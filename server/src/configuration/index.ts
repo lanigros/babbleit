@@ -7,3 +7,4 @@ dotenv.config({
 export * from './environment'
 export * from './db'
 export * from './session'
+export * from './redis'
