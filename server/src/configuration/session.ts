@@ -22,3 +22,10 @@ export const SESSION_OPTIONS: SessionOptions = {
   resave: false,
   saveUninitialized: false
 }
+
+declare module 'express-session' {
+  interface SessionData {
+    isAdmin: boolean
+    userId: string
+  }
+}

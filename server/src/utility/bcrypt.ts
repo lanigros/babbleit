@@ -7,7 +7,8 @@ type CallbackParameters = {
 
 const hashPassword = async (password: string) => {
   const salt = await bcrypt.genSalt(10)
-  return await bcrypt.hash(password, salt)
+  const hashedPassword = await bcrypt.hash(password, salt)
+  return { hashedPassword, salt }
 }
 
 const comparePasswords = (
@@ -15,12 +16,16 @@ const comparePasswords = (
   hashedPassword: string,
   callback: ({ error, isMatching }: CallbackParameters) => void
 ) => {
-  bcrypt.compare(password, hashedPassword, function (error, isMatching) {
-    if (error) {
-      return callback({ error })
+  bcrypt.compare(
+    password,
+    hashedPassword,
+    function (error?: Error, isMatching?: boolean) {
+      if (error) {
+        return callback({ error })
+      }
+      return callback({ isMatching })
     }
-    return callback({ isMatching })
-  })
+  )
 }
 
 export { hashPassword, comparePasswords }
