@@ -29,7 +29,5 @@ export function createApp(store: Store): Express {
     }
   )
 
-  //TODO add error handling here
-
   return app
 }
