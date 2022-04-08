@@ -17,6 +17,14 @@ export type User = {
   updatedAt: string
 } & UserRegistration
 
+export type Community = {
+  _id: string
+  title: string
+  description: string
+  isBlocked: number
+  __v: number
+}
+
 export type UserDocument = {
   _doc: User
 } & Document
@@ -28,4 +36,8 @@ export type Admin = {
 
 export type AdminDocument = {
   _doc: Admin
+} & Document
+
+export type CommunityDocument = {
+  _doc: Community
 } & Document
