@@ -27,6 +27,18 @@ export type UserDocument = {
   comparePassword: (password: string) => boolean
 } & Document
 
+export type Community = {
+  _id: string
+  title: string
+  description: string
+  isBlocked: number
+  __v: number
+}
+
+export type CommunityDocument = {
+  _doc: Community
+} & Document
+
 export type Admin = {
   _id: string
   __v: number
@@ -41,11 +53,12 @@ export type CommunityRegistration = {
   description: string
 }
 
-export type Community = {
+export type CommunityMember = {
   _id: string
   isBlocked: number
+  communityId: string
   __v: number
-} & CommunityRegistration
+}
 
 export type CommunityData = {
   id: string
@@ -55,6 +68,15 @@ export type CommunitySelect = {
   _id: string
 } & CommunityRegistration
 
-export type CommunityDocument = {
-  _doc: Community
+export type CommunityMemberDocument = {
+  _doc: CommunityMember
+} & Document
+
+export type CommunityAdmin = {
+  _id: string
+  roles: { communityId: string; role: string }[]
+}
+
+export type CommunityAdminDocument = {
+  _doc: CommunityAdmin
 } & Document
