@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 
-import { BadRequest } from '../errors/BadRequest'
 import { JoiValidation, JoiValidators } from '../validation'
 
 export function validateRequest(validatorName: JoiValidation) {
@@ -12,7 +11,7 @@ export function validateRequest(validatorName: JoiValidation) {
       req.body = validatedRequestBody
       next()
     } catch (error) {
-      next(new BadRequest('BAD'))
+      next(error)
     }
   }
 }

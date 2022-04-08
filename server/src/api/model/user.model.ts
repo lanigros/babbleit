@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-import { User } from '../../types'
+import { UserDocument } from '../../types'
 import { comparePasswords } from '../../utility'
 
 const userSchema = new Schema(
@@ -35,6 +35,6 @@ const userSchema = new Schema(
 
 userSchema.methods.matchesPassword = comparePasswords
 
-const UserModel = model<Omit<User, '_id'>>('user', userSchema)
+const UserModel = model<UserDocument>('user', userSchema)
 
 export default UserModel
