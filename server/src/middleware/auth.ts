@@ -10,3 +10,15 @@ export function allowOnlyGuests(req: Request, _: Response, next: NextFunction) {
 
   next()
 }
+
+export function allowOnlyRegisteredUsers(
+  req: Request,
+  _: Response,
+  next: NextFunction
+) {
+  console.log(req.body)
+  if (!req.session.userId) {
+    next(new Unauthorized('You need to be a registered user'))
+  }
+  next()
+}

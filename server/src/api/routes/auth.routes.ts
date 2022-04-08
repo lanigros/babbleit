@@ -1,9 +1,12 @@
 import { Router } from 'express'
 
 import { catchAsync } from '../../middleware'
-import { allowOnlyGuests } from '../../middleware/auth'
+import {
+  allowOnlyGuests,
+  allowOnlyRegisteredUsers
+} from '../../middleware/auth'
 import { validateRequest } from '../../middleware/validation'
-import { UserController } from '../controller'
+import { UserController, CommunityController } from '../controller'
 
 const router = Router()
 
@@ -13,6 +16,14 @@ router
     allowOnlyGuests,
     validateRequest('registration'),
     catchAsync(UserController.apiCreateUser)
+  )
+
+router
+  .route('/communities')
+  .post(
+    allowOnlyRegisteredUsers,
+    validateRequest('community'),
+    catchAsync(CommunityController.apiCreateCommunity)
   )
 
 export default router
