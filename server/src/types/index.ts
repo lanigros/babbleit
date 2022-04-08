@@ -22,6 +22,7 @@ export type Community = {
   title: string
   description: string
   isBlocked: number
+  __v: number
 }
 
 export type UserDocument = {
