@@ -7,7 +7,7 @@ const roleSchema = new Schema({
   communityId: {
     type: Schema.Types.ObjectId,
     ref: 'community',
-    required: [true, 'community id must be provided']
+    required: [true, 'Community id must be provided']
   },
   role: {
     type: String,

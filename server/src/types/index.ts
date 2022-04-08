@@ -1,4 +1,4 @@
-import { Document } from 'mongoose'
+import { Document, Schema } from 'mongoose'
 
 export type StatusError = {
   status?: number
@@ -47,11 +47,6 @@ export type Admin = {
 export type AdminDocument = {
   _doc: Admin
 } & Document
-
-export type CommunityRegistration = {
-  title: string
-  description: string
-}
 
 export type CommunityMember = {
   _id: string
