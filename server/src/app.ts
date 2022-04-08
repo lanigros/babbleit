@@ -1,7 +1,7 @@
 import express, { Request, Response, Express, NextFunction } from 'express'
 import session, { Store } from 'express-session'
 
-import { authRoutes } from './api/routes'
+import { authRoutes, communityRoutes } from './api/routes'
 import { SESSION_OPTIONS } from './configuration'
 
 export function createApp(store: Store): Express {
@@ -11,6 +11,7 @@ export function createApp(store: Store): Express {
   app.use(session({ ...SESSION_OPTIONS, store }))
 
   app.use('/api', authRoutes)
+  app.use('/communities', communityRoutes)
 
   app.use((_: Request, res: Response) => {
     res.status(404).json({ error: 'not found' })

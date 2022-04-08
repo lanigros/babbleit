@@ -11,7 +11,10 @@ async function saveNewCommunity(newCommunity: {
     description
   })
 
-  return await community.save()
+  const savedCommunity = await community.save()
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { __v, _id, ...communityResponse } = savedCommunity._doc
+  return { id: _id, ...communityResponse }
 }
 
 const CommunityService = {

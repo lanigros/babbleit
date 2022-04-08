@@ -1,6 +1,29 @@
 import { BadRequest } from '../../errors/BadRequest'
-import { UserLogin } from '../../types'
+import { UserLogin, UserRegistration } from '../../types'
+import { hashPassword } from '../../utility'
 import { UserModel } from '../model'
+
+const registerNewUser = async ({
+  email,
+  password,
+  username
+}: UserRegistration) => {
+  const { hashedPassword, salt } = await hashPassword(password)
+
+  const user = new UserModel({
+    email,
+    password: hashedPassword,
+    username,
+    salt
+  })
+
+  const newUser = await user.save()
+
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password: _, salt: secret, __v, _id, ...userResponse } = newUser._doc
+
+  return { id: _id, ...userResponse }
+}
 
 const loginUser = async ({ email, password }: UserLogin) => {
   const user = await UserModel.findOne({ email })
@@ -17,6 +40,7 @@ const loginUser = async ({ email, password }: UserLogin) => {
 }
 
 const AuthService = {
+  registerNewUser,
   loginUser
 }
 

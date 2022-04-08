@@ -8,7 +8,14 @@ const apiLoginUser = async (req: Request, res: Response) => {
   res.json({ user })
 }
 
+const apiRegisterUser = async (req: Request, res: Response) => {
+  const user = await AuthService.registerNewUser(req.body)
+  req.session.userId = user.id
+  res.json({ user })
+}
+
 const authController = {
+  apiRegisterUser,
   apiLoginUser
 }
 
