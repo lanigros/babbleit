@@ -6,7 +6,11 @@ import {
   allowOnlyRegisteredUsers
 } from '../../middleware/auth'
 import { validateRequest } from '../../middleware/validation'
-import { UserController, CommunityController } from '../controller'
+import {
+  AuthController,
+  CommunityController,
+  UserController
+} from '../controller'
 
 const router = Router()
 
@@ -24,6 +28,14 @@ router
     allowOnlyRegisteredUsers,
     validateRequest('community'),
     catchAsync(CommunityController.apiCreateCommunity)
+  )
+
+router
+  .route('/login')
+  .post(
+    allowOnlyGuests,
+    validateRequest('login'),
+    catchAsync(AuthController.apiLoginUser)
   )
 
 export default router

@@ -33,7 +33,9 @@ const userSchema = new Schema(
   { timestamps: true }
 )
 
-userSchema.methods.matchesPassword = comparePasswords
+userSchema.methods.comparePassword = async function (password: string) {
+  return comparePasswords(password, this.password)
+}
 
 const UserModel = model<UserDocument>('user', userSchema)
 

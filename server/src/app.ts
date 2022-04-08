@@ -10,7 +10,6 @@ export function createApp(store: Store): Express {
   app.use(express.json())
   app.use(session({ ...SESSION_OPTIONS, store }))
 
-  //TODO add api routes
   app.use('/api', authRoutes)
 
   app.use((_: Request, res: Response) => {

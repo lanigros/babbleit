@@ -11,21 +11,8 @@ const hashPassword = async (password: string) => {
   return { hashedPassword, salt }
 }
 
-const comparePasswords = (
-  password: string,
-  hashedPassword: string,
-  callback: ({ error, isMatching }: CallbackParameters) => void
-) => {
-  bcrypt.compare(
-    password,
-    hashedPassword,
-    function (error?: Error, isMatching?: boolean) {
-      if (error) {
-        return callback({ error })
-      }
-      return callback({ isMatching })
-    }
-  )
+const comparePasswords = (password: string, hashedPassword: string) => {
+  return bcrypt.compareSync(password, hashedPassword)
 }
 
 export { hashPassword, comparePasswords }
