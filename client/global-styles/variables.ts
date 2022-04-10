@@ -6,36 +6,33 @@ export const colors = {
   mediumGray: '#808080',
   lightGray: '#EBEBEB',
   black: '#242423',
-  white: '#FFFDFA'
-} as const
-
-export const transparentColors = {
+  white: '#FFFDFA',
+  danger: '#EA0027',
   transparentBlack: '#55525280'
-}
+} as const
 
 export const fonts = {
   poppins: `'Poppins', sans-serif`
 } as const
 
-
 export const fontSizes = {
-  extraExtraSmall: '24px',
-  extraSmall: '30px',
-  small: '36px', 
-  medium: '40px',
-  large: '48px',
-  extraLarge: '60px',
-  extraExtraLarge: '72px'
-} as const                
+  extraExtraSmall: '12px',
+  extraSmall: '14px',
+  small: '18px',
+  medium: '24px',
+  large: '32px',
+  extraLarge: '40px',
+  extraExtraLarge: '62px'
+} as const
 
 export const lineHeights = {
-  extraExtraSmall: '36px',
-  extraSmall: '45px',
-  small: '54px',
-  medium: '60px',
-  large: '72px',
-  extraLarge: '90px',
-  extraExtraLarge: '108px',
+  extraExtraSmall: '18px',
+  extraSmall: '20px',
+  small: '24px',
+  medium: '32px',
+  large: '44px',
+  extraLarge: '50px',
+  extraExtraLarge: '70px'
 } as const
 
 export const fontWeights = {
@@ -44,7 +41,7 @@ export const fontWeights = {
   medium: 500,
   semiBold: 600,
   bold: 700
-} as const                 
+} as const
 
 export const borderRadiuses = {
   small: '15px',
@@ -64,3 +61,16 @@ export const sizes = {
   mobileSmall: 425
 } as const
 
+export const spacings = {
+  tiny: '5px',
+  extraExtraSmall: '10px',
+  extraSmall: '18px',
+  small: '24px',
+  medium: '32px',
+  large: '40px',
+  extraLarge: '56px',
+  extraExtraLarge: '64px',
+  huge: '72px'
+} as const
+
+export const maxWidth = 1280
