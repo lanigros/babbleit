@@ -17,8 +17,17 @@ async function saveNewCommunity(newCommunity: {
   return { id: _id, ...communityResponse }
 }
 
+//get all communities
+async function getAllCommunities() {
+  //TODO fetch all communities from db
+  return await CommunityModel.find()
+
+  //create a filter that returns only non-blocked communities
+}
+
 const CommunityService = {
-  saveNewCommunity
+  saveNewCommunity,
+  getAllCommunities
 }
 
 export default CommunityService
