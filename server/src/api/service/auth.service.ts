@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 import { BadRequest } from '../../errors/BadRequest'
 import { Conflict } from '../../errors/Conflict'
 import { Unauthorized } from '../../errors/Unauthorized'
-import { UserLogin, UserRegistration } from '../../types'
+import { UserData, UserLogin, UserRegistration } from '../../types'
 import { hashPassword } from '../../utility'
 import { AdminModel, UserModel } from '../model'
 
@@ -11,7 +11,7 @@ const registerNewUser = async ({
   email,
   password,
   username
-}: UserRegistration) => {
+}: UserRegistration): Promise<UserData> => {
   const existingUser = await UserModel.exists({
     $or: [{ email }, { username }]
   })
@@ -35,7 +35,7 @@ const registerNewUser = async ({
   return { id, username: savedUsername, email: savedEmail, isAdmin: false }
 }
 
-const loginUser = async ({ email, password }: UserLogin) => {
+const loginUser = async ({ email, password }: UserLogin): Promise<UserData> => {
   const user = await UserModel.findOne({ email })
 
   const isAuthenticated = (await user?.comparePassword(password)) || false
@@ -52,7 +52,7 @@ const loginUser = async ({ email, password }: UserLogin) => {
     )
   }
 
-  const admin = await AdminModel.findOne({
+  const admin = await AdminModel.exists({
     userId: new Types.ObjectId(id)
   })
 

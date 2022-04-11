@@ -2,7 +2,7 @@ type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 export function createFetch<Data, Response>(slug: string, method: Method) {
   return async (data: Data) => {
-    const response = await fetch(`/api/${slug}`, {
+    const response = await fetch(`/server/${slug}`, {
       method,
       credentials: 'include',
       headers: {
