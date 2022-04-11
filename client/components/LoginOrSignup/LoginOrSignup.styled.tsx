@@ -4,6 +4,7 @@ import {
   colors,
   fontSizes,
   fontWeights,
+  lineHeights,
   sizes,
   spacings
 } from '../../global-styles/variables'
@@ -49,4 +50,24 @@ export const Button = styled.button`
     opacity: 0.5;
     color: ${colors.darkGray};
   }
+`
+
+export const LinkWrapper = styled.div`
+  color: ${colors.lightGray};
+  font-size: ${fontSizes.extraExtraSmall};
+  text-decoration: underline;
+  line-height: ${lineHeights.extraExtraSmall};
+  justify-self: flex-end;
+
+  :hover {
+    color: ${colors.mediumGray};
+  }
+`
+
+export const ErrorText = styled.p`
+  font-size: ${fontSizes.small};
+  line-height: ${lineHeights.small};
+  color: ${colors.danger};
+  font-weight: ${fontWeights.light};
+  padding: 0 ${spacings.extraSmall} 0 ${spacings.extraSmall};
 `

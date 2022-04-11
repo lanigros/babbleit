@@ -18,12 +18,13 @@ type FormValues<Initial extends FormValueObject> = {
 
 export function useForm<
   InitialValue extends FormValueObject,
-  S extends () => void,
+  S extends (values: InitialValue) => void,
   V extends (values: InitialValue) => Partial<InitialValue>
 >(
   initialValue: InitialValue,
   submitForm: S,
-  validate?: V
+  validate?: V,
+  resetOnSubmit = false
 ): FormValues<InitialValue> {
   const [values, setValues] = useState({ ...initialValue })
   const [errors, setErrors] = useState<Partial<InitialValue>>({})
@@ -35,8 +36,8 @@ export function useForm<
       setErrors(validationErrors)
       return
     }
-    submitForm()
-    setValues({ ...initialValue })
+    submitForm(values)
+    resetOnSubmit && setValues({ ...initialValue })
     setErrors({})
   }
 

@@ -1,11 +1,34 @@
 import SignupForm from '../../components/LoginOrSignup'
 import Input from '../../components/Input'
 import { useForm } from '../../hooks/useForm'
-import { validateLogin } from '../../validation/userValidation'
+import { validateSignup } from '../../validation/userValidation'
+import { useContext, useState } from 'react'
+import { GlobalContext } from '../../state/globalState'
+import { UserSignup } from '../../types'
+import { apiSignup } from '../../api/authApi'
+import { useRouter } from 'next/router'
 
 export default function Signup() {
-  function submitHandler() {
-    console.log('submitting')
+  const router = useRouter()
+  const { dispatch } = useContext(GlobalContext)
+
+  const [error, setError] = useState<string>('')
+
+  function submitHandler({ repeatPassword, ...signupValues }: UserSignup) {
+    async function postLogin() {
+      try {
+        const response = await apiSignup(signupValues)
+        response.user && dispatch({ type: 'user', payload: response.user })
+        router.push('/profile')
+      } catch (e) {
+        if (e instanceof Error && e.message.length > 0) {
+          setError(e.message)
+          return
+        }
+        setError('Something went wrong')
+      }
+    }
+    return postLogin()
   }
 
   const { values, errors, handleChange, handleSubmit } = useForm(
@@ -16,7 +39,7 @@ export default function Signup() {
       repeatPassword: ''
     },
     submitHandler,
-    validateLogin
+    validateSignup
   )
 
   return (
@@ -25,6 +48,10 @@ export default function Signup() {
       buttonText={`Let's go!`}
       onSubmit={handleSubmit}
       isSubmitDisabled={Object.keys(errors).length !== 0}
+      linkText={'Or login here'}
+      linkUrl={'/'}
+      isSuccessful={error.length === 0}
+      errorMessage={error}
     >
       <Input
         label={'Email'}
