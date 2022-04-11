@@ -1,14 +1,14 @@
-import LandingPage from '../views/LandingPage'
+import SignupPage from '../views/SignupPage'
 import { MaxWidthContainer } from '../components/MaxWidthContainer'
 
-const Home = () => {
+const Signup = () => {
   return (
     <main>
       <MaxWidthContainer>
-        <LandingPage />
+        <SignupPage />
       </MaxWidthContainer>
     </main>
   )
 }
 
-export default Home
+export default Signup
