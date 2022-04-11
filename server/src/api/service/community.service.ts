@@ -1,9 +1,10 @@
+import { Community, CommunityData, CommunitySelect } from '../../types'
 import { CommunityModel } from '../model'
 
 async function saveNewCommunity(newCommunity: {
   title: string
   description: string
-}) {
+}): Promise<CommunityData> {
   const { title, description } = newCommunity
 
   const community = new CommunityModel({
@@ -13,16 +14,26 @@ async function saveNewCommunity(newCommunity: {
 
   const savedCommunity = await community.save()
   //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { __v, _id, ...communityResponse } = savedCommunity._doc
-  return { id: _id, ...communityResponse }
+  const {
+    _id: id,
+    title: savedTitle,
+    description: savedDescription
+  } = savedCommunity._doc
+  return { id, title: savedTitle, description: savedDescription }
 }
 
-//get all communities
-async function getAllCommunities() {
-  //TODO fetch all communities from db
-  return await CommunityModel.find()
+async function getAllCommunities(): Promise<CommunityData[]> {
+  const communities = await CommunityModel.find<CommunitySelect>({
+    isBlocked: false
+  }).select('id title description')
 
-  //create a filter that returns only non-blocked communities
+  return communities.map((community) => {
+    return {
+      id: community._id,
+      title: community.title,
+      description: community.description
+    }
+  })
 }
 
 const CommunityService = {

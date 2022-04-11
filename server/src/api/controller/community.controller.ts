@@ -8,9 +8,9 @@ const createCommunity = async (req: Request, res: Response) => {
 }
 
 const getCommunities = async (req: Request, res: Response) => {
-  const allCommunities = await CommunityService.getAllCommunities()
+  const communities = await CommunityService.getAllCommunities()
 
-  res.json({ allCommunities: allCommunities })
+  res.json({ communities })
 }
 
 const communityController = {
