@@ -1,6 +1,8 @@
 import { Types } from 'mongoose'
 
 import { BadRequest } from '../../errors/BadRequest'
+import { Conflict } from '../../errors/Conflict'
+import { Unauthorized } from '../../errors/Unauthorized'
 import { UserLogin, UserRegistration } from '../../types'
 import { hashPassword } from '../../utility'
 import { AdminModel, UserModel } from '../model'
@@ -10,26 +12,31 @@ const registerNewUser = async ({
   password,
   username
 }: UserRegistration) => {
-  const { hashedPassword, salt } = await hashPassword(password)
+  const existingUser = await UserModel.exists({
+    $or: [{ email }, { username }]
+  })
+
+  if (existingUser) {
+    throw new Conflict('User already exists')
+  }
+
+  const hashedPassword = await hashPassword(password)
 
   const user = new UserModel({
     email,
     password: hashedPassword,
-    username,
-    salt
+    username
   })
 
   const newUser = await user.save()
 
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password: _, salt: secret, __v, _id, ...userResponse } = newUser._doc
+  const { _id: id, username: savedUsername, email: savedEmail } = newUser._doc
 
-  return { id: _id, ...userResponse, isAdmin: false }
+  return { id, username: savedUsername, email: savedEmail, isAdmin: false }
 }
 
 const loginUser = async ({ email, password }: UserLogin) => {
   const user = await UserModel.findOne({ email })
-  //Todo find godmode admin if exists
 
   const isAuthenticated = (await user?.comparePassword(password)) || false
 
@@ -37,14 +44,19 @@ const loginUser = async ({ email, password }: UserLogin) => {
     throw new BadRequest('Bad credentials')
   }
 
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password: _, salt, __v, _id, ...userResponse } = user._doc
+  const { _id: id, email: savedEmail, username, isBlocked } = user._doc
+
+  if (isBlocked) {
+    throw new Unauthorized(
+      'Sorry, you have been blocked. Contact an admin for more information'
+    )
+  }
 
   const admin = await AdminModel.findOne({
-    userId: new Types.ObjectId(_id)
+    userId: new Types.ObjectId(id)
   })
 
-  return { id: _id, ...userResponse, isAdmin: !!admin }
+  return { id, email: savedEmail, username, isAdmin: !!admin }
 }
 
 const AuthService = {

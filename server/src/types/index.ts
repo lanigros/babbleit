@@ -16,7 +16,6 @@ export type UserRegistration = {
 export type User = {
   _id: string
   isBlocked: number
-  salt: string
   __v: number
   createdAt: string
   updatedAt: string
