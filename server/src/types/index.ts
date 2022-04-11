@@ -1,12 +1,17 @@
+import { Document } from 'mongoose'
+
 export type StatusError = {
   status?: number
 } & Error
 
-export type UserRegistration = {
+export type UserLogin = {
   email: string
   password: string
-  username: string
 }
+
+export type UserRegistration = {
+  username: string
+} & UserLogin
 
 export type User = {
   _id: string
@@ -17,16 +22,9 @@ export type User = {
   updatedAt: string
 } & UserRegistration
 
-export type Community = {
-  _id: string
-  title: string
-  description: string
-  isBlocked: number
-  __v: number
-}
-
 export type UserDocument = {
   _doc: User
+  comparePassword: (password: string) => boolean
 } & Document
 
 export type Admin = {
@@ -37,6 +35,17 @@ export type Admin = {
 export type AdminDocument = {
   _doc: Admin
 } & Document
+
+export type CommunityRegistration = {
+  title: string
+  description: string
+}
+
+export type Community = {
+  _id: string
+  isBlocked: number
+  __v: number
+} & CommunityRegistration
 
 export type CommunityDocument = {
   _doc: Community

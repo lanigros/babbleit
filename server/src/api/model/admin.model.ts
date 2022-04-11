@@ -4,7 +4,8 @@ import { AdminDocument } from '../../types'
 
 const adminSchema = new Schema({
   userId: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'user',
     required: [true, 'User id must be provided'],
     unique: true
   }
