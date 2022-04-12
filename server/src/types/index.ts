@@ -67,9 +67,14 @@ export type CommunityMemberDocument = {
   _doc: CommunityMember
 } & Document
 
+export type Role = {
+  communityId: string
+  role: 'admin' | 'moderator'
+}
+
 export type CommunityAdmin = {
   _id: string
-  roles: { communityId: string; role: string }[]
+  roles: Role[]
 }
 
 export type CommunityAdminDocument = {

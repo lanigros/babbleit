@@ -7,14 +7,11 @@ const roleSchema = new Schema({
   communityId: {
     type: Schema.Types.ObjectId,
     ref: 'community',
-<<<<<<< HEAD
     required: [true, 'Community id must be provided']
-=======
-    required: [true, 'community id must be provided']
->>>>>>> 39add3c (added admin and member schemas)
   },
   role: {
     type: String,
+    enum: ['admin', 'moderator'],
     required: [true, 'Role must be provided']
   }
 })
