@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { Unauthorized } from '../errors/Unauthorized'
+import { Unauthorized } from '../errors'
 
 export function allowOnlyGuests(req: Request, _: Response, next: NextFunction) {
   if (req.session.userId) {

@@ -1,4 +1,4 @@
-import { Community, CommunityData, CommunitySelect } from '../../types'
+import { CommunityData, CommunitySelect } from '../../types'
 import { CommunityModel } from '../model'
 
 async function saveNewCommunity(newCommunity: {
