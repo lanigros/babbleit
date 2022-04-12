@@ -47,6 +47,14 @@ export type Community = {
   __v: number
 } & CommunityRegistration
 
+export type CommunityData = {
+  id: string
+} & CommunityRegistration
+
+export type CommunitySelect = {
+  _id: string
+} & CommunityRegistration
+
 export type CommunityDocument = {
   _doc: Community
 } & Document

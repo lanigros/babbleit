@@ -15,4 +15,6 @@ router
     catchAsync(CommunityController.createCommunity)
   )
 
+router.route('/').get(catchAsync(CommunityController.getCommunities))
+
 export default router
