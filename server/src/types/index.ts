@@ -1,4 +1,4 @@
-import { Document, Schema } from 'mongoose'
+import { Document } from 'mongoose'
 
 export type StatusError = {
   status?: number
@@ -16,7 +16,6 @@ export type UserRegistration = {
 export type User = {
   _id: string
   isBlocked: number
-  salt: string
   __v: number
   createdAt: string
   updatedAt: string
@@ -38,6 +37,17 @@ export type Community = {
 export type CommunityDocument = {
   _doc: Community
 } & Document
+
+export type UserData = {
+  id: User['_id']
+  email: User['email']
+  username: User['username']
+  isAdmin: boolean
+}
+
+export type UserResponse = {
+  user: UserData
+}
 
 export type Admin = {
   _id: string

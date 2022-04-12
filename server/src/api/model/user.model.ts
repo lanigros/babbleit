@@ -24,10 +24,6 @@ const userSchema = new Schema(
     isBlocked: {
       type: Number,
       default: 0
-    },
-    salt: {
-      type: String,
-      required: [true, 'Salt must be provided']
     }
   },
   { timestamps: true }
