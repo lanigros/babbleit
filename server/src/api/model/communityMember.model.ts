@@ -12,6 +12,10 @@ const communityMemberSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'community',
     required: [true, 'Community id must be provided']
+  },
+  isBlocked: {
+    type: Number,
+    default: 0
   }
 })
 
