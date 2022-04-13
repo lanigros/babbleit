@@ -46,7 +46,8 @@ export const fontWeights = {
 export const borderRadiuses = {
   small: '15px',
   medium: '32px',
-  large: '65px'
+  large: '65px',
+  circle: '50%'
 } as const
 
 export const boxShadows = {
@@ -74,3 +75,5 @@ export const spacings = {
 } as const
 
 export const maxWidth = 1280
+
+export const headerHeight = 70
