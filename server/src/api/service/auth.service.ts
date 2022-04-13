@@ -1,8 +1,6 @@
 import { Types } from 'mongoose'
 
-import { BadRequest } from '../../errors/BadRequest'
-import { Conflict } from '../../errors/Conflict'
-import { Unauthorized } from '../../errors/Unauthorized'
+import { BadRequest, Unauthorized, Conflict } from '../../errors'
 import { UserData, UserLogin, UserRegistration } from '../../types'
 import { hashPassword } from '../../utility'
 import { AdminModel, UserModel } from '../model'

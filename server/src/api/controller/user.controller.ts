@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { Unauthorized } from '../../errors/Unauthorized'
+import { Unauthorized } from '../../errors'
 import UserService from '../service/user.service'
 
 const getWhoAmI = async (req: Request, res: Response) => {
