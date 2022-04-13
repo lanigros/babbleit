@@ -1,12 +1,14 @@
+import { Community, MongoId } from '.'
+import { AdminRoles } from './aggregate.types'
+
 export type Role = {
-  communityId: string
-  role: 'admin' | 'moderator'
+  communityId: Community['_id']
+  role: AdminRoles['admin'] | AdminRoles['moderator']
 }
 
 export type CommunityAdmin = {
-  _id: string
   roles: Role[]
-}
+} & MongoId
 
 export type CommunityAdminDocument = {
   _doc: CommunityAdmin

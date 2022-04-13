@@ -16,7 +16,20 @@ const communitySchema = new Schema(
     isBlocked: {
       type: Number,
       default: 0
-    }
+    },
+    members: [
+      {
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: 'user',
+          required: [true, 'User id must be provided']
+        },
+        isBlocked: {
+          type: Number,
+          default: 0
+        }
+      }
+    ]
   },
   { timestamps: true }
 )

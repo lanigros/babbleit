@@ -1,22 +1,27 @@
+import { Document } from 'mongoose'
+
+import { Id, IsBlocked, MongoId } from '.'
+
 export type CommunityRegistration = {
   title: string
   description: string
 }
 
+export type CommunityMember = {
+  userId: Id['id']
+} & IsBlocked
+
 export type Community = {
-  _id: string
-  isBlocked: number
   __v: number
-} & CommunityRegistration
+  members: CommunityMember[]
+} & CommunityRegistration &
+  IsBlocked &
+  MongoId
 
 export type CommunityDocument = {
   _doc: Community
 } & Document
 
-export type CommunityData = {
-  id: string
-} & CommunityRegistration
+export type CommunityData = Id & CommunityRegistration
 
-export type CommunitySelect = {
-  _id: string
-} & CommunityRegistration
+export type CommunitySelect = MongoId & CommunityRegistration
