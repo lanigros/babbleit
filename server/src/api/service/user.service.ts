@@ -79,11 +79,22 @@ const updateBlockedStatus = async (
   return !!result.acknowledged
 }
 
+const deleteUserById = async (userId: string): Promise<string> => {
+  const user = await UserModel.findByIdAndRemove(userId)
+
+  if (!user) {
+    throw new NotFound('User does not exist')
+  }
+
+  return `Deleted account: ${user._doc.email}`
+}
+
 const UserService = {
   findUserById,
   updateFields,
   findUsers,
-  updateBlockedStatus
+  updateBlockedStatus,
+  deleteUserById
 }
 
 export default UserService

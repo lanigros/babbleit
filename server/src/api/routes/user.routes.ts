@@ -20,6 +20,7 @@ router
     validateRequest('userUpdate'),
     catchAsync(UserController.updateFields)
   )
+  .delete(catchAsync(UserController.deleteMyAccount))
 
 router
   .route('/:userId')
