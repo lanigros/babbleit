@@ -1,9 +1,15 @@
 import { Types } from 'mongoose'
 
 import { Unauthorized, NotFound } from '../../errors'
-import { Community, CommunityData, CommunitySelect } from '../../types'
+import {
+  CommunityData,
+  CommunityMemberJoin,
+  CommunitySelect,
+  CommunityWithMembers
+} from '../../types'
 import { CommunityModel } from '../model'
 
+// TODO add saving of user as communityAdmin
 async function saveNewCommunity(newCommunity: {
   title: string
   description: string
@@ -44,61 +50,87 @@ async function getAllCommunities(): Promise<CommunityData[]> {
 async function findCommunityById(
   communityId: string,
   showBlockedCommunities?: boolean
-): Promise<CommunityData> {
-  const result = await CommunityModel.aggregate<
-    CommunitySelect & Pick<Community, 'isBlocked'> & { id: string; members: [] }
-  >([
+): Promise<CommunityWithMembers> {
+  const result = await CommunityModel.aggregate<CommunityMemberJoin>([
     { $match: { _id: new Types.ObjectId(communityId) } },
     { $limit: 1 },
-    {
-      $lookup: {
-        from: 'communitymembers',
-        localField: '_id',
-        foreignField: 'communityId',
-        as: 'members'
-      }
-    },
     {
       $lookup: {
         from: 'users',
         localField: 'members.userId',
         foreignField: '_id',
-        as: 'members.user'
+        as: 'matchingUsers',
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              username: 1
+            }
+          }
+        ]
       }
     },
-    { $limit: 1 },
     {
       $project: {
-        id: { $toString: '$_id' },
         title: 1,
         description: 1,
         isBlocked: 1,
-        'members.id': { $toString: '$_id' },
-        'members.isBlocked': 1,
-        'members.userId': 1,
-        'members.username': { $first: '$members.user.username' }
+        members: {
+          $map: {
+            input: '$matchingUsers',
+            as: 'userMatch',
+            in: {
+              $mergeObjects: [
+                '$$userMatch',
+                {
+                  $arrayElemAt: [
+                    {
+                      $filter: {
+                        input: '$members',
+                        as: 'communityMembers',
+                        cond: {
+                          $eq: ['$$communityMembers.userId', '$$userMatch._id']
+                        }
+                      }
+                    },
+                    0
+                  ]
+                }
+              ]
+            }
+          }
+        }
       }
+    },
+    {
+      $unset: ['members._id']
     }
   ])
-
-  //communityId '6250667ce96043fc0c439d1b'
-  console.log('result', result)
 
   const community = result[0]
 
   if (!community) {
-    console.log('nooooo')
     throw new NotFound('No community by that id')
   }
 
   if (!showBlockedCommunities && community.isBlocked) {
-    console.log('yeeeeee')
     throw new Unauthorized('This community has been blocked by an admin')
   }
 
-  const { id, title, description, isBlocked, members } = community
+  const communityResponse = {
+    id: community._id.toString(),
+    title: community.title,
+    description: community.description,
+    isBlocked: !!community.isBlocked,
+    members: community.members.map((member) => {
+      const { username, userId, isBlocked } = member
+      return { id: userId.toString(), username, isBlocked: !!isBlocked }
+    })
+  }
 
-  return { id, title, description, isBlocked: !!isBlocked, members }
+  console.log('res', communityResponse)
+
+  return communityResponse
 }
 
 const CommunityService = {
