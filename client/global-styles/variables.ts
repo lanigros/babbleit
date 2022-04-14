@@ -16,6 +16,7 @@ export const fonts = {
 } as const
 
 export const fontSizes = {
+  tiny: '10px',
   extraExtraSmall: '12px',
   extraSmall: '14px',
   small: '18px',
@@ -26,6 +27,7 @@ export const fontSizes = {
 } as const
 
 export const lineHeights = {
+  tiny: '10px',
   extraExtraSmall: '18px',
   extraSmall: '20px',
   small: '24px',

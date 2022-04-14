@@ -1,5 +1,7 @@
+import InfoCard from '../components/InfoCard'
+
 const Profile = () => {
-  return <h1>Your profile will be here soon</h1>
+  return <InfoCard title={'Heyo'} description={'HGeyo'} />
 }
 
 export default Profile
