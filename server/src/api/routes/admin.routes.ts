@@ -5,6 +5,8 @@ import { AdminController } from '../controller'
 
 const router = Router()
 
-router.route('/block/user/:userId').post(catchAsync(AdminController.blockUser))
+router
+  .route('/users/:userId')
+  .put(allowOnlyAdmin, catchAsync(AdminController.blockUser))
 
 export default router
