@@ -1,5 +1,10 @@
-import Login from '../../features/Login'
+import { MaxWidthContainer } from '../../components'
+import { Login } from '../../features'
 
 export default function LandingPage() {
-  return <Login />
+  return (
+    <MaxWidthContainer>
+      <Login />
+    </MaxWidthContainer>
+  )
 }

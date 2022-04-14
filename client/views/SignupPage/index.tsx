@@ -1,5 +1,10 @@
-import Signup from '../../features/Signup'
+import { MaxWidthContainer } from '../../components'
+import { Signup } from '../../features'
 
 export default function SignupPage() {
-  return <Signup />
+  return (
+    <MaxWidthContainer>
+      <Signup />
+    </MaxWidthContainer>
+  )
 }

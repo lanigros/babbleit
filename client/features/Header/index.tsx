@@ -8,12 +8,11 @@ import {
   HeaderBody,
   ProfileWrapper,
   InitialLetter,
-  HeaderWrapper,
-  NotLoggedInTxt
+  HeaderWrapper
 } from './Header.styled'
 
 export default function Header() {
-  const { state, dispatch } = useContext(GlobalContext)
+  const { state } = useContext(GlobalContext)
   const { user } = state
 
   return (

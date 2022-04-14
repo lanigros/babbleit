@@ -1,9 +1,11 @@
 import { MaxWidthContainerWrapper } from './MaxWidthContainer.styled'
 
 type MaxWidthContainerProps = {
-  children: JSX.Element
+  children: JSX.Element | JSX.Element[]
 }
 
-export function MaxWidthContainer({ children }: MaxWidthContainerProps) {
+export default function MaxWidthContainer({
+  children
+}: MaxWidthContainerProps) {
   return <MaxWidthContainerWrapper>{children}</MaxWidthContainerWrapper>
 }

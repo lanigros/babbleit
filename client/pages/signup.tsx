@@ -1,12 +1,9 @@
-import SignupPage from '../views/SignupPage'
-import { MaxWidthContainer } from '../components/MaxWidthContainer'
+import { SignupView } from '../views'
 
 const Signup = () => {
   return (
     <main>
-      <MaxWidthContainer>
-        <SignupPage />
-      </MaxWidthContainer>
+      <SignupView />
     </main>
   )
 }

@@ -11,7 +11,7 @@ import {
 
 export const CardContainer = styled.div`
   max-width: 100%;
-  width: ${sizes.mobileSmall}px;
+  width: 100%;
   height: 155px;
   border: 1px solid black;
   background: ${colors.black};
@@ -52,7 +52,6 @@ export const CardFooterContent = styled.div`
 export const CardTextContainer = styled.div`
   height: 100%;
   width: 100%;
-  margin-left: ${spacings.extraExtraSmall};
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -77,7 +76,10 @@ export const CardDescription = styled.p`
 `
 
 export const CardThumbnail = styled.div`
+  min-height: 70px;
+  min-width: 70px;
   border-radius: ${borderRadiuses.small};
+  margin-right: ${spacings.extraSmall};
 `
 
 export const PlaceholderIcons = styled.span`
