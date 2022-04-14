@@ -7,15 +7,23 @@ const createCommunity = async (req: Request, res: Response) => {
   res.json({ community })
 }
 
-const getCommunities = async (req: Request, res: Response) => {
+const getCommunities = async (_: Request, res: Response) => {
   const communities = await CommunityService.getAllCommunities()
-
   res.json({ communities })
+}
+
+const getCommunity = async (req: Request, res: Response) => {
+  const community = await CommunityService.findCommunityById(
+    req.params.id,
+    req.session.isAdmin
+  )
+  res.json({ community })
 }
 
 const communityController = {
   createCommunity,
-  getCommunities
+  getCommunities,
+  getCommunity
 }
 
 export default communityController

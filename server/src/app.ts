@@ -6,6 +6,7 @@ import { SESSION_OPTIONS } from './configuration'
 
 export function createApp(store: Store): Express {
   const app = express()
+  app.disable('x-powered-by')
 
   app.use(express.json())
   app.use(session({ ...SESSION_OPTIONS, store }))
@@ -15,7 +16,7 @@ export function createApp(store: Store): Express {
   app.use('/users', userRoutes)
 
   app.use((_: Request, res: Response) => {
-    res.status(404).json({ error: 'not found' })
+    res.status(404).json({ error: 'Not found' })
   })
 
   app.use(

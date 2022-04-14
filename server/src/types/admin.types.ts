@@ -1,7 +1,9 @@
+import { Id, MongoId } from '.'
+
 export type Admin = {
-  _id: string
+  userId: Id['id']
   __v: number
-}
+} & MongoId
 
 export type AdminDocument = {
   _doc: Admin

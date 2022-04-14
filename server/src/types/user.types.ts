@@ -1,3 +1,5 @@
+import { MongoId, IsBlocked, Id } from '.'
+
 export type UserLogin = {
   email: string
   password: string
@@ -8,12 +10,12 @@ export type UserRegistration = {
 } & UserLogin
 
 export type User = {
-  _id: string
-  isBlocked: number
   __v: number
   createdAt: string
   updatedAt: string
-} & UserRegistration
+} & UserRegistration &
+  MongoId &
+  IsBlocked
 
 export type UserDocument = {
   _doc: User
@@ -21,11 +23,10 @@ export type UserDocument = {
 } & Document
 
 export type UserData = {
-  id: User['_id']
   email: User['email']
   username: User['username']
   isAdmin: boolean
-}
+} & Id
 
 export type UserResponse = {
   user: UserData

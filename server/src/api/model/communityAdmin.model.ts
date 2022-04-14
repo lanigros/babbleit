@@ -2,7 +2,6 @@ import { Schema, model } from 'mongoose'
 
 import { CommunityAdminDocument } from '../../types'
 
-//Used as a sub doc.
 const roleSchema = new Schema({
   communityId: {
     type: Schema.Types.ObjectId,
