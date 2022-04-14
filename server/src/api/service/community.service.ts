@@ -46,7 +46,7 @@ async function getAllCommunities(): Promise<CommunityData[]> {
   })
 }
 
-//TODO: add posts and members when fetching a community
+// TODO add posts to response
 async function findCommunityById(
   communityId: string,
   showBlockedCommunities?: boolean
