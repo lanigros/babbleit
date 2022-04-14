@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { Types } from 'mongoose'
 
+import { UserModel } from '../api/model'
 import { Unauthorized } from '../errors'
 import { CommunityAdminModel } from '../api/model'
 import { Role } from '../types'
@@ -13,7 +14,7 @@ export function allowOnlyGuests(req: Request, _: Response, next: NextFunction) {
   next()
 }
 
-export function allowOnlyRegisteredUsers(
+export async function allowOnlyRegisteredUsers(
   req: Request,
   _: Response,
   next: NextFunction
@@ -21,6 +22,15 @@ export function allowOnlyRegisteredUsers(
   if (!req.session.userId) {
     next(new Unauthorized('You need to be a registered user'))
   }
+
+  const user = await UserModel.findById(req.session.userId)
+
+  if (!user || user._doc.isBlocked) {
+    next(
+      new Unauthorized('You have been blocked from this page. Shame on you.')
+    )
+  }
+
   next()
 }
 

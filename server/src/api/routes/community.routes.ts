@@ -12,13 +12,12 @@ const router = Router()
 
 router
   .route('/')
+  .get(catchAsync(CommunityController.getCommunities))
   .post(
     allowOnlyRegisteredUsers,
     validateRequest('community'),
     catchAsync(CommunityController.createCommunity)
   )
-
-router.route('/').get(catchAsync(CommunityController.getCommunities))
 
 router
   .route('/:id')

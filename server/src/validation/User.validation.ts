@@ -6,12 +6,10 @@ export const ValidUser = {
   email: Joi.string()
     .email()
     .lowercase()
-    .required()
     .error(() => {
       return new BadRequest('Invalid email format')
     }),
   password: Joi.string()
-    .required()
     .regex(
       /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?\-_&])[A-Za-z\d@$!%*?\-_&]{10,30}$/
     )
@@ -21,7 +19,6 @@ export const ValidUser = {
       )
     }),
   username: Joi.string()
-    .required()
     .min(5)
     .max(20)
     .regex(/^[a-zA-Z0-9_.-]*$/)

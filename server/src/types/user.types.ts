@@ -31,3 +31,9 @@ export type UserData = {
 export type UserResponse = {
   user: UserData
 }
+
+export type UpdateableUserFields = {
+  email?: User['email']
+  username?: User['username']
+  password?: User['password']
+}

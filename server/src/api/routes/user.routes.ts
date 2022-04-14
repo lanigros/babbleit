@@ -1,10 +1,21 @@
 import { Router } from 'express'
 
-import { catchAsync } from '../../middleware'
+import {
+  catchAsync,
+  validateRequest,
+  allowOnlyRegisteredUsers
+} from '../../middleware'
 import { UserController } from '../controller'
 
 const router = Router()
 
-router.route('/me').get(catchAsync(UserController.getWhoAmI))
+router
+  .route('/me')
+  .get(allowOnlyRegisteredUsers, catchAsync(UserController.getWhoAmI))
+  .put(
+    allowOnlyRegisteredUsers,
+    validateRequest('userUpdate'),
+    catchAsync(UserController.updateFields)
+  )
 
 export default router
