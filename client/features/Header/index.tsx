@@ -24,17 +24,17 @@ export default function Header() {
             <Image src={logo} alt='BabbleIt logotype' width={30} height={30} />
           </a>
         </Link>
-        <Link href={'/profile'}>
-          <a>
-            {user.username && (
+        {user.username && (
+          <Link href={'/profile'}>
+            <a>
               <ProfileWrapper>
                 <InitialLetter>
                   {user.username?.charAt(0).toUpperCase()}
                 </InitialLetter>
               </ProfileWrapper>
-            )}
-          </a>
-        </Link>
+            </a>
+          </Link>
+        )}
       </HeaderBody>
     </HeaderWrapper>
   )
