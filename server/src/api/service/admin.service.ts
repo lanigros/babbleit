@@ -5,11 +5,12 @@ const blockUserById = async (Id: string) => {
   const user = await UserService.findUserById(Id)
   const userId = user.id
 
-  if (!user.isBlocked) {
-    await UserModel.updateOne({ _id: userId }, { isBlocked: true })
-    return true
+  if (user.isBlocked) {
+    return false
   }
-  return false
+
+  await UserModel.updateOne({ _id: userId }, { isBlocked: true })
+  return true
 }
 
 const AdminService = {

@@ -29,5 +29,12 @@ export const ValidUser = {
       return new BadRequest(
         'Username must be 5 - 20 characters long and may only contain letters, numbers and the following special characters: _ . -'
       )
+    }),
+  isBlocked: Joi.number()
+    .required()
+    .min(0)
+    .max(1)
+    .error(() => {
+      return new BadRequest('isBlocked is required and the only allowed value')
     })
 }

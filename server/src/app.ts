@@ -17,9 +17,9 @@ export function createApp(store: Store): Express {
   app.use(session({ ...SESSION_OPTIONS, store }))
 
   app.use('/api', authRoutes)
+  app.use('api/admins', adminRoutes)
   app.use('/communities', communityRoutes)
   app.use('/users', userRoutes)
-  app.use('/admin', adminRoutes)
 
   app.use((_: Request, res: Response) => {
     res.status(404).json({ error: 'Not found' })
