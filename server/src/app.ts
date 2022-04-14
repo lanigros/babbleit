@@ -17,7 +17,7 @@ export function createApp(store: Store): Express {
   app.use(session({ ...SESSION_OPTIONS, store }))
 
   app.use('/api', authRoutes)
-  app.use('api/admins', adminRoutes)
+  app.use('/api/admins', adminRoutes)
   app.use('/communities', communityRoutes)
   app.use('/users', userRoutes)
 

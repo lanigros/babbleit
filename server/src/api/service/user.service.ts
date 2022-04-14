@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-import { NotFound } from '../../errors/'
+import { NotFound } from '../../errors'
 import { UserData } from '../../types'
 import { AdminModel, UserModel } from '../model'
 

@@ -1,16 +1,10 @@
 import { UserService } from '../service'
 import { UserModel } from '../model'
 
-const blockUserById = async (Id: string) => {
-  const user = await UserService.findUserById(Id)
-  const userId = user.id
+const blockUserById = async (_id: string, isBlocked: number) => {
+  const user = await UserModel.updateOne({ _id }, { isBlocked }, { new: true })
 
-  if (user.isBlocked) {
-    return false
-  }
-
-  await UserModel.updateOne({ _id: userId }, { isBlocked: true })
-  return true
+  return !!user
 }
 
 const AdminService = {
