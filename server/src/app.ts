@@ -1,7 +1,12 @@
 import express, { Request, Response, Express, NextFunction } from 'express'
 import session, { Store } from 'express-session'
 
-import { authRoutes, communityRoutes, userRoutes } from './api/routes'
+import {
+  authRoutes,
+  communityRoutes,
+  userRoutes,
+  adminRoutes
+} from './api/routes'
 import { SESSION_OPTIONS } from './configuration'
 
 export function createApp(store: Store): Express {
@@ -12,6 +17,7 @@ export function createApp(store: Store): Express {
   app.use(session({ ...SESSION_OPTIONS, store }))
 
   app.use('/api', authRoutes)
+  app.use('/api/admins', adminRoutes)
   app.use('/communities', communityRoutes)
   app.use('/users', userRoutes)
 

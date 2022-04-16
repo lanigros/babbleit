@@ -54,5 +54,11 @@ export async function addCommunityAdminRole(
     }
     req.communityAdminRole = result[0]
   })
+}
+
+export function allowOnlyAdmin(req: Request, _: Response, next: NextFunction) {
+  if (!req.session.isAdmin) {
+    next(new Unauthorized('You need to be admin'))
+  }
   next()
 }
