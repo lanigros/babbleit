@@ -3,7 +3,15 @@ import { Request, Response } from 'express'
 import { CommunityService } from '../service'
 
 const createCommunity = async (req: Request, res: Response) => {
-  const community = await CommunityService.saveNewCommunity(req.body)
+  if (!req.session.userId) {
+    throw new Error(`You shouldn't be here`)
+  }
+
+  const community = await CommunityService.saveNewCommunity(
+    req.body,
+    req.session.userId
+  )
+
   res.json({ community })
 }
 

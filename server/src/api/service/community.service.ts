@@ -4,16 +4,17 @@ import { Unauthorized, NotFound } from '../../errors'
 import {
   CommunityData,
   CommunityMemberJoin,
+  CommunityRegistration,
   CommunitySelect,
-  CommunityWithMembers
+  CommunityWithMembers,
+  Role
 } from '../../types'
-import { CommunityModel } from '../model'
+import { CommunityAdminModel, CommunityModel } from '../model'
 
-// TODO add saving of user as communityAdmin
-async function saveNewCommunity(newCommunity: {
-  title: string
-  description: string
-}): Promise<CommunityData> {
+async function saveNewCommunity(
+  newCommunity: CommunityRegistration,
+  userId: string
+): Promise<CommunityData> {
   const { title, description } = newCommunity
 
   const community = new CommunityModel({
@@ -28,6 +29,19 @@ async function saveNewCommunity(newCommunity: {
     title: savedTitle,
     description: savedDescription
   } = savedCommunity._doc
+
+  const adminRole: Role = {
+    role: 'admin',
+    communityId: id
+  }
+
+  await CommunityAdminModel.findOneAndUpdate(
+    { userId },
+    {
+      $push: { roles: { ...adminRole } }
+    },
+    { upsert: true }
+  )
 
   return { id, title: savedTitle, description: savedDescription }
 }
