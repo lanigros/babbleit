@@ -1,3 +1,7 @@
+import Image from 'next/image'
+import { MouseEvent } from 'react'
+
+import Thumbnail from '../../public/Thumbnail.jpg'
 import {
   CardContainer,
   CardFooter,
@@ -10,16 +14,21 @@ import {
   PlaceholderIcons
 } from './InfoCard.styled'
 
-import Image from 'next/image'
-import Thumbnail from '../../public/Thumbnail.jpg'
 type CardProps = {
   title: string
   description: string
+  showFooter?: boolean
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
 
-export default function InfoCard({ title, description }: CardProps) {
+export default function InfoCard({
+  title,
+  description,
+  showFooter,
+  onClick
+}: CardProps) {
   return (
-    <CardContainer>
+    <CardContainer onClick={onClick}>
       <CardContent>
         <CardThumbnail>
           <Image
@@ -35,13 +44,15 @@ export default function InfoCard({ title, description }: CardProps) {
           <CardDescription>{description}</CardDescription>
         </CardTextContainer>
       </CardContent>
-      <CardFooter>
-        <CardFooterContent>
-          <PlaceholderIcons>&#128077;</PlaceholderIcons>
-          <PlaceholderIcons>&#128078;</PlaceholderIcons>
-          <PlaceholderIcons>&#11088;</PlaceholderIcons>
-        </CardFooterContent>
-      </CardFooter>
+      {showFooter && (
+        <CardFooter>
+          <CardFooterContent>
+            <PlaceholderIcons>&#128077;</PlaceholderIcons>
+            <PlaceholderIcons>&#128078;</PlaceholderIcons>
+            <PlaceholderIcons>&#11088;</PlaceholderIcons>
+          </CardFooterContent>
+        </CardFooter>
+      )}
     </CardContainer>
   )
 }

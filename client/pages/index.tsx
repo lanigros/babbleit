@@ -1,12 +1,9 @@
-import LandingPage from '../views/LandingPage'
-import { MaxWidthContainer } from '../components/MaxWidthContainer'
+import { LandingView } from '../views'
 
 const Home = () => {
   return (
     <main>
-      <MaxWidthContainer>
-        <LandingPage />
-      </MaxWidthContainer>
+      <LandingView />
     </main>
   )
 }

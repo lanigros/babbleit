@@ -1,12 +1,12 @@
-import LoginForm from '../../components/LoginOrSignup'
-import Input from '../../components/Input'
+import { useContext, useState } from 'react'
+import { useRouter } from 'next/router'
+
+import { LoginOrSignup as LoginForm, Input } from '../../components'
 import { useForm } from '../../hooks/useForm'
 import { validateLogin } from '../../validation/userValidation'
 import { apiLogin } from '../../api/authApi'
-import { UserLogin } from '../../types'
-import { useContext, useState } from 'react'
 import { GlobalContext } from '../../state/globalState'
-import { useRouter } from 'next/router'
+import { UserLogin } from '../../types'
 
 export default function Login() {
   const router = useRouter()
