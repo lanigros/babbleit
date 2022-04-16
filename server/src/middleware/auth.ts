@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import { Types } from 'mongoose'
 
-import { UserModel } from '../api/model'
+import { UserModel, CommunityAdminModel } from '../api/model'
 import { Unauthorized } from '../errors'
-import { CommunityAdminModel } from '../api/model'
 import { Role } from '../types'
 
 export function allowOnlyGuests(req: Request, _: Response, next: NextFunction) {
@@ -64,5 +63,11 @@ export async function addCommunityAdminRole(
     }
     req.communityAdminRole = result[0]
   })
+}
+
+export function allowOnlyAdmin(req: Request, _: Response, next: NextFunction) {
+  if (!req.session.isAdmin) {
+    next(new Unauthorized('You need to be admin'))
+  }
   next()
 }
