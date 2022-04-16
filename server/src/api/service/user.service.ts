@@ -1,7 +1,8 @@
 import { Types } from 'mongoose'
 
 import { NotFound } from '../../errors'
-import { UserData } from '../../types'
+import { UpdateableUserFields, UserData } from '../../types'
+import { hashPassword } from '../../utility'
 import { AdminModel, UserModel } from '../model'
 
 const findUserById = async (
@@ -22,8 +23,32 @@ const findUserById = async (
   return { id, email, username, isAdmin: !!admin, isBlocked: !!isBlocked }
 }
 
+const updateFields = async (
+  _id: string,
+  fieldsToUpdate: UpdateableUserFields
+) => {
+  const { password } = fieldsToUpdate
+  let update = { ...fieldsToUpdate }
+
+  if (password) {
+    const hashedPassword = await hashPassword(password)
+    update = { ...fieldsToUpdate, password: hashedPassword }
+  }
+
+  const user = await UserModel.findOneAndUpdate({ _id, isBlocked: 0 }, update, {
+    new: true
+  })
+
+  if (!user) {
+    throw new Error('Something went wrong')
+  }
+
+  return true
+}
+
 const UserService = {
-  findUserById
+  findUserById,
+  updateFields
 }
 
 export default UserService
