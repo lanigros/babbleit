@@ -18,7 +18,6 @@ export const BannerTitle = styled.div`
 
 export const FormWrapper = styled.form`
   max-width: ${styles.sizes.mobile}px;
-
   display: flex;
   flex-direction: column;
   gap: ${styles.spacings.medium};
