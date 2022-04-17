@@ -32,12 +32,13 @@ export default function CreateNewPost() {
     error && setError(false)
     async function postNewCommunity() {
       try {
-        //TODO test this route against the backend route
-        /* await apiPostNewCommunityPost({
+        const response = await apiPostNewCommunityPost({
           data: newPost,
           slug: `/${communityId}/posts`
-        }) */
-        console.log('Fired post request!')
+        })
+        if (response) {
+          router.back()
+        }
       } catch (e) {
         setError(true)
       }
