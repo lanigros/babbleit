@@ -1,4 +1,4 @@
-import { CommunityView } from '../../views'
+import { CommunityView } from '../../../views'
 
 const Community = () => {
   return <CommunityView />

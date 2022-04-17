@@ -35,10 +35,12 @@ export type UserResponse = {
 
 /** COMMUNITY */
 
-export type Community = {
+export type CommunityCreation = {
   title: string
   description: string
-} & Id
+}
+
+export type Community = CommunityCreation & Id
 
 export type CommunitiesResponse = {
   communities: Community[]
@@ -48,3 +50,12 @@ export type CommunityResponse = {
   community: Community
   communityAdminRole: 'admin' | 'moderator' | null
 }
+
+/** COMMUNITYPOST (THREAD) */
+
+export type PostCreation = {
+  title: string
+  content: string
+}
+
+export type Post = PostCreation & Id
