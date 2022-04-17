@@ -12,7 +12,9 @@ type FormValues<Initial extends FormValueObject> = {
   values: Initial
   errors: Partial<Initial>
   setErrors: Dispatch<SetStateAction<Partial<Initial>>>
-  handleChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
+  handleChange: (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => void
   handleSubmit: (e: FormEvent<HTMLFormElement | HTMLButtonElement>) => void
 }
 
@@ -42,7 +44,7 @@ export function useForm<
   }
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }))
 
