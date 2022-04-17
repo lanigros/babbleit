@@ -78,3 +78,12 @@ export type ServerSideProps = {
   community: DetailedCommunity
   communityAdminRole: CommunityAdminRole
 }
+
+/** COMMUNITYPOST (THREAD) */
+
+export type PostCreation = {
+  title: string
+  content: string
+}
+
+export type Post = PostCreation & Id
