@@ -1,14 +1,10 @@
-import registration from './registration.validation'
-import community from './community.validation'
-import login from './login.validation'
-import userUpdate from './userUpdate.validation'
-import blockUser from './admin.validation'
-import createCommunity from './createCommunity.validation'
+import { registration, login, userUpdate, blockUser } from './user'
+import { communityUpdate, createCommunity } from './community'
 
 export const JoiValidators = {
   registration,
   login,
-  community,
+  communityUpdate,
   createCommunity,
   userUpdate,
   blockUser
