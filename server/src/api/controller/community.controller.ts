@@ -15,8 +15,10 @@ const createCommunity = async (req: Request, res: Response) => {
   res.json({ community })
 }
 
-const getCommunities = async (_: Request, res: Response) => {
-  const communities = await CommunityService.getAllCommunities()
+const getCommunities = async (req: Request, res: Response) => {
+  const communities = await CommunityService.getAllCommunities(
+    req.session.isAdmin
+  )
   res.json({ communities })
 }
 

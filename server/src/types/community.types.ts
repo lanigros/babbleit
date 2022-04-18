@@ -10,7 +10,7 @@ export type CommunityRegistration = {
 export type CommunityMember = {
   userId: User['_id']
   username: User['username']
-} & IsBlocked
+}
 
 export type Community = {
   __v: number

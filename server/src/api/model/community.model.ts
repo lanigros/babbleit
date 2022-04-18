@@ -29,10 +29,6 @@ const communitySchema = new Schema(
           type: String,
           required: [true, 'Username must be provided'],
           unique: true
-        },
-        isBlocked: {
-          type: Number,
-          default: 0
         }
       }
     ]
