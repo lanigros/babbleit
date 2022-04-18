@@ -15,7 +15,7 @@ router
   .get(catchAsync(CommunityController.getCommunities))
   .post(
     allowOnlyRegisteredUsers,
-    validateRequest('community'),
+    validateRequest('createCommunity'),
     catchAsync(CommunityController.createCommunity)
   )
 
