@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import { CommunityAdminModel } from '../api/model'
 import { Role } from '../types'
+import { Unauthorized } from '../errors'
 
 export async function addCommunityAdminRole(
   req: Request,
@@ -13,7 +14,7 @@ export async function addCommunityAdminRole(
     return next()
   }
 
-  await CommunityAdminModel.aggregate<Role>([
+  const result = await CommunityAdminModel.aggregate<Role>([
     {
       $match: {
         userId: new Types.ObjectId(req.session.userId)
@@ -27,13 +28,23 @@ export async function addCommunityAdminRole(
     { $unwind: '$roles' },
     { $replaceRoot: { newRoot: '$roles' } },
     { $limit: 1 }
-  ]).exec((error, result) => {
-    if (error) {
-      console.error(error)
-      throw new Error('Oops, something went wrong')
-    }
-    req.communityAdminRole = result[0]?.role
-  })
-  console.log('admin', req.communityAdminRole)
+  ])
+
+  req.communityAdminRole = result[0]?.role
+  next()
+}
+
+export async function allowOnlyCommunityAdminsAndAdmins(
+  req: Request,
+  _: Response,
+  next: NextFunction
+) {
+  if (!(req.session.isAdmin || req.communityAdminRole === 'admin')) {
+    next(
+      new Unauthorized(
+        'You must be an admin of the page or community to access this route'
+      )
+    )
+  }
   next()
 }

@@ -5,7 +5,8 @@ import {
   validateRequest,
   catchAsync,
   addCommunityAdminRole,
-  allowOnlyRegisteredUsers
+  allowOnlyRegisteredUsers,
+  allowOnlyCommunityAdminsAndAdmins
 } from '../../middleware'
 
 const router = Router()
@@ -22,5 +23,10 @@ router
 router
   .route('/:id')
   .get(addCommunityAdminRole, catchAsync(CommunityController.getCommunity))
+  .delete(
+    addCommunityAdminRole,
+    allowOnlyCommunityAdminsAndAdmins,
+    catchAsync(CommunityController.deleteCommunity)
+  )
 
 export default router

@@ -8,7 +8,11 @@ import {
   CommunitySelect,
   Role
 } from '../../types'
-import { CommunityAdminModel, CommunityModel } from '../model'
+import {
+  CommunityAdminModel,
+  CommunityModel,
+  UserCommunityModel
+} from '../model'
 
 async function saveNewCommunity(
   newCommunity: CommunityRegistration,
@@ -110,10 +114,45 @@ async function findCommunityById(
   return community
 }
 
+async function deleteCommunityById(id: string) {
+  const userCommunityResult = await UserCommunityModel.updateMany(
+    {},
+    {
+      $pull: {
+        communities: {
+          communityId: new Types.ObjectId(id)
+        }
+      }
+    }
+  )
+
+  const communityResult = await CommunityModel.deleteOne({
+    _id: new Types.ObjectId(id)
+  })
+
+  const communityAdminResult = await CommunityAdminModel.updateMany(
+    {},
+    {
+      $pull: {
+        roles: {
+          communityId: new Types.ObjectId(id)
+        }
+      }
+    }
+  )
+
+  return {
+    isCommunityDeleted: communityResult.acknowledged,
+    isUserCommunityDeleted: userCommunityResult.acknowledged,
+    isCommunityAdminDeleted: communityAdminResult.acknowledged
+  }
+}
+
 const CommunityService = {
   saveNewCommunity,
   getAllCommunities,
-  findCommunityById
+  findCommunityById,
+  deleteCommunityById
 }
 
 export default CommunityService
