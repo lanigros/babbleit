@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 import { BadRequest } from '../../errors/BadRequest'
 
-export const newCommunitySchema = {
+export const communitySchema = {
   title: Joi.string()
     .alphanum()
     .min(3)
@@ -15,11 +15,11 @@ export const newCommunitySchema = {
   description: Joi.string()
     .min(5)
     .max(50)
-    .regex(/^[a-zA-Z0-9_.- ]*$/)
+    .regex(/^[a-zA-Z0-9_(.)(-) ]*$/)
     .error(() => {
       return new BadRequest(
         'Description must be 5-30 characters long and may only contain letters, numbers and the following special characters: _ . -'
       )
     })
 }
-export default newCommunitySchema
+export default communitySchema
