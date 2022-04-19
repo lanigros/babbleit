@@ -1,10 +1,10 @@
 import Joi from 'joi'
 
-import { newCommunitySchema } from './Community.validation'
+import { communitySchema } from './Community.validation'
 
-const newCreateCommunitySchema = Joi.object({
-  title: newCommunitySchema.title.required(),
-  description: newCommunitySchema.description.required()
+const createCommunitySchema = Joi.object({
+  title: communitySchema.title.required(),
+  description: communitySchema.description.required()
 })
 
-export default newCreateCommunitySchema
+export default createCommunitySchema

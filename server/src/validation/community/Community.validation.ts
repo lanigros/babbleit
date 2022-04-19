@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 import { BadRequest } from '../../errors/BadRequest'
 
-export const newCommunitySchema = {
+export const communitySchema = {
   title: Joi.string()
     .alphanum()
     .min(3)
@@ -22,4 +22,4 @@ export const newCommunitySchema = {
       )
     })
 }
-export default newCommunitySchema
+export default communitySchema
