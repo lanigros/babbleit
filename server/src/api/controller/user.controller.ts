@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import { Unauthorized } from '../../errors'
 import { createResponseMessage } from '../../utility'
 import destroySession from '../../utility/destroySession'
+import { CommunityService, AdminService } from '../service'
 import UserService from '../service/user.service'
 
 const getWhoAmI = async (req: Request, res: Response) => {
@@ -57,14 +58,25 @@ const updateBlockedStatus = async (req: Request, res: Response) => {
 }
 
 const deleteMyAccount = async (req: Request, res: Response) => {
-  const userID = req.session.userId
+  const userId = req.session.userId
+  if (!userId) return
 
-  if (!userID) return
+  const numberOfDeletedCommunities =
+    await CommunityService.deleteCommunitiesOwnedByUserId(userId)
+
+  await AdminService.deleteCommunityAdminsByUserId(userId)
 
   await destroySession(req, res)
 
-  const emailOfDeletedUser = UserService.deleteUserById(userID)
-  res.json(createResponseMessage('Succesfully deleted: ' + emailOfDeletedUser))
+  const emailOfDeletedUser = UserService.deleteUserById(userId)
+  res.json(
+    createResponseMessage(
+      'Succesfully deleted: ' +
+        emailOfDeletedUser +
+        ', deleted communities: ' +
+        numberOfDeletedCommunities
+    )
+  )
 }
 
 const userController = {
