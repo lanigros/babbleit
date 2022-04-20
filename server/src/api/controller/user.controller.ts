@@ -33,9 +33,15 @@ const updateFields = async (req: Request, res: Response) => {
   )
 }
 
+const getUsers = async (req: Request, res: Response) => {
+  const users = await UserService.findUsers(req.session.isAdmin)
+  res.json({ users })
+}
+
 const userController = {
   getWhoAmI,
-  updateFields
+  updateFields,
+  getUsers
 }
 
 export default userController

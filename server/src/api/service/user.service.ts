@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 
 import { NotFound } from '../../errors'
-import { UpdateableUserFields, UserData } from '../../types'
+import { PublicUserFields, UpdateableUserFields, UserData } from '../../types'
 import { hashPassword } from '../../utility'
 import { AdminModel, UserModel } from '../model'
 
@@ -32,7 +32,7 @@ const findUserById = async (
 const updateFields = async (
   _id: string,
   fieldsToUpdate: UpdateableUserFields
-) => {
+): Promise<boolean> => {
   const { password } = fieldsToUpdate
   let update = { ...fieldsToUpdate }
 
@@ -52,9 +52,28 @@ const updateFields = async (
   return true
 }
 
+const findUsers = async (
+  showBlockedUsers = false
+): Promise<PublicUserFields[]> => {
+  const users = await UserModel.find(showBlockedUsers ? {} : { isBlocked: 0 })
+    .select('_id isBlocked username')
+    .limit(10)
+    .skip(0)
+
+  return users.map((user) => {
+    const { _id, username, isBlocked } = user._doc
+    return {
+      id: _id.toString(),
+      username,
+      isBlocked
+    }
+  })
+}
+
 const UserService = {
   findUserById,
-  updateFields
+  updateFields,
+  findUsers
 }
 
 export default UserService
