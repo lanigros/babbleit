@@ -1,5 +1,5 @@
 import { registration, login, userUpdate, blockUser } from './user'
-import { communityUpdate, createCommunity } from './community'
+import { communityUpdate, createCommunity, updateModerator } from './community'
 
 export const JoiValidators = {
   registration,
@@ -7,7 +7,8 @@ export const JoiValidators = {
   communityUpdate,
   createCommunity,
   userUpdate,
-  blockUser
+  blockUser,
+  updateModerator
 }
 
 export type JoiValidation = keyof typeof JoiValidators

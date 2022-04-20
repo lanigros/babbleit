@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { BadRequest, Unauthorized } from '../../errors'
 import { createResponseMessage } from '../../utility'
 import { CommunityService } from '../service'
 
@@ -31,6 +32,24 @@ const getCommunity = async (req: Request, res: Response) => {
   res.json({ community })
 }
 
+const postModerator = async (req: Request, res: Response) => {
+  if (req.communityAdminRole !== 'admin') {
+    throw new Unauthorized(
+      'Access not allowed as you are not an admin of this community'
+    )
+  }
+  const isModeratorAdded = await CommunityService.addModerator(
+    req.params.id,
+    req.body.userId
+  )
+
+  if (!isModeratorAdded) {
+    throw new BadRequest('Moderator already exists')
+  }
+
+  res.json(createResponseMessage('Moderator added'))
+}
+
 const deleteCommunity = async (req: Request, res: Response) => {
   const acknowledgedResults = await CommunityService.deleteCommunityById(
     req.params.id
@@ -49,6 +68,7 @@ const communityController = {
   createCommunity,
   getCommunities,
   getCommunity,
+  postModerator,
   deleteCommunity
 }
 
