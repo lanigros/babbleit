@@ -15,7 +15,7 @@ export const communitySchema = {
   description: Joi.string()
     .min(5)
     .max(50)
-    .regex(/^[a-zA-Z0-9_.- ]*$/)
+    .regex(/^[a-zA-Z0-9_(.)(-) ]*$/)
     .error(() => {
       return new BadRequest(
         'Description must be 5-30 characters long and may only contain letters, numbers and the following special characters: _ . -'
