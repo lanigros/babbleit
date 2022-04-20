@@ -1,17 +1,24 @@
 import { MaxWidthContainer } from '../../components'
 import { Signup } from '../../features'
-import { Container } from './signuppage.styled'
+import {
+  Container,
+  BackgroundContainer,
+  LandingPageTitle
+} from './signuppage.styled'
 import bg from '../../public/Landing-page-background.svg'
 import Image from 'next/image'
 
 export default function SignupPage() {
   return (
     <>
-      <Container>
+      <BackgroundContainer>
         <Image className='background' src={bg} layout='responsive' />
-      </Container>
+      </BackgroundContainer>
       <MaxWidthContainer>
-        <Signup />
+        <Container>
+          <LandingPageTitle>IT</LandingPageTitle>
+          <Signup />
+        </Container>
       </MaxWidthContainer>
     </>
   )

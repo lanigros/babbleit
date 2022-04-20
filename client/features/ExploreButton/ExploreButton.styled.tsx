@@ -2,15 +2,27 @@ import styled from 'styled-components'
 
 import {
   colors,
-  sizes,
   spacings,
-  headerHeight,
   fontWeights,
-  borderRadiuses
+  borderRadiuses,
+  fontSizes,
+  boxShadows
 } from '../../global-styles/variables'
 
 export const Button = styled.button`
-  width: 10px;
-  height: 10px;
-  background-color: #020202;
+  width: 64px;
+  height: 64px;
+  border-radius: ${borderRadiuses.circle};
+  background-color: ${colors.yellow};
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: ${boxShadows.small};
+
+  span {
+    color: ${colors.black};
+    font-weight: ${fontWeights.bold};
+    font-size: ${fontSizes.medium};
+  }
 `
