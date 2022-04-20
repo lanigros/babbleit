@@ -14,13 +14,19 @@ const findUserById = async (
     throw new NotFound('User not found')
   }
 
-  const { _id: id, email, username, isBlocked } = user._doc
+  const { _id, email, username, isBlocked } = user._doc
 
   const admin = await AdminModel.exists({
-    userId: new Types.ObjectId(id)
+    userId: _id
   })
 
-  return { id, email, username, isAdmin: !!admin, isBlocked: !!isBlocked }
+  return {
+    id: _id.toString(),
+    email,
+    username,
+    isAdmin: !!admin,
+    isBlocked: !!isBlocked
+  }
 }
 
 const updateFields = async (
