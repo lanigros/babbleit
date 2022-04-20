@@ -191,13 +191,22 @@ async function deleteCommunityById(id: string) {
   }
 }
 
+async function deleteCommunitiesOwnedByUserId(userId: string) {
+  const numberOfDeletedCommunities = await CommunityModel.deleteMany({
+    userId: userId,
+    role: 'admin'
+  })
+  return numberOfDeletedCommunities
+}
+
 const CommunityService = {
   saveNewCommunity,
   getAllCommunities,
   findCommunityById,
   addModerator,
   removeModerator,
-  deleteCommunityById
+  deleteCommunityById,
+  deleteCommunitiesOwnedByUserId
 }
 
 export default CommunityService
