@@ -29,6 +29,15 @@ const communitySchema = new Schema(
           required: [true, 'Username must be provided']
         }
       }
+    ],
+    posts: [
+      {
+        postId: {
+          type: Schema.Types.ObjectId,
+          ref: 'posts',
+          required: [true, 'Post id must be provided']
+        }
+      }
     ]
   },
   { timestamps: true }

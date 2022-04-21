@@ -1,6 +1,6 @@
 import { Document } from 'mongoose'
 
-import { Id, IsBlocked, MongoId, User } from '.'
+import { Id, IsBlocked, MongoId, User, Post } from '.'
 
 export type CommunityRegistration = {
   title: string
@@ -12,9 +12,14 @@ export type CommunityMember = {
   username: User['username']
 }
 
+export type CommunityPost = {
+  postId: Post['_id']
+}
+
 export type Community = {
   __v: number
   members: CommunityMember[]
+  posts: CommunityPost[]
 } & CommunityRegistration &
   IsBlocked &
   MongoId

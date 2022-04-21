@@ -15,3 +15,8 @@ export type Post = {
 export type PostDocument = {
   _doc: Post
 } & Document
+
+export type PostRegistration = {
+  title: string
+  content: string
+}

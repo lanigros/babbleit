@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { CommunityController } from '../controller'
+import { CommunityController, PostController } from '../controller'
 import {
   validateRequest,
   catchAsync,
@@ -70,5 +70,9 @@ router
     allowOnlyRegisteredUsers,
     catchAsync(CommunityController.leaveCommunity)
   )
+router
+  .route('/:id/posts')
+  .get(catchAsync(PostController.getAllPosts))
+  .post(allowOnlyRegisteredUsers, catchAsync(PostController.createPost))
 
 export default router
