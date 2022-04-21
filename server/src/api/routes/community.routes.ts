@@ -50,15 +50,25 @@ router
   .post(
     addCommunityAdminRole,
     allowOnlyCommunityAdminsAndAdmins,
-    validateRequest('newMember'),
+    validateRequest('userId'),
     catchAsync(CommunityController.addCommunityMember)
+  )
+  .delete(
+    addCommunityAdminRole,
+    allowOnlyCommunityAdminsAndAdmins,
+    validateRequest('userId'),
+    catchAsync(CommunityController.removeCommunityMember)
   )
 
 router
   .route('/:id/join')
-  .post(
+  .post(allowOnlyRegisteredUsers, catchAsync(CommunityController.joinCommunity))
+
+router
+  .route('/:id/leave')
+  .delete(
     allowOnlyRegisteredUsers,
-    catchAsync(CommunityController.becomeCommunityMember)
+    catchAsync(CommunityController.leaveCommunity)
   )
 
 export default router

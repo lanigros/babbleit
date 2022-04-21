@@ -20,11 +20,5 @@ export const communitySchema = {
       return new BadRequest(
         'Description must be 5-30 characters long and may only contain letters, numbers and the following special characters: _ . -'
       )
-    }),
-  userId: Joi.string()
-    .alphanum()
-    .length(24)
-    .error(() => {
-      return new BadRequest('UserId does not match the specified criteria')
     })
 }
