@@ -140,6 +140,23 @@ async function addModerator(communityId: string, userId: string) {
   return !!(result.modifiedCount || result.upsertedCount)
 }
 
+async function removeModerator(communityId: string, userId: string) {
+  const result = await CommunityAdminModel.updateOne(
+    {
+      userId: new Types.ObjectId(userId),
+      communityId: new Types.ObjectId(communityId)
+    },
+    {
+      $pull: {
+        roles: {
+          role: 'moderator'
+        }
+      }
+    }
+  )
+  return !!result.modifiedCount
+}
+
 async function deleteCommunityById(id: string) {
   const userCommunityResult = await UserCommunityModel.updateMany(
     {},
@@ -179,6 +196,7 @@ const CommunityService = {
   getAllCommunities,
   findCommunityById,
   addModerator,
+  removeModerator,
   deleteCommunityById
 }
 

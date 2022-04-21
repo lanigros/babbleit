@@ -50,6 +50,25 @@ const postModerator = async (req: Request, res: Response) => {
   res.json(createResponseMessage('Moderator added'))
 }
 
+const deleteModerator = async (req: Request, res: Response) => {
+  if (req.communityAdminRole !== 'admin') {
+    throw new Unauthorized(
+      'Access not allowed as you are not an admin of this community'
+    )
+  }
+
+  const isModeratorDeleted = await CommunityService.removeModerator(
+    req.params.id,
+    req.params.userId
+  )
+
+  if (!isModeratorDeleted) {
+    throw new Error('Something went wrong when removing moderator')
+  }
+
+  res.json(createResponseMessage('Moderator removed'))
+}
+
 const deleteCommunity = async (req: Request, res: Response) => {
   const acknowledgedResults = await CommunityService.deleteCommunityById(
     req.params.id
@@ -69,6 +88,7 @@ const communityController = {
   getCommunities,
   getCommunity,
   postModerator,
+  deleteModerator,
   deleteCommunity
 }
 

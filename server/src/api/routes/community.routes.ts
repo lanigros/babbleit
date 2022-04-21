@@ -38,4 +38,11 @@ router
     catchAsync(communityController.postModerator)
   )
 
+router
+  .route('/:id/moderators/:userId')
+  .delete(
+    addCommunityAdminRole,
+    catchAsync(communityController.deleteModerator)
+  )
+
 export default router
