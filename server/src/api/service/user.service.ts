@@ -4,6 +4,8 @@ import { NotFound } from '../../errors'
 import { PublicUserFields, UpdateableUserFields, UserData } from '../../types'
 import { hashPassword } from '../../utility'
 import { AdminModel, UserModel } from '../model'
+import AdminService from './admin.service'
+import CommunityService from './community.service'
 
 const findUserById = async (
   userId: string
@@ -52,6 +54,16 @@ const updateFields = async (
   return true
 }
 
+const deleteUserById = async (userId: string): Promise<string | null> => {
+  const user = await UserModel.findByIdAndRemove(userId)
+
+  if (!user) {
+    return null
+  }
+
+  return user._doc._id.toString()
+}
+
 const findUsers = async (
   showBlockedUsers = false
 ): Promise<PublicUserFields[]> => {
@@ -79,14 +91,16 @@ const updateBlockedStatus = async (
   return !!result.acknowledged
 }
 
-const deleteUserById = async (userId: string): Promise<string> => {
-  const user = await UserModel.findByIdAndRemove(userId)
+const deleteMyAccountAndAllMyCommunities = async (
+  userId: string
+): Promise<boolean> => {
+  await CommunityService.deleteCommunitiesOwnedByUserId(userId)
 
-  if (!user) {
-    throw new NotFound('User does not exist')
-  }
+  await AdminService.deleteCommunityAdminsByUserId(userId)
 
-  return user._doc.email
+  const deletedUserId = await deleteUserById(userId)
+
+  return !!deletedUserId
 }
 
 const UserService = {
@@ -94,7 +108,8 @@ const UserService = {
   updateFields,
   findUsers,
   updateBlockedStatus,
-  deleteUserById
+  deleteUserById,
+  deleteMyAccountAndAllMyCommunities
 }
 
 export default UserService

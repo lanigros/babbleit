@@ -22,13 +22,11 @@ const communitySchema = new Schema(
         userId: {
           type: Schema.Types.ObjectId,
           ref: 'user',
-          required: [true, 'User id must be provided'],
-          unique: true
+          required: [true, 'User id must be provided']
         },
         username: {
           type: String,
-          required: [true, 'Username must be provided'],
-          unique: true
+          required: [true, 'Username must be provided']
         }
       }
     ]
