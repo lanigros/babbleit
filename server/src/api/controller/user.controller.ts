@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import { Unauthorized } from '../../errors'
 import { createResponseMessage } from '../../utility'
 import destroySession from '../../utility/destroySession'
-import { CommunityService, AdminService } from '../service'
 import UserService from '../service/user.service'
 
 const getWhoAmI = async (req: Request, res: Response) => {
@@ -57,26 +56,25 @@ const updateBlockedStatus = async (req: Request, res: Response) => {
   )
 }
 
-const deleteMyAccount = async (req: Request, res: Response) => {
-  const userId = req.session.userId
-  if (!userId) return
+const deleteMyAccountAndAllMyCommunities = async (
+  req: Request,
+  res: Response
+) => {
+  if (!req.session.userId) {
+    throw new Unauthorized('Not logged in')
+  }
 
-  const numberOfDeletedCommunities =
-    await CommunityService.deleteCommunitiesOwnedByUserId(userId)
+  const deletedResult = await UserService.deleteMyAccountAndAllMyCommunities(
+    req.session.userId
+  )
 
-  await AdminService.deleteCommunityAdminsByUserId(userId)
+  if (!deletedResult) {
+    throw new Error('Something went wrong')
+  }
 
   await destroySession(req, res)
 
-  const emailOfDeletedUser = UserService.deleteUserById(userId)
-  res.json(
-    createResponseMessage(
-      'Succesfully deleted: ' +
-        emailOfDeletedUser +
-        ', deleted communities: ' +
-        numberOfDeletedCommunities
-    )
-  )
+  res.json(createResponseMessage('Successfully deleted your account'))
 }
 
 const userController = {
@@ -84,7 +82,7 @@ const userController = {
   updateFields,
   getUsers,
   updateBlockedStatus,
-  deleteMyAccount
+  deleteMyAccountAndAllMyCommunities
 }
 
 export default userController

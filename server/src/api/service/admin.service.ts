@@ -7,11 +7,10 @@ const blockUserById = async (_id: string, isBlocked: number) => {
 }
 
 const deleteCommunityAdminsByUserId = async (userId: string) => {
-  const deleted = await CommunityAdminModel.deleteMany({
-    userId: userId,
-    role: 'admin'
+  const deleted = await CommunityAdminModel.deleteOne({
+    userId
   })
-  return deleted
+  return deleted.acknowledged
 }
 
 const AdminService = {

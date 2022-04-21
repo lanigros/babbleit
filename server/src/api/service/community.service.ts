@@ -13,6 +13,7 @@ import {
   CommunityModel,
   UserCommunityModel
 } from '../model'
+import AdminService from './admin.service'
 
 async function saveNewCommunity(
   newCommunity: CommunityRegistration,
@@ -191,12 +192,38 @@ async function deleteCommunityById(id: string) {
   }
 }
 
-async function deleteCommunitiesOwnedByUserId(userId: string) {
-  const numberOfDeletedCommunities = await CommunityModel.deleteMany({
+async function getIdOfAllCommunitiesOwnedByUserId(userId: string) {
+  const communityAdminDoc = await CommunityAdminModel.findOne({
     userId: userId,
-    role: 'admin'
+    'roles.role': 'admin'
   })
-  return numberOfDeletedCommunities
+
+  if (!communityAdminDoc) {
+    return []
+  }
+
+  const listOfCommunityId: Types.ObjectId[] = []
+
+  communityAdminDoc._doc.roles.map((userRole) => {
+    if (userRole.role === 'admin') {
+      listOfCommunityId.push(userRole.communityId)
+    }
+  })
+  //["community._id", "sadasfsdfs"]
+  return listOfCommunityId
+}
+
+async function deleteCommunitiesOwnedByUserId(userId: string) {
+  const communitiesToDelete = await getIdOfAllCommunitiesOwnedByUserId(userId)
+
+  if (communitiesToDelete.length <= 0) {
+    return 0
+  }
+
+  const numberOfDeletedCommunities = await CommunityModel.deleteMany({
+    _id: { $in: communitiesToDelete }
+  })
+  return numberOfDeletedCommunities.deletedCount
 }
 
 const CommunityService = {
