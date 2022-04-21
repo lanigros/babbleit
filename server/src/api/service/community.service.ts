@@ -209,7 +209,7 @@ async function getIdOfAllCommunitiesOwnedByUserId(userId: string) {
       listOfCommunityId.push(userRole.communityId)
     }
   })
-  //["community._id", "sadasfsdfs"]
+
   return listOfCommunityId
 }
 
