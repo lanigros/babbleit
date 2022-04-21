@@ -83,17 +83,17 @@ const deleteCommunity = async (req: Request, res: Response) => {
   res.json(createResponseMessage(`Successfully deleted community`))
 }
 
-const becomeCommunityMember = async (req: Request, res: Response) => {
+const joinCommunity = async (req: Request, res: Response) => {
   const isMembershipSuccessful = await CommunityService.addCommunityMember(
     req.params.id,
     req.session.userId as string
   )
 
   if (!isMembershipSuccessful) {
-    throw new Error('Membership could not be created')
+    throw new BadRequest('Member already exists')
   }
 
-  res.json(createResponseMessage('Membership created'))
+  res.json(createResponseMessage('You are now a member. Welcome!'))
 }
 
 const addCommunityMember = async (req: Request, res: Response) => {
@@ -103,10 +103,40 @@ const addCommunityMember = async (req: Request, res: Response) => {
   )
 
   if (!isMembershipSuccessful) {
-    throw new Error('Membership unsuccessful')
+    throw new BadRequest('Member already exists')
   }
 
   res.json(createResponseMessage('Membership created'))
+}
+
+const removeCommunityMember = async (req: Request, res: Response) => {
+  const isMembershipRemoved = await CommunityService.removeCommunityMember(
+    req.params.id,
+    req.body.userId
+  )
+
+  if (!isMembershipRemoved) {
+    throw new BadRequest('Member could not be removed')
+  }
+
+  res.json(createResponseMessage('Member removed'))
+}
+
+const leaveCommunity = async (req: Request, res: Response) => {
+  const isMembershipRemoved = await CommunityService.removeCommunityMember(
+    req.params.id,
+    req.session.userId as string
+  )
+
+  if (!isMembershipRemoved) {
+    throw new BadRequest('Member could not be removed')
+  }
+
+  res.json(
+    createResponseMessage(
+      'You have now left the community... come back please?'
+    )
+  )
 }
 
 const communityController = {
@@ -116,8 +146,10 @@ const communityController = {
   postModerator,
   deleteModerator,
   deleteCommunity,
-  becomeCommunityMember,
-  addCommunityMember
+  joinCommunity,
+  addCommunityMember,
+  leaveCommunity,
+  removeCommunityMember
 }
 
 export default communityController
