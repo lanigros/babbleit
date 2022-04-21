@@ -38,10 +38,28 @@ const getUsers = async (req: Request, res: Response) => {
   res.json({ users })
 }
 
+const updateBlockedStatus = async (req: Request, res: Response) => {
+  const isUpdateSuccessful = await UserService.updateBlockedStatus(
+    req.params.userId,
+    req.body.isBlocked
+  )
+
+  if (!isUpdateSuccessful) {
+    throw new Error('Update of isBlocked was unsuccessful')
+  }
+
+  res.json(
+    createResponseMessage(
+      `User successfully ${req.body.isBlocked ? 'blocked' : 'unblocked'}`
+    )
+  )
+}
+
 const userController = {
   getWhoAmI,
   updateFields,
-  getUsers
+  getUsers,
+  updateBlockedStatus
 }
 
 export default userController
