@@ -83,13 +83,41 @@ const deleteCommunity = async (req: Request, res: Response) => {
   res.json(createResponseMessage(`Successfully deleted community`))
 }
 
+const becomeCommunityMember = async (req: Request, res: Response) => {
+  const isMembershipSuccessful = await CommunityService.addCommunityMember(
+    req.params.id,
+    req.session.userId as string
+  )
+
+  if (!isMembershipSuccessful) {
+    throw new Error('Membership could not be created')
+  }
+
+  res.json(createResponseMessage('Membership created'))
+}
+
+const addCommunityMember = async (req: Request, res: Response) => {
+  const isMembershipSuccessful = await CommunityService.addCommunityMember(
+    req.params.id,
+    req.body.userId
+  )
+
+  if (!isMembershipSuccessful) {
+    throw new Error('Membership unsuccessful')
+  }
+
+  res.json(createResponseMessage('Membership created'))
+}
+
 const communityController = {
   createCommunity,
   getCommunities,
   getCommunity,
   postModerator,
   deleteModerator,
-  deleteCommunity
+  deleteCommunity,
+  becomeCommunityMember,
+  addCommunityMember
 }
 
 export default communityController

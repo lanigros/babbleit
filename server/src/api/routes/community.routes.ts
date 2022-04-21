@@ -45,4 +45,20 @@ router
     catchAsync(communityController.deleteModerator)
   )
 
+router
+  .route('/:id/members')
+  .post(
+    addCommunityAdminRole,
+    allowOnlyCommunityAdminsAndAdmins,
+    validateRequest('newMember'),
+    catchAsync(CommunityController.addCommunityMember)
+  )
+
+router
+  .route('/:id/join')
+  .post(
+    allowOnlyRegisteredUsers,
+    catchAsync(CommunityController.becomeCommunityMember)
+  )
+
 export default router
