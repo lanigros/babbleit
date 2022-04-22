@@ -11,9 +11,9 @@ import {
 import {
   CommunityAdminModel,
   CommunityModel,
-  UserCommunityModel
+  UserCommunityModel,
+  UserModel
 } from '../model'
-import AdminService from './admin.service'
 
 async function saveNewCommunity(
   newCommunity: CommunityRegistration,
@@ -226,6 +226,49 @@ async function deleteCommunitiesOwnedByUserId(userId: string) {
   return numberOfDeletedCommunities.deletedCount
 }
 
+async function addCommunityMember(communityId: string, userId: string) {
+  const user = await UserModel.findOne({ _id: userId })
+
+  const existing = await CommunityModel.exists({
+    _id: communityId,
+    'members.userId': userId
+  })
+
+  if (existing) {
+    return false
+  }
+
+  const result = await CommunityModel.updateOne(
+    {
+      _id: communityId
+    },
+    {
+      $push: {
+        members: {
+          userId: new Types.ObjectId(userId),
+          username: user?._doc.username
+        }
+      }
+    }
+  )
+
+  return result.acknowledged
+}
+
+async function removeCommunityMember(communityId: string, userId: string) {
+  const result = await CommunityModel.updateOne(
+    { _id: communityId },
+    {
+      $pull: {
+        members: {
+          userId: new Types.ObjectId(userId)
+        }
+      }
+    }
+  )
+  return result.modifiedCount === 1
+}
+
 const CommunityService = {
   saveNewCommunity,
   getAllCommunities,
@@ -233,7 +276,9 @@ const CommunityService = {
   addModerator,
   removeModerator,
   deleteCommunityById,
-  deleteCommunitiesOwnedByUserId
+  deleteCommunitiesOwnedByUserId,
+  addCommunityMember,
+  removeCommunityMember
 }
 
 export default CommunityService

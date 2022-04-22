@@ -83,13 +83,73 @@ const deleteCommunity = async (req: Request, res: Response) => {
   res.json(createResponseMessage(`Successfully deleted community`))
 }
 
+const joinCommunity = async (req: Request, res: Response) => {
+  const isMembershipSuccessful = await CommunityService.addCommunityMember(
+    req.params.id,
+    req.session.userId as string
+  )
+
+  if (!isMembershipSuccessful) {
+    throw new BadRequest('Member already exists')
+  }
+
+  res.json(createResponseMessage('You are now a member. Welcome!'))
+}
+
+const addCommunityMember = async (req: Request, res: Response) => {
+  const isMembershipSuccessful = await CommunityService.addCommunityMember(
+    req.params.id,
+    req.body.userId
+  )
+
+  if (!isMembershipSuccessful) {
+    throw new BadRequest('Member already exists')
+  }
+
+  res.json(createResponseMessage('Membership created'))
+}
+
+const removeCommunityMember = async (req: Request, res: Response) => {
+  const isMembershipRemoved = await CommunityService.removeCommunityMember(
+    req.params.id,
+    req.body.userId
+  )
+
+  if (!isMembershipRemoved) {
+    throw new BadRequest('Member could not be removed')
+  }
+
+  res.json(createResponseMessage('Member removed'))
+}
+
+const leaveCommunity = async (req: Request, res: Response) => {
+  const isMembershipRemoved = await CommunityService.removeCommunityMember(
+    req.params.id,
+    req.session.userId as string
+  )
+
+  if (!isMembershipRemoved) {
+    throw new BadRequest('Member could not be removed')
+  }
+
+  res.json(
+    createResponseMessage(
+      'You have now left the community... come back please?'
+    )
+  )
+}
+
 const communityController = {
   createCommunity,
   getCommunities,
   getCommunity,
   postModerator,
   deleteModerator,
-  deleteCommunity
+  deleteCommunity,
+  joinCommunity,
+  addCommunityMember,
+  leaveCommunity,
+  removeCommunityMember
 }
 
 export default communityController

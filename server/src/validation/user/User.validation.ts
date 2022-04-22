@@ -33,5 +33,11 @@ export const ValidUser = {
     .max(1)
     .error(() => {
       return new BadRequest('isBlocked is required and the only allowed value')
+    }),
+  userId: Joi.string()
+    .alphanum()
+    .length(24)
+    .error(() => {
+      return new BadRequest('UserId does not match the specified criteria')
     })
 }

@@ -34,7 +34,7 @@ router
   .route('/:id/moderators')
   .post(
     addCommunityAdminRole,
-    validateRequest('updateModerator'),
+    validateRequest('userId'),
     catchAsync(communityController.postModerator)
   )
 
@@ -43,6 +43,32 @@ router
   .delete(
     addCommunityAdminRole,
     catchAsync(communityController.deleteModerator)
+  )
+
+router
+  .route('/:id/members')
+  .post(
+    addCommunityAdminRole,
+    allowOnlyCommunityAdminsAndAdmins,
+    validateRequest('userId'),
+    catchAsync(CommunityController.addCommunityMember)
+  )
+  .delete(
+    addCommunityAdminRole,
+    allowOnlyCommunityAdminsAndAdmins,
+    validateRequest('userId'),
+    catchAsync(CommunityController.removeCommunityMember)
+  )
+
+router
+  .route('/:id/join')
+  .post(allowOnlyRegisteredUsers, catchAsync(CommunityController.joinCommunity))
+
+router
+  .route('/:id/leave')
+  .delete(
+    allowOnlyRegisteredUsers,
+    catchAsync(CommunityController.leaveCommunity)
   )
 
 export default router
