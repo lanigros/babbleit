@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import { Unauthorized } from '../../errors'
 import { createResponseMessage } from '../../utility'
+import destroySession from '../../utility/destroySession'
 import UserService from '../service/user.service'
 
 const getWhoAmI = async (req: Request, res: Response) => {
@@ -55,11 +56,33 @@ const updateBlockedStatus = async (req: Request, res: Response) => {
   )
 }
 
+const deleteMyAccountAndAllMyCommunities = async (
+  req: Request,
+  res: Response
+) => {
+  if (!req.session.userId) {
+    throw new Unauthorized('Not logged in')
+  }
+
+  const deletedResult = await UserService.deleteMyAccountAndAllMyCommunities(
+    req.session.userId
+  )
+
+  if (!deletedResult) {
+    throw new Error('Something went wrong')
+  }
+
+  await destroySession(req, res)
+
+  res.json(createResponseMessage('Successfully deleted your account'))
+}
+
 const userController = {
   getWhoAmI,
   updateFields,
   getUsers,
-  updateBlockedStatus
+  updateBlockedStatus,
+  deleteMyAccountAndAllMyCommunities
 }
 
 export default userController

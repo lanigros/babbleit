@@ -13,6 +13,7 @@ import {
   CommunityModel,
   UserCommunityModel
 } from '../model'
+import AdminService from './admin.service'
 
 async function saveNewCommunity(
   newCommunity: CommunityRegistration,
@@ -191,13 +192,48 @@ async function deleteCommunityById(id: string) {
   }
 }
 
+async function getIdOfAllCommunitiesOwnedByUserId(userId: string) {
+  const communityAdminDoc = await CommunityAdminModel.findOne({
+    userId: userId,
+    'roles.role': 'admin'
+  })
+
+  if (!communityAdminDoc) {
+    return []
+  }
+
+  const listOfCommunityId: Types.ObjectId[] = []
+
+  communityAdminDoc._doc.roles.map((userRole) => {
+    if (userRole.role === 'admin') {
+      listOfCommunityId.push(userRole.communityId)
+    }
+  })
+
+  return listOfCommunityId
+}
+
+async function deleteCommunitiesOwnedByUserId(userId: string) {
+  const communitiesToDelete = await getIdOfAllCommunitiesOwnedByUserId(userId)
+
+  if (communitiesToDelete.length <= 0) {
+    return 0
+  }
+
+  const numberOfDeletedCommunities = await CommunityModel.deleteMany({
+    _id: { $in: communitiesToDelete }
+  })
+  return numberOfDeletedCommunities.deletedCount
+}
+
 const CommunityService = {
   saveNewCommunity,
   getAllCommunities,
   findCommunityById,
   addModerator,
   removeModerator,
-  deleteCommunityById
+  deleteCommunityById,
+  deleteCommunitiesOwnedByUserId
 }
 
 export default CommunityService
