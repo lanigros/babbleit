@@ -114,6 +114,49 @@ async function findCommunityById(
   return community
 }
 
+async function addModerator(communityId: string, userId: string) {
+  const existingRole = await CommunityAdminModel.exists({
+    userId: new Types.ObjectId(userId),
+    'roles.communityId': new Types.ObjectId(communityId)
+  })
+
+  if (existingRole) {
+    return false
+  }
+
+  const result = await CommunityAdminModel.updateOne(
+    { userId: new Types.ObjectId(userId) },
+    {
+      $push: {
+        roles: {
+          communityId: new Types.ObjectId(communityId),
+          role: 'moderator'
+        }
+      }
+    },
+    { upsert: true }
+  )
+
+  return !!(result.modifiedCount || result.upsertedCount)
+}
+
+async function removeModerator(communityId: string, userId: string) {
+  const result = await CommunityAdminModel.updateOne(
+    {
+      userId: new Types.ObjectId(userId),
+      communityId: new Types.ObjectId(communityId)
+    },
+    {
+      $pull: {
+        roles: {
+          role: 'moderator'
+        }
+      }
+    }
+  )
+  return !!result.modifiedCount
+}
+
 async function deleteCommunityById(id: string) {
   const userCommunityResult = await UserCommunityModel.updateMany(
     {},
@@ -152,6 +195,8 @@ const CommunityService = {
   saveNewCommunity,
   getAllCommunities,
   findCommunityById,
+  addModerator,
+  removeModerator,
   deleteCommunityById
 }
 

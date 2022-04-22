@@ -8,6 +8,7 @@ import {
   allowOnlyRegisteredUsers,
   allowOnlyCommunityAdminsAndAdmins
 } from '../../middleware'
+import communityController from '../controller/community.controller'
 
 const router = Router()
 
@@ -27,6 +28,21 @@ router
     addCommunityAdminRole,
     allowOnlyCommunityAdminsAndAdmins,
     catchAsync(CommunityController.deleteCommunity)
+  )
+
+router
+  .route('/:id/moderators')
+  .post(
+    addCommunityAdminRole,
+    validateRequest('updateModerator'),
+    catchAsync(communityController.postModerator)
+  )
+
+router
+  .route('/:id/moderators/:userId')
+  .delete(
+    addCommunityAdminRole,
+    catchAsync(communityController.deleteModerator)
   )
 
 export default router
