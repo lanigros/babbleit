@@ -1,7 +1,12 @@
 import { InfoCard } from '../components'
 
 const Profile = () => {
-  return <InfoCard title={'Heyo'} description={'HGeyo'} />
+  return (
+    <InfoCard
+      title={'Im a placeholder'}
+      description={'Im a placeholder too!'}
+    />
+  )
 }
 
 export default Profile
