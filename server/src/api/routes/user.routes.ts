@@ -3,7 +3,8 @@ import { Router } from 'express'
 import {
   catchAsync,
   validateRequest,
-  allowOnlyRegisteredUsers
+  allowOnlyRegisteredUsers,
+  allowOnlyAdmin
 } from '../../middleware'
 import { UserController } from '../controller'
 
@@ -18,6 +19,14 @@ router
     allowOnlyRegisteredUsers,
     validateRequest('userUpdate'),
     catchAsync(UserController.updateFields)
+  )
+
+router
+  .route('/:userId')
+  .put(
+    allowOnlyAdmin,
+    validateRequest('updateBlocked'),
+    catchAsync(UserController.updateBlockedStatus)
   )
 
 export default router

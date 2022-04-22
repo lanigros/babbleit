@@ -70,10 +70,20 @@ const findUsers = async (
   })
 }
 
+const updateBlockedStatus = async (
+  _id: string,
+  isBlocked: number
+): Promise<boolean> => {
+  const result = await UserModel.updateOne({ _id }, { isBlocked })
+
+  return !!result.acknowledged
+}
+
 const UserService = {
   findUserById,
   updateFields,
-  findUsers
+  findUsers,
+  updateBlockedStatus
 }
 
 export default UserService
