@@ -56,16 +56,27 @@ const updateBlockedStatus = async (req: Request, res: Response) => {
   )
 }
 
+const deleteUserAccountWithCommunities = async (
+  req: Request,
+  res: Response
+) => {
+  const deletedResult = await UserService.deleteMyAccountAndAllMyCommunities(
+    req.body.userId
+  )
+
+  if (!deletedResult) {
+    throw new Error('Something went wrong')
+  }
+
+  res.json(createResponseMessage('Successfully deleted useraccount'))
+}
+
 const deleteMyAccountAndAllMyCommunities = async (
   req: Request,
   res: Response
 ) => {
-  if (!req.session.userId) {
-    throw new Unauthorized('Not logged in')
-  }
-
   const deletedResult = await UserService.deleteMyAccountAndAllMyCommunities(
-    req.session.userId
+    req.session.userId as string
   )
 
   if (!deletedResult) {
@@ -82,7 +93,8 @@ const userController = {
   updateFields,
   getUsers,
   updateBlockedStatus,
-  deleteMyAccountAndAllMyCommunities
+  deleteMyAccountAndAllMyCommunities,
+  deleteUserAccountWithCommunities
 }
 
 export default userController

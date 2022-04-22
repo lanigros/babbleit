@@ -14,7 +14,7 @@ router.route('/').get(catchAsync(UserController.getUsers))
 
 router
   .route('/me')
-  .get(allowOnlyRegisteredUsers, catchAsync(UserController.getWhoAmI))
+  .get(catchAsync(UserController.getWhoAmI))
   .put(
     allowOnlyRegisteredUsers,
     validateRequest('userUpdate'),
@@ -31,6 +31,11 @@ router
     allowOnlyAdmin,
     validateRequest('updateBlocked'),
     catchAsync(UserController.updateBlockedStatus)
+  )
+  .delete(
+    allowOnlyAdmin,
+    validateRequest('userId'),
+    catchAsync(UserController.deleteUserAccountWithCommunities)
   )
 
 export default router
