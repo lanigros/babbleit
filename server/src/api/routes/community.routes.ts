@@ -6,7 +6,8 @@ import {
   catchAsync,
   addCommunityAdminRole,
   allowOnlyRegisteredUsers,
-  allowOnlyCommunityAdminsAndAdmins
+  allowOnlyCommunityAdminsAndAdmins,
+  allowOnlyCommunityMembers
 } from '../../middleware'
 import communityController from '../controller/community.controller'
 
@@ -72,7 +73,11 @@ router
   )
 router
   .route('/:id/posts')
-  .get(catchAsync(PostController.getAllPosts))
-  .post(allowOnlyRegisteredUsers, catchAsync(PostController.createPost))
+  .get(catchAsync(PostController.getAllPostsInCommunity))
+  .post(
+    allowOnlyRegisteredUsers,
+    allowOnlyCommunityMembers,
+    catchAsync(PostController.createPost)
+  )
 
 export default router
