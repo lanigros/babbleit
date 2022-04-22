@@ -1,17 +1,16 @@
-import { Community } from '../../types'
+import { useContext } from 'react'
+
 import { CardList } from '../../components'
+import { GlobalContext } from '../../state/globalState'
 import CommunityCard from '../CommunityCard'
 
-type CommunityListProps = {
-  communities?: Community[]
-}
-
-export default function CommunityList({ communities }: CommunityListProps) {
+export default function CommunityList() {
+  const { state } = useContext(GlobalContext)
   return (
     <CardList>
       <>
-        {communities?.length &&
-          communities.map((community) => (
+        {state.communities?.length &&
+          state.communities.map((community) => (
             <CommunityCard {...community} key={community.id} />
           ))}
       </>

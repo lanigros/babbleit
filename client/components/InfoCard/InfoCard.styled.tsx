@@ -85,3 +85,7 @@ export const CardThumbnail = styled.div`
 export const PlaceholderIcons = styled.span`
   font-size: ${fontSizes.small};
 `
+
+export const RemovalButton = styled.button`
+  align-self: flex-start;
+`

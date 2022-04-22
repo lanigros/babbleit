@@ -1,7 +1,12 @@
-import { CommunitiesResponse } from '../types'
-import { createServerSideFetch } from './createFetch'
+import { CommunitiesResponse, ResponseMessage } from '../types'
+import { createFetch, createServerSideFetch } from './createFetch'
 
 export const apiGetCommunities = createServerSideFetch<
-  undefined,
+  never,
   CommunitiesResponse
 >('communities', 'GET')
+
+export const apiRemoveCommunity = createFetch<never, ResponseMessage>(
+  'communities',
+  'DELETE'
+)

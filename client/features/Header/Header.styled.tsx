@@ -12,6 +12,7 @@ import {
 export const HeaderWrapper = styled.div`
   position: relative;
   height: ${headerHeight}px;
+  z-index: 1000000;
 `
 
 export const HeaderBody = styled.header`
@@ -22,7 +23,6 @@ export const HeaderBody = styled.header`
   height: ${headerHeight}px;
   background-color: ${colors.black};
   align-items: center;
-
   padding: 0 ${spacings.extraLarge};
 
   @media screen and (max-width: ${sizes.tablet}px) {
