@@ -34,7 +34,7 @@ router
   .route('/:id/moderators')
   .post(
     addCommunityAdminRole,
-    validateRequest('updateModerator'),
+    validateRequest('userId'),
     catchAsync(communityController.postModerator)
   )
 

@@ -1,5 +1,5 @@
 import { registration, login, userUpdate, updateBlocked, userId } from './user'
-import { communityUpdate, createCommunity, updateModerator } from './community'
+import { communityUpdate, createCommunity } from './community'
 
 export const JoiValidators = {
   registration,
@@ -7,7 +7,6 @@ export const JoiValidators = {
   communityUpdate,
   createCommunity,
   userUpdate,
-  updateModerator,
   updateBlocked,
   userId
 }
