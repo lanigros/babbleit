@@ -29,7 +29,7 @@ const getCommunity = async (req: Request, res: Response) => {
     req.params.id,
     req.session.isAdmin
   )
-  res.json({ community })
+  res.json({ community, communityAdminRole: req.communityAdminRole || null })
 }
 
 const postModerator = async (req: Request, res: Response) => {
