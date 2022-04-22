@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 
-import { Unauthorized } from '../../errors'
 import { PostService } from '../service'
 
-const getAllPosts = async (req: Request, res: Response) => {
-  const allPostInCommunity = await PostService.getPosts()
+const getAllPostsInCommunity = async (req: Request, res: Response) => {
+  const allPostInCommunity = await PostService.getPosts(req.params.id)
 
   res.json({ allPostInCommunity })
 }
@@ -22,7 +21,7 @@ const createPost = async (req: Request, res: Response) => {
 }
 
 const postController = {
-  getAllPosts,
+  getAllPostsInCommunity,
   createPost
 }
 

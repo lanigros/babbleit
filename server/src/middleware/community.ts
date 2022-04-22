@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import { NextFunction, Request, Response } from 'express'
 
-import { CommunityAdminModel } from '../api/model'
+import { CommunityAdminModel, CommunityModel, UserModel } from '../api/model'
 import { Role } from '../types'
 import { Unauthorized } from '../errors'
 
@@ -46,5 +46,20 @@ export async function allowOnlyCommunityAdminsAndAdmins(
       )
     )
   }
+  next()
+}
+
+export async function allowOnlyCommunityMembers(
+  req: Request,
+  _: Response,
+  next: NextFunction
+) {
+  const existingMember = await CommunityModel.exists({
+    'members.userId': req.session.userId
+  })
+  if (!existingMember) {
+    throw new Unauthorized('You must be a member to post in this community')
+  }
+
   next()
 }

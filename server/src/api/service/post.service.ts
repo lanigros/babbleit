@@ -1,9 +1,13 @@
-import { PostModel, CommunityModel } from '../model'
-import { UserService } from '../service'
+import { PostModel, CommunityModel, UserModel } from '../model'
+import { UserService, CommunityService } from '../service'
 import { Post } from '../../types'
 
-const getPosts = async () => {
-  console.log('Yeehaw')
+const getPosts = async (communityId: string) => {
+  return await CommunityService.findCommunityById(communityId).then(
+    (community) => {
+      return community.posts
+    }
+  )
 }
 
 const createPost = async (
@@ -11,8 +15,8 @@ const createPost = async (
   communityId: string,
   newPost: Post
 ) => {
-  const username = await UserService.findUserById(userId).then((user) => {
-    return user.username
+  const username = await UserModel.findOne({ _id: userId }).then((user) => {
+    return user?._doc.username
   })
 
   const { title, content } = newPost
