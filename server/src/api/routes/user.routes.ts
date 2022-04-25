@@ -32,5 +32,10 @@ router
     validateRequest('updateBlocked'),
     catchAsync(UserController.updateBlockedStatus)
   )
+  .delete(
+    allowOnlyAdmin,
+    validateRequest('userId'),
+    catchAsync(UserController.deleteUserAccountWithCommunities)
+  )
 
 export default router
