@@ -17,7 +17,7 @@ export default function Signup() {
   function submitHandler({ repeatPassword, ...signupValues }: UserSignup) {
     async function postLogin() {
       try {
-        const response = await apiSignup(signupValues)
+        const response = await apiSignup({ data: signupValues })
         response.user && dispatch({ type: 'user', payload: response.user })
         router.push('/profile')
       } catch (e) {
