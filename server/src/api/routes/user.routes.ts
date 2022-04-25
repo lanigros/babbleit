@@ -14,7 +14,7 @@ router.route('/').get(catchAsync(UserController.getUsers))
 
 router
   .route('/me')
-  .get(allowOnlyRegisteredUsers, catchAsync(UserController.getWhoAmI))
+  .get(catchAsync(UserController.getWhoAmI))
   .put(
     allowOnlyRegisteredUsers,
     validateRequest('userUpdate'),
