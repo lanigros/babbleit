@@ -58,7 +58,7 @@ export async function allowOnlyCommunityMembers(
     'members.userId': req.session.userId
   })
   if (!existingMember) {
-    throw new Unauthorized('You must be a member to post in this community')
+    next(new Unauthorized('You must be a member to post in this community'))
   }
 
   next()

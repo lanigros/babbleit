@@ -3,11 +3,8 @@ import { UserService, CommunityService } from '../service'
 import { Post } from '../../types'
 
 const getPosts = async (communityId: string) => {
-  return await CommunityService.findCommunityById(communityId).then(
-    (community) => {
-      return community.posts
-    }
-  )
+  const community = await CommunityService.findCommunityById(communityId)
+  return community.posts
 }
 
 const createPost = async (
@@ -15,9 +12,8 @@ const createPost = async (
   communityId: string,
   newPost: Post
 ) => {
-  const username = await UserModel.findOne({ _id: userId }).then((user) => {
-    return user?._doc.username
-  })
+  const user = await UserModel.findOne({ _id: userId })
+  const username = user?._doc.username
 
   const { title, content } = newPost
 
