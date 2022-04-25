@@ -35,7 +35,11 @@ export type UserResponse = {
 
 /** POSTS */
 
-export type CommunityPost = Id
+export type CommunityPost = {
+  username: User['username']
+  title: string
+  content: string
+} & Id
 
 /** COMMUNITY */
 

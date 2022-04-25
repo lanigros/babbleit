@@ -48,12 +48,15 @@ const Community = ({ user, community, communityAdminRole }: CommunityProps) => {
   const { dispatch } = useContext(GlobalContext)
   useEffect(() => {
     user && dispatch({ type: 'user', payload: user })
-  }, [dispatch, user])
+    community.posts && dispatch({ type: 'setPosts', payload: community.posts })
+  }, [dispatch, user, community])
   return (
-    <CommunityView
-      community={community}
-      communityAdminRole={communityAdminRole}
-    />
+    <main>
+      <CommunityView
+        community={community}
+        communityAdminRole={communityAdminRole}
+      />
+    </main>
   )
 }
 

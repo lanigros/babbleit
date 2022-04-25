@@ -12,7 +12,7 @@ import {
 export const CardContainer = styled.div`
   max-width: 100%;
   width: 100%;
-  height: 155px;
+  min-height: 155px;
   border: 1px solid black;
   background: ${colors.black};
   border-radius: ${borderRadiuses.small};
@@ -42,7 +42,6 @@ export const CardFooter = styled.div`
 `
 
 export const CardFooterContent = styled.div`
-  width: 35%;
   height: 100%;
   display: flex;
   align-items: center;

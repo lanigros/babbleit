@@ -20,6 +20,7 @@ type CardProps = {
   title: string
   description: string
   showFooter?: boolean
+  showImage?: boolean
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
   allowRemoval?: boolean
   onRemoval?: (e: MouseEvent<HTMLButtonElement>) => void
@@ -29,6 +30,7 @@ export default function InfoCard({
   title,
   description,
   showFooter = false,
+  showImage = false,
   onClick,
   allowRemoval = false,
   onRemoval
@@ -36,15 +38,17 @@ export default function InfoCard({
   return (
     <CardContainer>
       <CardContent>
-        <CardThumbnail onClick={onClick}>
-          <Image
-            src={Thumbnail}
-            alt='Thumbnail'
-            height={70}
-            width={70}
-            layout='intrinsic'
-          />
-        </CardThumbnail>
+        {showImage && (
+          <CardThumbnail onClick={onClick}>
+            <Image
+              src={Thumbnail}
+              alt='Thumbnail'
+              height={70}
+              width={70}
+              layout='intrinsic'
+            />
+          </CardThumbnail>
+        )}
         <CardTextContainer onClick={onClick}>
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>

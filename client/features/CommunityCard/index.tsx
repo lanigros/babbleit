@@ -24,6 +24,7 @@ export default function CommunityCard({ id, title, description }: Community) {
         onClick={() => router.push(`/communities/${id}`)}
         allowRemoval={state.user.isAdmin}
         onRemoval={removeCommunity}
+        showImage
       />
     </CommunityCardWrapper>
   )

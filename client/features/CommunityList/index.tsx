@@ -9,10 +9,13 @@ export default function CommunityList() {
   return (
     <CardList>
       <>
-        {state.communities?.length &&
+        {state.communities?.length ? (
           state.communities.map((community) => (
             <CommunityCard {...community} key={community.id} />
-          ))}
+          ))
+        ) : (
+          <div>No Communities Yet :(</div>
+        )}
       </>
     </CardList>
   )

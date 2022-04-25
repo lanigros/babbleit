@@ -90,10 +90,11 @@ async function findCommunityById(
         pipeline: [
           {
             $project: {
-              id: 1,
+              _id: 0,
               title: 1,
               content: 1,
-              username: 1
+              username: 1,
+              id: { $toString: '$_id' }
             }
           }
         ],
