@@ -73,10 +73,11 @@ router
   )
 router
   .route('/:id/posts')
-  .get(catchAsync(PostController.getAllPostsInCommunity))
+  .get(catchAsync(PostController.getPostsInCommunity))
   .post(
     allowOnlyRegisteredUsers,
     allowOnlyCommunityMembers,
+    validateRequest('createPost'),
     catchAsync(PostController.createPost)
   )
 
