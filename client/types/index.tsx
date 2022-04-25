@@ -2,7 +2,11 @@ export type ErrorResponse = {
   error?: string
 }
 
-type Id = { id: string }
+export type ResponseMessage = {
+  message: string
+}
+
+export type Id = { id: string }
 
 /** USER */
 
@@ -38,4 +42,9 @@ export type Community = {
 
 export type CommunitiesResponse = {
   communities: Community[]
+}
+
+export type CommunityResponse = {
+  community: Community
+  communityAdminRole: 'admin' | 'moderator' | null
 }

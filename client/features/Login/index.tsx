@@ -18,7 +18,7 @@ export default function Login() {
     error && setError(false)
     async function postLogin() {
       try {
-        const response = await apiLogin(userLogin)
+        const response = await apiLogin({ data: userLogin })
         response.user && dispatch({ type: 'user', payload: response.user })
         router.push('/profile')
       } catch (e) {
