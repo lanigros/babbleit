@@ -83,6 +83,24 @@ async function findCommunityById(
     { $match: { _id: new Types.ObjectId(communityId) } },
     { $limit: 1 },
     {
+      $lookup: {
+        from: 'posts',
+        localField: '_id',
+        foreignField: 'communityId',
+        pipeline: [
+          {
+            $project: {
+              id: 1,
+              title: 1,
+              content: 1,
+              username: 1
+            }
+          }
+        ],
+        as: 'posts'
+      }
+    },
+    {
       $project: {
         _id: 0,
         id: { $toString: '$_id' },
@@ -97,7 +115,8 @@ async function findCommunityById(
               username: '$$this.username'
             }
           }
-        }
+        },
+        posts: '$posts'
       }
     }
   ])

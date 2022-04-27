@@ -1,12 +1,13 @@
 import { Router } from 'express'
 
-import { CommunityController } from '../controller'
+import { CommunityController, PostController } from '../controller'
 import {
   validateRequest,
   catchAsync,
   addCommunityAdminRole,
   allowOnlyRegisteredUsers,
-  allowOnlyCommunityAdminsAndAdmins
+  allowOnlyCommunityAdminsAndAdmins,
+  allowOnlyCommunityMembers
 } from '../../middleware'
 import communityController from '../controller/community.controller'
 
@@ -69,6 +70,15 @@ router
   .delete(
     allowOnlyRegisteredUsers,
     catchAsync(CommunityController.leaveCommunity)
+  )
+router
+  .route('/:id/posts')
+  .get(catchAsync(PostController.getPostsInCommunity))
+  .post(
+    allowOnlyRegisteredUsers,
+    allowOnlyCommunityMembers,
+    validateRequest('createPost'),
+    catchAsync(PostController.createPost)
   )
 
 export default router
