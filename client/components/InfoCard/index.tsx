@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import { MouseEvent } from 'react'
 
-import remove from '../../public/recycle-bin.png'
 import Thumbnail from '../../public/Thumbnail.jpg'
+import OptionMenu from '../OptionMenu'
 import {
   CardContainer,
   CardFooter,
@@ -13,7 +13,7 @@ import {
   CardFooterContent,
   CardThumbnail,
   PlaceholderIcons,
-  RemovalButton
+  MenuHolder
 } from './InfoCard.styled'
 
 type CardProps = {
@@ -21,9 +21,11 @@ type CardProps = {
   description: string
   showFooter?: boolean
   showImage?: boolean
+  allowDelete?: boolean
+  allowEdit?: boolean
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
-  allowRemoval?: boolean
-  onRemoval?: (e: MouseEvent<HTMLButtonElement>) => void
+  onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
+  onEdit?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 export default function InfoCard({
@@ -31,9 +33,11 @@ export default function InfoCard({
   description,
   showFooter = false,
   showImage = false,
+  allowDelete = false,
+  allowEdit = false,
   onClick,
-  allowRemoval = false,
-  onRemoval
+  onDelete,
+  onEdit
 }: CardProps) {
   return (
     <CardContainer>
@@ -53,18 +57,10 @@ export default function InfoCard({
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardTextContainer>
-        {allowRemoval && (
-          <RemovalButton onClick={onRemoval}>
-            <span>
-              <Image
-                src={remove}
-                width={50}
-                height={50}
-                layout='intrinsic'
-                alt='Icon of a trashcan'
-              />
-            </span>
-          </RemovalButton>
+        {((allowEdit && onEdit) || (allowDelete && onDelete)) && (
+          <MenuHolder>
+            <OptionMenu onDelete={onDelete} onEdit={onEdit} />
+          </MenuHolder>
         )}
       </CardContent>
       {showFooter && (

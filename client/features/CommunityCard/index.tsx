@@ -12,8 +12,7 @@ export default function CommunityCard({ id, title, description }: Community) {
 
   async function removeCommunity() {
     const response = await apiRemoveCommunity({ slug: id })
-    response.message &&
-      dispatch({ type: 'removeCommunity', payload: { id, title, description } })
+    response.message && dispatch({ type: 'removeCommunity', payload: { id } })
   }
 
   return (
@@ -22,9 +21,9 @@ export default function CommunityCard({ id, title, description }: Community) {
         title={title}
         description={description}
         onClick={() => router.push(`/communities/${id}`)}
-        allowRemoval={state.user.isAdmin}
-        onRemoval={removeCommunity}
         showImage
+        allowDelete={state.user.isAdmin}
+        onDelete={removeCommunity}
       />
     </CommunityCardWrapper>
   )
