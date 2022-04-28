@@ -1,6 +1,7 @@
 import { PostModel, CommunityModel, UserModel } from '../model'
-import { UserService, CommunityService } from '../service'
-import { Post } from '../../types'
+import { CommunityService } from '../service'
+import { Post, PostRegistration } from '../../types'
+import { Unauthorized } from '../../errors'
 
 const getPosts = async (communityId: string) => {
   const community = await CommunityService.findCommunityById(communityId)
@@ -51,8 +52,27 @@ const createPost = async (
   }
 }
 
+const updatePost = async (
+  postId: string,
+  userId: string,
+  update: PostRegistration
+) => {
+  const author = await PostModel.exists({
+    _id: postId,
+    userId
+  })
+
+  if (!author) {
+    throw new Unauthorized('You are not the owner of this post')
+  }
+
+  const result = await PostModel.updateOne({ _id: postId }, { ...update })
+  return result.acknowledged
+}
+
 const PostService = {
   getPosts,
-  createPost
+  createPost,
+  updatePost
 }
 export default PostService

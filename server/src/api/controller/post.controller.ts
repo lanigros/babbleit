@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { createResponseMessage } from '../../utility'
 import { PostService } from '../service'
 
 const getPostsInCommunity = async (req: Request, res: Response) => {
@@ -20,9 +21,24 @@ const createPost = async (req: Request, res: Response) => {
   res.json({ newPost })
 }
 
+const updatePost = async (req: Request, res: Response) => {
+  const isUpdated = await PostService.updatePost(
+    req.params.postId,
+    req.session.userId as string,
+    req.body
+  )
+
+  if (!isUpdated) {
+    throw new Error('Update unsuccessful')
+  }
+
+  res.json(createResponseMessage('Successfully updated your post'))
+}
+
 const postController = {
   getPostsInCommunity,
-  createPost
+  createPost,
+  updatePost
 }
 
 export default postController
