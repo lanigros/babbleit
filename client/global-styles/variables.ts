@@ -73,7 +73,8 @@ export const spacings = {
   large: '40px',
   extraLarge: '56px',
   extraExtraLarge: '64px',
-  huge: '72px'
+  huge: '72px',
+  heightHalfScreen: '50vh'
 } as const
 
 export const maxWidth = 1280

@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react'
 import { apiGetCommunity, serverSideWhoAmI } from '../../api'
 import { GlobalContext } from '../../state/globalState'
 import { CommunityAdminRole, ServerSideProps } from '../../types'
-import { CommunityView } from '../../views'
+import { CommunityView } from '../../../views'
 
 type CommunityProps = {
   user: ServerSideProps['user']
