@@ -42,7 +42,9 @@ const Home = ({ user, communities }: HomeProps) => {
   return (
     <main>
       {!user && <LandingView />}
-      {user && <CommunitiesView />}
+      {user ? <CommunitiesView />
+        : <LandingView/>
+      }
     </main>
   )
 }
