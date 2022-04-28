@@ -5,6 +5,8 @@ const Profile = () => {
     <InfoCard
       title={'Im a placeholder'}
       description={'Im a placeholder too!'}
+      showImage
+      showFooter
     />
   )
 }

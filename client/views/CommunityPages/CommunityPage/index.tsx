@@ -1,9 +1,44 @@
+import { useRouter } from 'next/router'
+import { useContext } from 'react'
+import { apiRemoveCommunity } from '../../../api'
 import { MaxWidthContainer } from '../../../components'
+import { PostList } from '../../../features'
+import { GlobalContext } from '../../../state/globalState'
+import { CommunityAdminRole, DetailedCommunity } from '../../../types'
+import { DeleteButton, Title } from './CommunitiesPage.styled'
 
-export default function CommunityPage() {
+type CommunityProps = {
+  communityAdminRole: CommunityAdminRole
+  community: DetailedCommunity
+}
+
+export default function CommunityPage({
+  community,
+  communityAdminRole
+}: CommunityProps) {
+  const router = useRouter()
+  const { state } = useContext(GlobalContext)
+  function removeCommunity() {
+    async function deleteCommunity() {
+      await apiRemoveCommunity({
+        slug: router.query.slug as string
+      })
+      router.reload()
+    }
+    deleteCommunity()
+  }
+
   return (
     <MaxWidthContainer>
-      <div>COMMUNITY WILL BE HERE SOON</div>
+      <Title>
+        Community <span>{`'${community.title}'`}</span>
+      </Title>
+      <>
+        {(communityAdminRole === 'admin' || state.user.isAdmin) && (
+          <DeleteButton onClick={removeCommunity}>DELETE</DeleteButton>
+        )}
+      </>
+      <PostList />
     </MaxWidthContainer>
   )
 }

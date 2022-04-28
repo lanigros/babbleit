@@ -1,21 +1,24 @@
 import { createContext, useReducer } from 'react'
 
-import { Community, User } from '../types'
+import { Community, CommunityPost, User } from '../types'
 
 const initialState = {
   user: {},
-  communities: []
+  communities: [],
+  posts: []
 }
 
 type GlobalState = {
   user: Partial<User>
   communities: Community[]
+  posts: CommunityPost[]
 }
 
 type SetStateAction =
   | { type: 'user'; payload: User }
   | { type: 'setCommunities'; payload: Community[] }
   | { type: 'removeCommunity'; payload: Community }
+  | { type: 'setPosts'; payload: CommunityPost[] }
 
 type GlobalContextType = {
   state: GlobalState
@@ -49,6 +52,11 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
       return {
         ...state,
         communities
+      }
+    case 'setPosts':
+      return {
+        ...state,
+        posts: action.payload
       }
     default:
       return { ...state }

@@ -33,18 +33,48 @@ export type UserResponse = {
   user?: User
 } & ErrorResponse
 
+/** POSTS */
+
+export type CommunityPost = {
+  username: User['username']
+  title: string
+  content: string
+} & Id
+
 /** COMMUNITY */
 
-export type Community = {
+type CommunityMember = {
+  username: User['username']
+  userId: User['id']
+}
+
+export type CommunityRegistration = {
   title: string
   description: string
-} & Id
+}
+
+export type Community = CommunityRegistration & Id
+
+export type DetailedCommunity = {
+  isBlocked: 1 | 0
+  members: CommunityMember[]
+  posts: CommunityPost[]
+} & Community
 
 export type CommunitiesResponse = {
   communities: Community[]
 }
 
+export type CommunityAdminRole = 'admin' | 'moderator' | null
+
 export type CommunityResponse = {
-  community: Community
-  communityAdminRole: 'admin' | 'moderator' | null
+  community: DetailedCommunity
+  communityAdminRole: CommunityAdminRole
+}
+
+/** SERVER-SIDE PROPS */
+export type ServerSideProps = {
+  user: User | null
+  community: DetailedCommunity
+  communityAdminRole: CommunityAdminRole
 }
