@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react'
 
-import { Community, CommunityPost, User } from '../types'
+import { Community, CommunityPost, User, Id } from '../types'
 
 const initialState = {
   user: {},
@@ -17,8 +17,8 @@ type GlobalState = {
 type SetStateAction =
   | { type: 'user'; payload: User }
   | { type: 'setCommunities'; payload: Community[] }
-  | { type: 'removeCommunity'; payload: Community }
   | { type: 'setPosts'; payload: CommunityPost[] }
+  | { type: 'removeCommunity'; payload: Id }
 
 type GlobalContextType = {
   state: GlobalState
@@ -43,10 +43,9 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
         communities: action.payload
       }
     case 'removeCommunity':
-      let indexToRemove = state.communities.indexOf(action.payload)
-      if (indexToRemove === -1) {
-        indexToRemove = state.communities.length - 1
-      }
+      let indexToRemove = state.communities.findIndex(
+        (community) => community.id === action.payload.id
+      )
       const communities = [...state.communities]
       communities.splice(indexToRemove, 1)
       return {

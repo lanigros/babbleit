@@ -85,6 +85,6 @@ export const PlaceholderIcons = styled.span`
   font-size: ${fontSizes.small};
 `
 
-export const RemovalButton = styled.button`
+export const MenuHolder = styled.div`
   align-self: flex-start;
 `
