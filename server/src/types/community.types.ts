@@ -1,6 +1,6 @@
 import { Document } from 'mongoose'
 
-import { Id, IsBlocked, MongoId, User, Post } from '.'
+import { Id, IsBlocked, MongoId, User, Post, CommunityPost } from '.'
 
 export type CommunityBase = {
   title: string

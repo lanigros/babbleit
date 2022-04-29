@@ -38,6 +38,7 @@ export type User = {
 
 export type UserResponse = {
   user?: User
+  posts?: CommunityPost[]
 } & ErrorResponse
 
 export type UsersResponse = {

@@ -47,6 +47,7 @@ export const fontWeights = {
 } as const
 
 export const borderRadiuses = {
+  tiny: '10px',
   small: '15px',
   medium: '32px',
   large: '65px',

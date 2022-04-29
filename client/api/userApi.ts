@@ -25,3 +25,7 @@ export const apiChangeUserBlocked = createFetch<IsBlocked, ResponseMessage>(
   'users',
   'PUT'
 )
+export const serverSideWhoAmIWithPosts = createServerSideFetch<
+  never,
+  UserResponse
+>('users/me?withPosts=true', 'GET')

@@ -1,34 +1,58 @@
 import { Types } from 'mongoose'
 
 import { NotFound } from '../../errors'
-import { PublicUserFields, UpdateableUserFields, UserData } from '../../types'
+import {
+  CommunityPost,
+  Post,
+  PublicUserFields,
+  UpdateableUserFields,
+  UserData,
+  UserResponse
+} from '../../types'
 import { hashPassword } from '../../utility'
-import { AdminModel, UserModel } from '../model'
+import { AdminModel, PostModel, UserModel } from '../model'
 import AdminService from './admin.service'
 import CommunityService from './community.service'
 
 const findUserById = async (
-  userId: string
-): Promise<UserData & { isBlocked: boolean }> => {
+  userId: string,
+  withPosts: string
+): Promise<UserResponse> => {
   const user = await UserModel.findById(new Types.ObjectId(userId))
-
   if (!user) {
     throw new NotFound('User not found')
   }
-
   const { _id, email, username, isBlocked } = user._doc
-
   const admin = await AdminModel.exists({
     userId: _id
   })
 
-  return {
+  const fetchedUser = {
     id: _id.toString(),
     email,
     username,
     isAdmin: !!admin,
-    isBlocked: !!isBlocked
+    isBlocked
   }
+
+  if (withPosts == 'false') {
+    return { user: fetchedUser }
+  }
+
+  const posts = await PostModel.aggregate<CommunityPost>([
+    { $match: { userId: new Types.ObjectId(user._id) } },
+    {
+      $project: {
+        _id: 0,
+        title: 1,
+        content: 1,
+        username: 1,
+        id: { $toString: '$_id' }
+      }
+    }
+  ])
+
+  return { user: fetchedUser, posts }
 }
 
 const updateFields = async (
