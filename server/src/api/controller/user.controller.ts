@@ -61,7 +61,7 @@ const deleteUserAccountWithCommunities = async (
   res: Response
 ) => {
   const deletedResult = await UserService.deleteMyAccountAndAllMyCommunities(
-    req.body.userId
+    req.params.userId
   )
 
   if (!deletedResult) {

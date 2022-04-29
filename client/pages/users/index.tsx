@@ -1,38 +1,44 @@
 import { GetServerSidePropsContext } from 'next'
 import { useContext, useEffect } from 'react'
-import { apiGetUsers } from '../../api'
-import UserList from '../../features/UserList'
+import { apiGetUsers, serverSideWhoAmI } from '../../api'
 import { GlobalContext } from '../../state/globalState'
-import { LimitedUserInfo } from '../../types'
+import { LimitedUserInfo, ServerSideProps, User } from '../../types'
 import { UsersView } from '../../views'
 
 type UsersProps = {
   users: LimitedUserInfo[] | null
+  user: User
 }
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let users: LimitedUserInfo[] | null = null
+  let user: ServerSideProps['user'] = null
 
   try {
-    const userResponse = await apiGetUsers(ctx.req.cookies)
-    users = userResponse.users
+    const usersResponse = await apiGetUsers(ctx.req.cookies)
+    users = usersResponse.users
+
+    const userResponse = await serverSideWhoAmI(ctx.req.cookies)
+    user = userResponse.user || null
   } catch (e) {
     console.error(e)
   }
 
   return {
     props: {
-      users
+      users,
+      user
     }
   }
 }
 
-const Users = ({ users }: UsersProps) => {
+const Users = ({ users, user }: UsersProps) => {
   const { dispatch } = useContext(GlobalContext)
 
   useEffect(() => {
     users && dispatch({ type: 'setUsers', payload: users })
-  }, [dispatch, users])
+    user && dispatch({ type: 'user', payload: user })
+  }, [dispatch, users, user])
 
   return (
     <main>
