@@ -2,10 +2,12 @@ import { Document } from 'mongoose'
 
 import { Id, IsBlocked, MongoId, User, Post } from '.'
 
-export type CommunityRegistration = {
+export type CommunityBase = {
   title: string
   description: string
 }
+
+export type EditBaseCommunity = CommunityBase & Id
 
 export type CommunityMember = {
   userId: User['_id']
@@ -24,7 +26,7 @@ export type Community = {
   __v: number
   members: CommunityMember[]
   posts: CommunityPost[]
-} & CommunityRegistration &
+} & CommunityBase &
   IsBlocked &
   MongoId &
   CreatorId
@@ -33,12 +35,15 @@ export type CommunityDocument = {
   _doc: Community
 } & Document
 
-export type CommunityData = Id & CommunityRegistration & { creatorId: Id['id'] }
+export type CommunityData = Id & CommunityBase & { creatorId: Id['id'] }
 
-export type CommunitySelect = MongoId &
-  CommunityRegistration &
-  IsBlocked &
-  CreatorId
+export type CommunitySelect = MongoId & CommunityBase & IsBlocked & CreatorId
+
+export type JoinedMember = {
+  userId: User['_id']
+  username: User['username']
+} & IsBlocked &
+  MongoId
 
 export type MemberResponse = {
   id: Id['id']
@@ -46,4 +51,5 @@ export type MemberResponse = {
 
 export type CommunityMemberAggregate = {
   members: MemberResponse[]
-}
+} & CommunityBase &
+  Id

@@ -5,8 +5,9 @@ import {
   Community,
   CommunityData,
   CommunityMemberAggregate,
-  CommunityRegistration,
+  CommunityBase,
   CommunitySelect,
+  EditBaseCommunity,
   Role
 } from '../../types'
 import {
@@ -17,7 +18,7 @@ import {
 } from '../model'
 
 async function saveNewCommunity(
-  newCommunity: CommunityRegistration,
+  newCommunity: CommunityBase,
   userId: string
 ): Promise<CommunityData> {
   const { title, description } = newCommunity
@@ -80,6 +81,15 @@ async function getCommunities(
   })
 }
 
+async function updateBaseCommunity(community: EditBaseCommunity) {
+  const result = await CommunityModel.updateOne(
+    { _id: community.id },
+    { title: community.title, description: community.description }
+  )
+  return result.acknowledged
+}
+
+// TODO add posts to response
 async function findCommunityById(
   communityId: string,
   showBlockedCommunities = false,
@@ -347,7 +357,8 @@ const CommunityService = {
   addCommunityMember,
   removeCommunityMember,
   updateBlockedStatus,
-  findMembers
+  findMembers,
+  updateBaseCommunity
 }
 
 export default CommunityService

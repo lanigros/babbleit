@@ -31,6 +31,25 @@ const getCommunity = async (req: Request, res: Response) => {
   res.json({ community, communityAdminRole: req.communityAdminRole || null })
 }
 
+const updateBaseCommunity = async (req: Request, res: Response) => {
+  if (req.communityAdminRole !== 'admin') {
+    throw new Unauthorized(
+      'Access not allowed as you are not an admin of this community'
+    )
+  }
+
+  const result = await CommunityService.updateBaseCommunity({
+    ...req.body,
+    id: req.params.id
+  })
+
+  if (!result) {
+    throw new BadRequest('Something went wrong')
+  }
+
+  res.json(createResponseMessage('Succesfully updated'))
+}
+
 const postModerator = async (req: Request, res: Response) => {
   if (req.communityAdminRole !== 'admin') {
     throw new Unauthorized(
@@ -179,7 +198,8 @@ const communityController = {
   leaveCommunity,
   removeCommunityMember,
   updateBlockedStatus,
-  getMembers
+  getMembers,
+  updateBaseCommunity
 }
 
 export default communityController
