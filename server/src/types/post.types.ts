@@ -1,5 +1,5 @@
 import { Community } from '.'
-import { IsBlocked, MongoId } from './aggregate.types'
+import { Id, IsBlocked, MongoId } from './aggregate.types'
 import { User } from './user.types'
 
 export type Post = {
@@ -20,3 +20,8 @@ export type PostRegistration = {
   title: string
   content: string
 }
+
+export type PostUsername = {
+  username: Post['username']
+} & Id &
+  PostRegistration

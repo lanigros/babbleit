@@ -1,4 +1,5 @@
-import { User } from '../../types'
+import { useContext } from 'react'
+import { GlobalContext } from '../../state/globalState'
 import {
   Card,
   ProfilePicture,
@@ -7,11 +8,8 @@ import {
   CardUpper
 } from './ProfileCard.styled'
 
-type ProfileCardProps = {
-  user: User
-}
-
-export default function ProfileCard({ user }: ProfileCardProps) {
+export default function ProfileCard() {
+  const { state } = useContext(GlobalContext)
   return (
     <Card>
       <CardUpper>
@@ -19,8 +17,8 @@ export default function ProfileCard({ user }: ProfileCardProps) {
       </CardUpper>
       <CardLower>
         <ProfileText>
-          <h5>{user.username}</h5>
-          <p>{user.email}</p>
+          <h5>{state.user.email}</h5>
+          <p>{state.user.username}</p>
         </ProfileText>
       </CardLower>
     </Card>

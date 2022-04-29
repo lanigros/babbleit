@@ -15,7 +15,6 @@ export const Button = styled.div`
     ${colors.yellow} 0 25%,
     ${colors.white} 0 75%
   );
-  align-self: flex-end;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
