@@ -1,7 +1,7 @@
 import { PostModel, CommunityModel, UserModel } from '../model'
 import { CommunityService } from '../service'
 import { Post, PostRegistration } from '../../types'
-import { Unauthorized } from '../../errors'
+import { NotFound, Unauthorized } from '../../errors'
 
 const getPosts = async (communityId: string) => {
   const community = await CommunityService.findCommunityById(communityId)
@@ -99,12 +99,34 @@ const deletePost = async (
   return result.acknowledged
 }
 
+const findPostById = async (postId: string) => {
+  const post = await PostModel.findOne({ _id: postId })
+
+  if (!post) {
+    throw new NotFound('No such post')
+  }
+
+  const { _id, userId, username, communityId, title, content, isBlocked } =
+    post._doc
+
+  return {
+    id: _id.toString(),
+    userId: userId.toString(),
+    username,
+    communityId: communityId.toString(),
+    title,
+    content,
+    isBlocked
+  }
+}
+
 const PostService = {
   getPosts,
   createPost,
   updatePost,
   updateBlockedStatus,
-  deletePost
+  deletePost,
+  findPostById
 }
 
 export default PostService
