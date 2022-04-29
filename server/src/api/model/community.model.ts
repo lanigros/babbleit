@@ -17,6 +17,11 @@ const communitySchema = new Schema(
       type: Number,
       default: 0
     },
+    creatorId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: [true, 'User id must be provided']
+    },
     members: [
       {
         userId: {

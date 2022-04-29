@@ -16,21 +16,29 @@ export type CommunityPost = {
   postId: Post['_id']
 }
 
+type CreatorId = {
+  creatorId: User['_id']
+}
+
 export type Community = {
   __v: number
   members: CommunityMember[]
   posts: CommunityPost[]
 } & CommunityRegistration &
   IsBlocked &
-  MongoId
+  MongoId &
+  CreatorId
 
 export type CommunityDocument = {
   _doc: Community
 } & Document
 
-export type CommunityData = Id & CommunityRegistration
+export type CommunityData = Id & CommunityRegistration & { creatorId: Id['id'] }
 
-export type CommunitySelect = MongoId & CommunityRegistration & IsBlocked
+export type CommunitySelect = MongoId &
+  CommunityRegistration &
+  IsBlocked &
+  CreatorId
 
 export type JoinedMember = {
   userId: User['_id']
