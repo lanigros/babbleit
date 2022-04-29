@@ -19,6 +19,11 @@ export type UserLogin = {
   password: string
 }
 
+export type LimitedUserInfo = {
+  username: string
+} & Id &
+  IsBlocked
+
 export type UserSignup = {
   username: string
   repeatPassword: string
@@ -26,15 +31,17 @@ export type UserSignup = {
 
 export type User = {
   email: string
-  username: string
   createdAt: string
   updatedAt: string
   isAdmin: boolean
-} & Id &
-  IsBlocked
+} & LimitedUserInfo
 
 export type UserResponse = {
   user?: User
+} & ErrorResponse
+
+export type UsersResponse = {
+  users: LimitedUserInfo[]
 } & ErrorResponse
 
 /** POSTS */
