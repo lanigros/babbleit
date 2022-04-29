@@ -23,6 +23,11 @@ export const apiGetCommunity = createServerSideFetch<never, CommunityResponse>(
   'GET'
 )
 
+export const apiPutCommunity = createFetch<CommunityRegistration, Community>(
+  'communities',
+  'PUT'
+)
+
 export const apiPostNewCommunity = createFetch<
   CommunityRegistration,
   CommunityResponse
