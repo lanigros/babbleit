@@ -33,6 +33,7 @@ export default function PostCard({
       console.log('oopsie')
     }
   }
+
   return (
     <PostCardWrapper>
       <InfoCard
@@ -42,7 +43,9 @@ export default function PostCard({
         allowDelete={hasAdminPrivileges || isPostCreator}
         allowEdit={isPostCreator}
         onDelete={deletePost}
-        onEdit={() => console.log('edit')}
+        onEdit={() =>
+          router.push(`/communities/${router.query.slug}/posts/${id}/edit`)
+        }
       />
     </PostCardWrapper>
   )
