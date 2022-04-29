@@ -1,10 +1,9 @@
-import error from 'next/error'
 import { FormEvent } from 'react'
 import {
   BannerTitle,
-  CreateCommunityForm,
-  ErrorText
-} from '../../views/CommunityPages/CreateCommunityPage/CreateCommunity.styled'
+  ErrorText,
+  FormWrapper
+} from './CreatePostOrCommunity.styled'
 
 type CreateFormProps = {
   children: JSX.Element[]
@@ -30,11 +29,11 @@ export default function CreatePostOrCommunityForm({
           <span>Create</span> {type}
         </BannerTitle>
       </div>
-      <CreateCommunityForm>
+      <FormWrapper>
         {children}
         <button onClick={handleSubmit}>{buttonText}</button>
         {isError && <ErrorText>{errorText}</ErrorText>}
-      </CreateCommunityForm>
+      </FormWrapper>
     </>
   )
 }

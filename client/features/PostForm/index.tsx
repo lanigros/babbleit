@@ -1,35 +1,43 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { apiPostNewCommunityPost } from '../../api'
+import { apiPostNewCommunityPost, apiUpdateCommunityPost } from '../../api'
 import { Input, TextArea } from '../../components'
 import CreatePostOrCommunityForm from '../../components/CreatePostOrCommunityForm'
 import { useForm } from '../../hooks/useForm'
-import { PostCreation } from '../../types'
+import { Id, Post, PostCreation } from '../../types'
 import { validateCommunityPost } from '../../validation/postValidation'
 
-export default function CreatePostForm() {
+type PostFormProps = {
+  currentPost?: Post
+}
+
+export default function PostForm({ currentPost }: PostFormProps) {
   const router = useRouter()
   const communityId = router.query.slug
 
   const [error, setError] = useState(false)
 
+  const initialValues = currentPost || { title: '', content: '' }
+
   const { values, errors, handleChange, handleSubmit } = useForm(
-    {
-      title: '',
-      content: ''
-    },
+    initialValues,
     submitHandler,
     validateCommunityPost
   )
 
-  async function submitHandler(newPost: PostCreation) {
+  async function submitHandler(post: PostCreation & Partial<Id>) {
     error && setError(false)
     async function postNewCommunity() {
       try {
-        const response = await apiPostNewCommunityPost({
-          data: newPost,
-          slug: `/${communityId}/posts`
-        })
+        const response = post.id
+          ? await apiUpdateCommunityPost({
+              data: { title: post.title, content: post.content },
+              slug: `/${communityId}/posts/${post.id}`
+            })
+          : await apiPostNewCommunityPost({
+              data: post,
+              slug: `/${communityId}/posts`
+            })
         if (response) {
           router.back()
         }
@@ -39,6 +47,7 @@ export default function CreatePostForm() {
     }
     return postNewCommunity()
   }
+
   return (
     <CreatePostOrCommunityForm
       handleSubmit={handleSubmit}

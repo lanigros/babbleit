@@ -1,11 +1,11 @@
 import { MaxWidthContainer } from '../../../components'
-import { CreatePostForm } from '../../../features'
+import { PostForm } from '../../../features'
 
 export default function CreateNewPost() {
   return (
     <>
       <MaxWidthContainer>
-        <CreatePostForm />
+        <PostForm />
       </MaxWidthContainer>
     </>
   )
