@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { apiRemoveCommunity } from '../../../api'
 import { MaxWidthContainer } from '../../../components'
+import Button from '../../../components/Button'
 import { PostList } from '../../../features'
 import { GlobalContext } from '../../../state/globalState'
 import { CommunityAdminRole, DetailedCommunity } from '../../../types'
@@ -35,7 +36,9 @@ export default function CommunityPage({
       </Title>
       <>
         {(communityAdminRole === 'admin' || state.user.isAdmin) && (
-          <DeleteButton onClick={removeCommunity}>DELETE</DeleteButton>
+          <Button danger onClick={removeCommunity}>
+            DELETE
+          </Button>
         )}
       </>
       <PostList />
