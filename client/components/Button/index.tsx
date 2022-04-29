@@ -6,6 +6,10 @@ type ButtonProps = {
   onClick: (e: MouseEvent<HTMLButtonElement>) => void
 } & DangerProps
 
-export default function Button({ children, onClick }: ButtonProps) {
-  return <ButtonWrapper onClick={onClick}>{children}</ButtonWrapper>
+export default function Button({ children, onClick, danger }: ButtonProps) {
+  return (
+    <ButtonWrapper danger={danger} onClick={onClick}>
+      {children}
+    </ButtonWrapper>
+  )
 }

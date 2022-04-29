@@ -6,7 +6,7 @@ import Button from '../../../components/Button'
 import { PostList } from '../../../features'
 import { GlobalContext } from '../../../state/globalState'
 import { CommunityAdminRole, DetailedCommunity } from '../../../types'
-import { Title } from './CommunitiesPage.styled'
+import { ButtonWrapper, Title } from './CommunitiesPage.styled'
 
 type CommunityProps = {
   communityAdminRole: CommunityAdminRole
@@ -34,13 +34,16 @@ export default function CommunityPage({
       <Title>
         Community <span>{`'${community.title}'`}</span>
       </Title>
-      <>
+      <ButtonWrapper>
+        <Button onClick={() => router.push(`${router.query.slug}/members`)}>
+          See members
+        </Button>
         {(communityAdminRole === 'admin' || state.user.isAdmin) && (
           <Button danger onClick={removeCommunity}>
-            DELETE
+            Delete community
           </Button>
         )}
-      </>
+      </ButtonWrapper>
       <PostList isCommunityAdmin={!!communityAdminRole} />
     </MaxWidthContainer>
   )

@@ -58,16 +58,19 @@ router
 
 router
   .route('/:id/members')
+  .get(addCommunityAdminRole, catchAsync(CommunityController.getMembers))
   .post(
     addCommunityAdminRole,
     allowOnlyCommunityAdminsAndAdmins,
     validateRequest('userId'),
     catchAsync(CommunityController.addCommunityMember)
   )
+
+router
+  .route('/:id/members/:userId')
   .delete(
     addCommunityAdminRole,
     allowOnlyCommunityAdminsAndAdmins,
-    validateRequest('userId'),
     catchAsync(CommunityController.removeCommunityMember)
   )
 

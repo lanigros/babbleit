@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { BadRequest, Unauthorized } from '../../errors'
+import { BadRequest, NotFound, Unauthorized } from '../../errors'
 import { createResponseMessage } from '../../utility'
 import { CommunityService } from '../service'
 
@@ -111,7 +111,7 @@ const addCommunityMember = async (req: Request, res: Response) => {
 const removeCommunityMember = async (req: Request, res: Response) => {
   const isMembershipRemoved = await CommunityService.removeCommunityMember(
     req.params.id,
-    req.body.userId
+    req.params.userId
   )
 
   if (!isMembershipRemoved) {
@@ -157,6 +157,16 @@ const updateBlockedStatus = async (req: Request, res: Response) => {
   )
 }
 
+const getMembers = async (req: Request, res: Response) => {
+  const members = await CommunityService.findMembers(req.params.id)
+
+  if (!members) {
+    throw new NotFound('No members found')
+  }
+
+  res.json({ members, communityAdminRole: req.communityAdminRole })
+}
+
 const communityController = {
   createCommunity,
   getCommunities,
@@ -168,7 +178,8 @@ const communityController = {
   addCommunityMember,
   leaveCommunity,
   removeCommunityMember,
-  updateBlockedStatus
+  updateBlockedStatus,
+  getMembers
 }
 
 export default communityController

@@ -1,20 +1,27 @@
-import { MouseEvent, useContext } from 'react'
-import { apiDeleteAnAccount } from '../../api'
+import { useRouter } from 'next/router'
+import { useContext } from 'react'
+import { apiRemoveMember } from '../../api'
 import { CardList } from '../../components'
 import { GlobalContext } from '../../state/globalState'
+import { CommunityAdminRole } from '../../types'
 import UserCard from '../UserCard'
 
-export default function UserList() {
+type MemberListProps = {
+  communityAdminRole: CommunityAdminRole
+}
+
+export default function MemberList({ communityAdminRole }: MemberListProps) {
+  const router = useRouter()
   const { state, dispatch } = useContext(GlobalContext)
 
   return (
     <CardList>
       {state.users?.length ? (
         state.users.map((post) => {
-          async function deleteAccount() {
+          async function removeMember() {
             try {
-              const response = await apiDeleteAnAccount({
-                slug: post.id
+              const response = await apiRemoveMember({
+                slug: `${router.query.slug}/members/${post.id}`
               })
               if (response) {
                 dispatch({ type: 'removeUser', payload: { id: post.id } })
@@ -28,8 +35,9 @@ export default function UserList() {
             <UserCard
               {...post}
               key={post.id}
-              onDelete={deleteAccount}
-              allowDelete={state.user.isAdmin}
+              disableBlocking={true}
+              onDelete={removeMember}
+              allowDelete={state.user.isAdmin || !!communityAdminRole}
             />
           )
         })

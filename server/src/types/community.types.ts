@@ -40,18 +40,10 @@ export type CommunitySelect = MongoId &
   IsBlocked &
   CreatorId
 
-export type JoinedMember = {
-  userId: User['_id']
-  username: User['username']
-} & IsBlocked &
-  MongoId
-
 export type MemberResponse = {
-  isBlocked: boolean
-} & Id &
-  Pick<User, 'username'>
+  id: Id['id']
+} & Pick<User, 'username'>
 
-export type CommunityAggregate = {
+export type CommunityMemberAggregate = {
   members: MemberResponse[]
-} & CommunityRegistration &
-  Id
+}

@@ -22,7 +22,7 @@ export type UserLogin = {
 export type LimitedUserInfo = {
   username: string
 } & Id &
-  IsBlocked
+  Partial<IsBlocked>
 
 export type UserSignup = {
   username: string
@@ -66,7 +66,7 @@ export type PostResponse = {
 
 /** COMMUNITY */
 
-type CommunityMember = {
+export type CommunityMember = {
   username: User['username']
   userId: User['id']
 }
@@ -79,6 +79,11 @@ export type CommunityRegistration = {
 export type Community = { creatorId: Id['id'] } & CommunityRegistration &
   Id &
   IsBlocked
+
+export type MembersResponse = {
+  members: LimitedUserInfo[]
+  communityAdminRole: CommunityAdminRole
+} & ErrorResponse
 
 export type DetailedCommunity = {
   members: CommunityMember[]

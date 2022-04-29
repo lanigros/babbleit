@@ -4,6 +4,7 @@ import { Unauthorized, NotFound } from '../../errors'
 import {
   Community,
   CommunityData,
+  CommunityMemberAggregate,
   CommunityRegistration,
   CommunitySelect,
   Role
@@ -311,6 +312,30 @@ async function updateBlockedStatus(communityId: string, isBlocked: number) {
   return result.acknowledged
 }
 
+async function findMembers(communityId: string) {
+  const memberAggregate =
+    await CommunityModel.aggregate<CommunityMemberAggregate>([
+      { $match: { _id: new Types.ObjectId(communityId) } },
+      { $limit: 1 },
+      {
+        $project: {
+          _id: 0,
+          members: {
+            $map: {
+              input: '$members',
+              in: {
+                id: { $toString: '$$this.userId' },
+                username: '$$this.username'
+              }
+            }
+          }
+        }
+      }
+    ])
+
+  return memberAggregate[0]?.members
+}
+
 const CommunityService = {
   saveNewCommunity,
   getCommunities,
@@ -321,7 +346,8 @@ const CommunityService = {
   deleteCommunitiesOwnedByUserId,
   addCommunityMember,
   removeCommunityMember,
-  updateBlockedStatus
+  updateBlockedStatus,
+  findMembers
 }
 
 export default CommunityService
