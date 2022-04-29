@@ -41,7 +41,7 @@ export default function CommunityPage({
           </Button>
         )}
       </>
-      <PostList />
+      <PostList isCommunityAdmin={!!communityAdminRole} />
     </MaxWidthContainer>
   )
 }

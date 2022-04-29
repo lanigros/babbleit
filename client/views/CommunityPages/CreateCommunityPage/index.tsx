@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { apiPostNewCommunity } from '../../../api'
 import { Input, MaxWidthContainer, TextArea } from '../../../components'
 import { useForm } from '../../../hooks/useForm'
-import { CommunityCreation } from '../../../types'
+import { CommunityRegistration } from '../../../types'
 import { validateCommunity } from '../../../validation/communityValidation'
 
 import {
@@ -28,7 +28,7 @@ export default function CreateCommunity() {
     validateCommunity
   )
 
-  async function submitHandler(newCommunity: CommunityCreation) {
+  async function submitHandler(newCommunity: CommunityRegistration) {
     error && setError(false)
     async function postNewCommunity() {
       try {
