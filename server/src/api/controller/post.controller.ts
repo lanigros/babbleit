@@ -59,11 +59,26 @@ const updateBlockedStatus = async (req: Request, res: Response) => {
   )
 }
 
+const deletePost = async (req: Request, res: Response) => {
+  const isDeleted = await PostService.deletePost(
+    req.params.postId,
+    req.session.userId as string,
+    req.session.isAdmin || !!req.communityAdminRole
+  )
+
+  if (!isDeleted) {
+    throw new Error('Could not delete post')
+  }
+
+  res.json(createResponseMessage('Successfully deleted post'))
+}
+
 const postController = {
   getPostsInCommunity,
   createPost,
   updatePost,
-  updateBlockedStatus
+  updateBlockedStatus,
+  deletePost
 }
 
 export default postController

@@ -76,14 +76,35 @@ const updateBlockedStatus = async (
 ): Promise<boolean> => {
   const result = await PostModel.updateOne({ _id }, { isBlocked })
 
-  return !!result.acknowledged
+  return result.acknowledged
+}
+
+const deletePost = async (
+  postId: string,
+  userId: string,
+  hasAdminRole: boolean
+) => {
+  if (!hasAdminRole) {
+    const author = await PostModel.exists({
+      _id: postId,
+      userId
+    })
+
+    if (!author) {
+      throw new Unauthorized('You are not the owner of this post')
+    }
+  }
+
+  const result = await PostModel.deleteOne({ _id: postId })
+  return result.acknowledged
 }
 
 const PostService = {
   getPosts,
   createPost,
   updatePost,
-  updateBlockedStatus
+  updateBlockedStatus,
+  deletePost
 }
 
 export default PostService

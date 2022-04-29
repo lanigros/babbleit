@@ -69,7 +69,7 @@ export async function allowAllCommunityRoles(
   _: Response,
   next: NextFunction
 ) {
-  if (req.communityAdminRole) {
+  if (req.communityAdminRole || req.session.isAdmin) {
     return next()
   }
 
