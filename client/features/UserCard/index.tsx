@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { apiDeleteAnAccount } from '../../api'
+import { apiChangeUserBlocked, apiDeleteAnAccount } from '../../api'
 import { InfoCard } from '../../components'
 import { GlobalContext } from '../../state/globalState'
 import { LimitedUserInfo } from '../../types'
@@ -21,6 +21,23 @@ export default function UserCard({ username, id, isBlocked }: LimitedUserInfo) {
     }
   }
 
+  async function changeBlockedStatus() {
+    try {
+      const response = await apiChangeUserBlocked({
+        data: { isBlocked: isBlocked ? 0 : 1 },
+        slug: id
+      })
+      if (response) {
+        dispatch({
+          type: 'updateUserInUsers',
+          payload: { username, id, isBlocked: isBlocked ? 0 : 1 }
+        })
+      }
+    } catch (e) {
+      console.log('oopsie')
+    }
+  }
+
   return (
     <UserCardWrapper>
       <InfoCard
@@ -31,6 +48,7 @@ export default function UserCard({ username, id, isBlocked }: LimitedUserInfo) {
         onDelete={deleteAccount}
         isBlocked={isBlocked}
         allowChangeBlocked={state.user.isAdmin}
+        onChangeBlocked={changeBlockedStatus}
       />
     </UserCardWrapper>
   )
