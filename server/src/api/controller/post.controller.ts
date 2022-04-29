@@ -5,7 +5,11 @@ import { createResponseMessage } from '../../utility'
 import { PostService } from '../service'
 
 const getPostsInCommunity = async (req: Request, res: Response) => {
-  const posts = await PostService.getPosts(req.params.id)
+  const posts = await PostService.getPosts(
+    req.params.id,
+    req.session.isAdmin,
+    req.session.isAdmin || !!req.communityAdminRole
+  )
 
   res.json({ posts: posts })
 }
@@ -39,12 +43,8 @@ const updatePost = async (req: Request, res: Response) => {
 const updateBlockedStatus = async (req: Request, res: Response) => {
   const { isBlocked } = req.body
 
-  if (!req.session.isAdmin && !isBlocked) {
-    throw new Unauthorized('Only page admins can unblock content')
-  }
-
   const isUpdated = await PostService.updateBlockedStatus(
-    req.params.userId,
+    req.params.postId,
     isBlocked
   )
 
@@ -74,7 +74,10 @@ const deletePost = async (req: Request, res: Response) => {
 }
 
 const getPost = async (req: Request, res: Response) => {
-  const post = await PostService.findPostById(req.params.postId)
+  const post = await PostService.findPostById(
+    req.params.postId,
+    req.session.isAdmin || !!req.communityAdminRole
+  )
 
   if (post.isBlocked && !req.session.isAdmin) {
     throw new Unauthorized('This post has been blocked')

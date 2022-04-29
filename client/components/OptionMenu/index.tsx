@@ -12,13 +12,19 @@ export type EditProps = {
   allowEdit?: boolean
   onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
   onEdit?: (e: MouseEvent<HTMLButtonElement>) => void
+  isBlocked?: 1 | 0
+  onChangeBlocked?: (e: MouseEvent<HTMLButtonElement>) => void
+  allowChangeBlocked?: boolean
 }
 
 export default function OptionMenu({
   onDelete,
   onEdit,
   allowDelete,
-  allowEdit
+  allowEdit,
+  allowChangeBlocked,
+  onChangeBlocked,
+  isBlocked
 }: EditProps) {
   const [isMenuActive, setIsMenuActive] = useState(false)
   return (
@@ -35,6 +41,11 @@ export default function OptionMenu({
           {onDelete && allowDelete && (
             <Option onClick={onDelete} danger>
               delete
+            </Option>
+          )}
+          {allowChangeBlocked && onChangeBlocked && (
+            <Option onClick={onChangeBlocked}>
+              {isBlocked ? 'unblock' : 'block'}
             </Option>
           )}
         </MenuOptions>

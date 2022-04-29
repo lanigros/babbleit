@@ -31,9 +31,12 @@ export default function InfoCard({
   showImage = false,
   allowDelete = false,
   allowEdit = false,
+  allowChangeBlocked = false,
+  isBlocked,
   onClick,
   onDelete,
-  onEdit
+  onEdit,
+  onChangeBlocked
 }: CardProps) {
   return (
     <CardContainer>
@@ -60,6 +63,9 @@ export default function InfoCard({
               allowDelete={allowDelete}
               onDelete={onDelete}
               onEdit={onEdit}
+              allowChangeBlocked={allowChangeBlocked}
+              onChangeBlocked={onChangeBlocked}
+              isBlocked={isBlocked}
             />
           </MenuHolder>
         )}
