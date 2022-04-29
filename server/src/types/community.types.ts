@@ -30,7 +30,7 @@ export type CommunityDocument = {
 
 export type CommunityData = Id & CommunityRegistration
 
-export type CommunitySelect = MongoId & CommunityRegistration
+export type CommunitySelect = MongoId & CommunityRegistration & IsBlocked
 
 export type JoinedMember = {
   userId: User['_id']

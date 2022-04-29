@@ -18,9 +18,7 @@ const createCommunity = async (req: Request, res: Response) => {
 }
 
 const getCommunities = async (req: Request, res: Response) => {
-  const communities = await CommunityService.getAllCommunities(
-    req.session.isAdmin
-  )
+  const communities = await CommunityService.getCommunities(req.session.isAdmin)
   res.json({ communities })
 }
 
@@ -140,6 +138,25 @@ const leaveCommunity = async (req: Request, res: Response) => {
   )
 }
 
+const updateBlockedStatus = async (req: Request, res: Response) => {
+  const { isBlocked } = req.body
+
+  const isUpdated = await CommunityService.updateBlockedStatus(
+    req.params.id,
+    isBlocked
+  )
+
+  if (!isUpdated) {
+    throw new Error('Update of blocked status was unsuccessful')
+  }
+
+  res.json(
+    createResponseMessage(
+      `Post successfully ${isBlocked ? 'blocked' : 'unblocked'}`
+    )
+  )
+}
+
 const communityController = {
   createCommunity,
   getCommunities,
@@ -150,7 +167,8 @@ const communityController = {
   joinCommunity,
   addCommunityMember,
   leaveCommunity,
-  removeCommunityMember
+  removeCommunityMember,
+  updateBlockedStatus
 }
 
 export default communityController

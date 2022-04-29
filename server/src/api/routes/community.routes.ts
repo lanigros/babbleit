@@ -8,7 +8,8 @@ import {
   allowOnlyRegisteredUsers,
   allowOnlyCommunityAdminsAndAdmins,
   allowAllCommunityRoles,
-  allowAllAdminRoles
+  allowAllAdminRoles,
+  allowOnlyAdmin
 } from '../../middleware'
 import communityController from '../controller/community.controller'
 
@@ -30,6 +31,14 @@ router
     addCommunityAdminRole,
     allowOnlyCommunityAdminsAndAdmins,
     catchAsync(CommunityController.deleteCommunity)
+  )
+
+router
+  .route('/:id/blocked')
+  .put(
+    allowOnlyAdmin,
+    validateRequest('updateBlocked'),
+    catchAsync(CommunityController.updateBlockedStatus)
   )
 
 router

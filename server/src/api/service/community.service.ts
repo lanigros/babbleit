@@ -54,7 +54,7 @@ async function saveNewCommunity(
   }
 }
 
-async function getAllCommunities(
+async function getCommunities(
   showBlockedCommunities = false
 ): Promise<CommunityData[]> {
   const communities = await CommunityModel.find<CommunitySelect>(
@@ -69,7 +69,8 @@ async function getAllCommunities(
     return {
       id: community._id.toString(),
       title: community.title,
-      description: community.description
+      description: community.description,
+      isBlocked: community.isBlocked
     }
   })
 }
@@ -296,16 +297,26 @@ async function removeCommunityMember(communityId: string, userId: string) {
   return result.modifiedCount === 1
 }
 
+async function updateBlockedStatus(communityId: string, isBlocked: number) {
+  const result = await CommunityModel.updateOne(
+    { _id: communityId },
+    { isBlocked }
+  )
+
+  return result.acknowledged
+}
+
 const CommunityService = {
   saveNewCommunity,
-  getAllCommunities,
+  getCommunities,
   findCommunityById,
   addModerator,
   removeModerator,
   deleteCommunityById,
   deleteCommunitiesOwnedByUserId,
   addCommunityMember,
-  removeCommunityMember
+  removeCommunityMember,
+  updateBlockedStatus
 }
 
 export default CommunityService

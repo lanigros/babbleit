@@ -17,8 +17,9 @@ type GlobalState = {
 type SetStateAction =
   | { type: 'user'; payload: User }
   | { type: 'setCommunities'; payload: Community[] }
-  | { type: 'setPosts'; payload: CommunityPost[] }
   | { type: 'removeCommunity'; payload: Id }
+  | { type: 'updateCommunity'; payload: Community }
+  | { type: 'setPosts'; payload: CommunityPost[] }
   | { type: 'removePost'; payload: Id }
   | { type: 'updatePost'; payload: CommunityPost }
 
@@ -39,11 +40,13 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
         ...state,
         user: action.payload
       }
+
     case 'setCommunities':
       return {
         ...state,
         communities: action.payload
       }
+
     case 'removeCommunity':
       const communityIndex = state.communities.findIndex(
         (community) => community.id === action.payload.id
@@ -54,11 +57,24 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
         ...state,
         communities
       }
+
+    case 'updateCommunity':
+      const communityIndexToUpdate = state.communities.findIndex(
+        (post) => post.id === action.payload.id
+      )
+      const updateCommunities = [...state.communities]
+      updateCommunities.splice(communityIndexToUpdate, 1, action.payload)
+      return {
+        ...state,
+        communities: updateCommunities
+      }
+
     case 'setPosts':
       return {
         ...state,
         posts: action.payload
       }
+
     case 'removePost':
       const postIndex = state.posts.findIndex(
         (post) => post.id === action.payload.id
@@ -69,6 +85,7 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
         ...state,
         posts
       }
+
     case 'updatePost':
       const postIndexToUpdate = state.posts.findIndex(
         (post) => post.id === action.payload.id
