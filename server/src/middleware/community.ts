@@ -49,6 +49,21 @@ export async function allowOnlyCommunityAdminsAndAdmins(
   next()
 }
 
+export async function allowAllAdminRoles(
+  req: Request,
+  _: Response,
+  next: NextFunction
+) {
+  if (!(req.session.isAdmin || req.communityAdminRole)) {
+    next(
+      new Unauthorized(
+        'You must be an admin or moderator of the page or community to access this route'
+      )
+    )
+  }
+  next()
+}
+
 export async function allowAllCommunityRoles(
   req: Request,
   _: Response,
