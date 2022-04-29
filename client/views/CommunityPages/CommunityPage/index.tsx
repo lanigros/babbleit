@@ -6,7 +6,7 @@ import Button from '../../../components/Button'
 import { PostList } from '../../../features'
 import { GlobalContext } from '../../../state/globalState'
 import { CommunityAdminRole, DetailedCommunity } from '../../../types'
-import { DeleteButton, Title } from './CommunitiesPage.styled'
+import { Title } from './CommunitiesPage.styled'
 
 type CommunityProps = {
   communityAdminRole: CommunityAdminRole
