@@ -39,14 +39,7 @@ const Home = ({ user, communities }: HomeProps) => {
     communities && dispatch({ type: 'setCommunities', payload: communities })
   }, [dispatch, user, communities])
 
-  return (
-    <main>
-      {!user && <LandingView />}
-      {user ? <CommunitiesView />
-        : <LandingView/>
-      }
-    </main>
-  )
+  return <main>{user ? <CommunitiesView /> : <LandingView />}</main>
 }
 
 export default Home
