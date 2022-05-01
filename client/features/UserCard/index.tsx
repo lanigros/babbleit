@@ -1,25 +1,25 @@
-import { useContext } from 'react'
+import { MouseEvent, useContext } from 'react'
 import { apiChangeUserBlocked, apiDeleteAnAccount } from '../../api'
 import { InfoCard } from '../../components'
 import { GlobalContext } from '../../state/globalState'
 import { LimitedUserInfo } from '../../types'
 import { UserCardWrapper } from './UserCard.styled'
 
-export default function UserCard({ username, id, isBlocked }: LimitedUserInfo) {
-  const { state, dispatch } = useContext(GlobalContext)
+type UserCardProps = {
+  disableBlocking?: boolean
+  onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
+  allowDelete?: boolean
+} & LimitedUserInfo
 
-  async function deleteAccount() {
-    try {
-      const response = await apiDeleteAnAccount({
-        slug: id
-      })
-      if (response) {
-        dispatch({ type: 'removeUser', payload: { id } })
-      }
-    } catch (e) {
-      console.log('oopsie')
-    }
-  }
+export default function UserCard({
+  username,
+  id,
+  isBlocked,
+  disableBlocking,
+  onDelete,
+  allowDelete = false
+}: UserCardProps) {
+  const { state, dispatch } = useContext(GlobalContext)
 
   async function changeBlockedStatus() {
     try {
@@ -44,10 +44,10 @@ export default function UserCard({ username, id, isBlocked }: LimitedUserInfo) {
         title={username}
         description={''}
         showImage
-        allowDelete={state.user.isAdmin}
-        onDelete={deleteAccount}
+        allowDelete={allowDelete}
+        onDelete={onDelete}
         isBlocked={isBlocked}
-        allowChangeBlocked={state.user.isAdmin}
+        allowChangeBlocked={disableBlocking ? false : state.user.isAdmin}
         onChangeBlocked={changeBlockedStatus}
       />
     </UserCardWrapper>

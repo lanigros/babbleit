@@ -29,7 +29,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     }
 
     community = communityResponse.community
-    communityAdminRole = communityResponse.communityAdminRole
+    communityAdminRole = communityResponse.communityAdminRole || null
     const userResponse = await serverSideWhoAmI(req.cookies)
     user = userResponse.user || null
   } catch (e) {
