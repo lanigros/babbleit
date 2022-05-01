@@ -32,3 +32,8 @@ export const apiPostNewCommunityPost = createFetch<PostCreation, undefined>(
   `communities`,
   'POST'
 )
+
+export const apiJoinCommunity = createFetch<never, ResponseMessage>(
+  'communities',
+  'POST'
+)

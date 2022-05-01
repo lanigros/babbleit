@@ -74,7 +74,6 @@ async function getAllCommunities(
   })
 }
 
-// TODO add posts to response
 async function findCommunityById(
   communityId: string,
   showBlockedCommunities = false
@@ -94,6 +93,7 @@ async function findCommunityById(
               title: 1,
               content: 1,
               username: 1,
+              userId: { $toString: '$userId' },
               id: { $toString: '$_id' }
             }
           }
