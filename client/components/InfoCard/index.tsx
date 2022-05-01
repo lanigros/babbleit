@@ -71,18 +71,18 @@ export default function InfoCard({
           </MenuHolder>
         )}
       </CardContent>
-      {showFooter && (
-        <CardFooter>
-          <CardFooterContent isBlocked={!!isBlocked}>
-            {isBlocked ? <h5>Blocked</h5> : null}
+      <CardFooter>
+        <CardFooterContent isBlocked={!!isBlocked}>
+          {isBlocked ? <h5>Blocked</h5> : null}
+          {showFooter && (
             <IconWrapper>
               <PlaceholderIcons>&#128077;</PlaceholderIcons>
               <PlaceholderIcons>&#128078;</PlaceholderIcons>
               <PlaceholderIcons>&#11088;</PlaceholderIcons>
             </IconWrapper>
-          </CardFooterContent>
-        </CardFooter>
-      )}
+          )}
+        </CardFooterContent>
+      </CardFooter>
     </CardContainer>
   )
 }

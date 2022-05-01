@@ -2,6 +2,7 @@ import {
   CommunitiesResponse,
   CommunityRegistration,
   CommunityResponse,
+  IsBlocked,
   PostCreation,
   ResponseMessage
 } from '../types'
@@ -35,4 +36,9 @@ export const apiPostNewCommunityPost = createFetch<PostCreation, undefined>(
 export const apiJoinCommunity = createFetch<never, ResponseMessage>(
   'communities',
   'POST'
+)
+
+export const apiBlockCommunity = createFetch<IsBlocked, ResponseMessage>(
+  'communities',
+  'PUT'
 )

@@ -69,13 +69,12 @@ export type CommunityRegistration = {
   description: string
 }
 
-export type Community = CommunityRegistration & Id
+export type Community = CommunityRegistration & Id & IsBlocked
 
 export type DetailedCommunity = {
   members: CommunityMember[]
   posts: CommunityPost[]
-} & Community &
-  IsBlocked
+} & Community
 
 export type CommunitiesResponse = {
   communities: Community[]
