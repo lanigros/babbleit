@@ -50,9 +50,6 @@ const EditPost = ({ post, user }: EditPostProps) => {
     user && dispatch({ type: 'user', payload: user })
   }, [dispatch, user])
 
-  console.log('post.userId', post.userId)
-  console.log('user.id', user.id)
-
   return (
     <main>
       {user.id === post.userId ? (

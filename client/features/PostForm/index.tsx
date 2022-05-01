@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { stringify } from 'querystring'
 import { useState } from 'react'
 import { apiPostNewCommunityPost, apiUpdateCommunityPost } from '../../api'
 import { Input, TextArea } from '../../components'
@@ -29,13 +30,12 @@ export default function PostForm({ currentPost }: PostFormProps) {
 
   async function submitHandler(post: PostCreation & Partial<Id>) {
     isError && setIsError(false)
-
     async function postNewCommunity() {
       try {
-        const response = post.id
+        const response = currentPost?.id
           ? await apiUpdateCommunityPost({
-              data: { title: post.title, content: post.content },
-              slug: `/${communityId}/posts/${post.id}`
+              data: post,
+              slug: `/${communityId}/posts/${currentPost.id}`
             })
           : await apiPostNewCommunityPost({
               data: post,
@@ -56,7 +56,7 @@ export default function PostForm({ currentPost }: PostFormProps) {
     <CreatePostOrCommunityForm
       handleSubmit={handleSubmit}
       type={'post'}
-      buttonText={'Create post'}
+      buttonText={currentPost ? 'Edit post' : 'Create post'}
     >
       <Input
         name='title'
