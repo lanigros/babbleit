@@ -7,7 +7,8 @@ import {
   addCommunityAdminRole,
   allowOnlyRegisteredUsers,
   allowOnlyCommunityAdminsAndAdmins,
-  allowAllCommunityRoles
+  allowAllCommunityRoles,
+  allowAllAdminRoles
 } from '../../middleware'
 import communityController from '../controller/community.controller'
 
@@ -91,6 +92,16 @@ router
     allowAllCommunityRoles,
     validateRequest('updatePost'),
     catchAsync(PostController.updatePost)
+  )
+
+router
+  .route('/:id/posts/:postId/blocked')
+  .put(
+    allowOnlyRegisteredUsers,
+    addCommunityAdminRole,
+    allowAllAdminRoles,
+    validateRequest('updateBlocked'),
+    catchAsync(PostController.updateBlockedStatus)
   )
 
 export default router

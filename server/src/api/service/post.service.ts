@@ -70,9 +70,20 @@ const updatePost = async (
   return result.acknowledged
 }
 
+const updateBlockedStatus = async (
+  _id: string,
+  isBlocked: number
+): Promise<boolean> => {
+  const result = await PostModel.updateOne({ _id }, { isBlocked })
+
+  return !!result.acknowledged
+}
+
 const PostService = {
   getPosts,
   createPost,
-  updatePost
+  updatePost,
+  updateBlockedStatus
 }
+
 export default PostService

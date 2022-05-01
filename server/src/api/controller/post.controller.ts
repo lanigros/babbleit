@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { Unauthorized } from '../../errors'
 import { createResponseMessage } from '../../utility'
 import { PostService } from '../service'
 
@@ -35,10 +36,34 @@ const updatePost = async (req: Request, res: Response) => {
   res.json(createResponseMessage('Successfully updated your post'))
 }
 
+const updateBlockedStatus = async (req: Request, res: Response) => {
+  const { isBlocked } = req.body
+
+  if (!req.session.isAdmin && !isBlocked) {
+    throw new Unauthorized('Only page admins can unblock content')
+  }
+
+  const isUpdated = await PostService.updateBlockedStatus(
+    req.params.userId,
+    isBlocked
+  )
+
+  if (!isUpdated) {
+    throw new Error('Update of blocked status was unsuccessful')
+  }
+
+  res.json(
+    createResponseMessage(
+      `Post successfully ${isBlocked ? 'blocked' : 'unblocked'}`
+    )
+  )
+}
+
 const postController = {
   getPostsInCommunity,
   createPost,
-  updatePost
+  updatePost,
+  updateBlockedStatus
 }
 
 export default postController
