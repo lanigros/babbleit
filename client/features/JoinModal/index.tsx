@@ -22,6 +22,7 @@ export default function JoinModal({ showModal, setShowModal }: ModalProps) {
   async function joinCommunity() {
     try {
       await apiJoinCommunity({ slug: `${router.query.slug}/join` })
+      setShowModal(false)
     } catch (e) {
       setIsError(true)
     }
