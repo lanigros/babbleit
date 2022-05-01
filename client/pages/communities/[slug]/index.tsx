@@ -60,7 +60,12 @@ const Community = ({
     community.posts && dispatch({ type: 'setPosts', payload: community.posts })
   }, [dispatch, user, community])
 
-  const [showModal, setShowModal] = useState(!isMember)
+  const showMembershipPrompt = communityAdminRole
+    ? !communityAdminRole
+    : !isMember
+
+  const [showModal, setShowModal] = useState(showMembershipPrompt)
+
   return (
     <main>
       <JoinModal showModal={showModal} setShowModal={setShowModal} />

@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 import {
+  borderRadiuses,
   colors,
   fonts,
   fontSizes,
@@ -92,5 +93,27 @@ export const GlobalStyle = createGlobalStyle`
   p {
     font-size: ${fontSizes.extraExtraSmall};
     line-height: ${lineHeights.extraExtraSmall};
+  }
+
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: ${colors.black};
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${colors.transParentWhite};
+    border-radius: ${borderRadiuses.medium};
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${colors.mediumGray};
   }
 `
