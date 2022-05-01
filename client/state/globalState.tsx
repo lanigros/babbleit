@@ -1,17 +1,19 @@
 import { createContext, useReducer } from 'react'
 
-import { Community, CommunityPost, User, Id } from '../types'
+import { Community, CommunityPost, User, Id, LimitedUserInfo } from '../types'
 
 const initialState = {
   user: {},
   communities: [],
-  posts: []
+  posts: [],
+  users: []
 }
 
 type GlobalState = {
   user: Partial<User>
   communities: Community[]
   posts: CommunityPost[]
+  users: LimitedUserInfo[]
 }
 
 type SetStateAction =
@@ -22,6 +24,8 @@ type SetStateAction =
   | { type: 'setPosts'; payload: CommunityPost[] }
   | { type: 'removePost'; payload: Id }
   | { type: 'updatePost'; payload: CommunityPost }
+  | { type: 'setUsers'; payload: LimitedUserInfo[] }
+  | { type: 'removeUser'; payload: Id }
 
 type GlobalContextType = {
   state: GlobalState
@@ -60,7 +64,7 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
 
     case 'updateCommunity':
       const communityIndexToUpdate = state.communities.findIndex(
-        (post) => post.id === action.payload.id
+        (community) => community.id === action.payload.id
       )
       const updateCommunities = [...state.communities]
       updateCommunities.splice(communityIndexToUpdate, 1, action.payload)
@@ -95,6 +99,23 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
       return {
         ...state,
         posts: updatePosts
+      }
+
+    case 'setUsers':
+      return {
+        ...state,
+        users: action.payload
+      }
+
+    case 'removeUser':
+      const userIndex = state.users.findIndex(
+        (user) => user.id === action.payload.id
+      )
+      const users = [...state.users]
+      users.splice(userIndex, 1)
+      return {
+        ...state,
+        users
       }
 
     default:

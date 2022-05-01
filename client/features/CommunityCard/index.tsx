@@ -39,7 +39,6 @@ export default function CommunityCard({
             isBlocked: isBlocked ? 0 : 1
           }
         })
-        console.log('done')
       }
     } catch (e) {
       console.log('oopsie')

@@ -34,7 +34,6 @@ router
   )
   .delete(
     allowOnlyAdmin,
-    validateRequest('userId'),
     catchAsync(UserController.deleteUserAccountWithCommunities)
   )
 
