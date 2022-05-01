@@ -10,9 +10,9 @@ export default function CommunityCard({
   id,
   title,
   description,
-  isBlocked
+  isBlocked,
+  creatorId
 }: Community & IsBlocked) {
-  console.log('isBlocked', isBlocked)
   const router = useRouter()
   const { state, dispatch } = useContext(GlobalContext)
 
@@ -35,6 +35,7 @@ export default function CommunityCard({
             id,
             title,
             description,
+            creatorId,
             isBlocked: isBlocked ? 0 : 1
           }
         })
@@ -52,7 +53,7 @@ export default function CommunityCard({
         description={description}
         onClick={() => router.push(`/communities/${id}`)}
         showImage
-        allowDelete={state.user.isAdmin}
+        allowDelete={state.user.isAdmin || creatorId === state.user.id}
         onDelete={removeCommunity}
         isBlocked={isBlocked}
         allowChangeBlocked={state.user.isAdmin}

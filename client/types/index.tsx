@@ -69,7 +69,9 @@ export type CommunityRegistration = {
   description: string
 }
 
-export type Community = CommunityRegistration & Id & IsBlocked
+export type Community = { creatorId: Id['id'] } & CommunityRegistration &
+  Id &
+  IsBlocked
 
 export type DetailedCommunity = {
   members: CommunityMember[]

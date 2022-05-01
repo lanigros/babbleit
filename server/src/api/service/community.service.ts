@@ -23,7 +23,8 @@ async function saveNewCommunity(
 
   const community = new CommunityModel({
     title,
-    description
+    description,
+    creatorId: new Types.ObjectId(userId)
   })
 
   const savedCommunity = await community.save()
@@ -31,7 +32,8 @@ async function saveNewCommunity(
   const {
     _id,
     title: savedTitle,
-    description: savedDescription
+    description: savedDescription,
+    creatorId
   } = savedCommunity._doc
 
   const adminRole: Role = {
@@ -50,7 +52,8 @@ async function saveNewCommunity(
   return {
     id: _id.toString(),
     title: savedTitle,
-    description: savedDescription
+    description: savedDescription,
+    creatorId: creatorId.toString()
   }
 }
 
@@ -70,7 +73,8 @@ async function getCommunities(
       id: community._id.toString(),
       title: community.title,
       description: community.description,
-      isBlocked: community.isBlocked
+      isBlocked: community.isBlocked,
+      creatorId: community.creatorId.toString()
     }
   })
 }
@@ -116,6 +120,7 @@ async function findCommunityById(
         title: 1,
         description: 1,
         isBlocked: 1,
+        creatorId: { $toString: '$creatorId' },
         members: {
           $map: {
             input: '$members',
