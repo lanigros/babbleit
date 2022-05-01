@@ -26,7 +26,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       slug: `${ctx.params?.slug}/members`
     })
     members = membersResponse.members
-    communityAdminRole = membersResponse.communityAdminRole
+    communityAdminRole = membersResponse.communityAdminRole || null
 
     const userResponse = await serverSideWhoAmI(ctx.req.cookies)
     user = userResponse.user || null
