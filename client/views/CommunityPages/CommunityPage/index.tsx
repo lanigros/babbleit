@@ -19,6 +19,7 @@ export default function CommunityPage({
 }: CommunityProps) {
   const router = useRouter()
   const { state } = useContext(GlobalContext)
+
   function removeCommunity() {
     async function deleteCommunity() {
       await apiRemoveCommunity({
@@ -38,6 +39,11 @@ export default function CommunityPage({
         <Button onClick={() => router.push(`${router.query.slug}/members`)}>
           See members
         </Button>
+        {communityAdminRole === 'admin' && (
+          <Button onClick={() => router.push(`${router.query.slug}/edit`)}>
+            Edit info
+          </Button>
+        )}
         {(communityAdminRole === 'admin' || state.user.isAdmin) && (
           <Button danger onClick={removeCommunity}>
             Delete community

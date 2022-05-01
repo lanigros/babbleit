@@ -42,10 +42,12 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
 const EditCommunity = ({ user, community }: EditCommunityProps) => {
   const { dispatch } = useContext(GlobalContext)
+
   useEffect(() => {
     user && dispatch({ type: 'user', payload: user })
     community.posts && dispatch({ type: 'setPosts', payload: community.posts })
   }, [dispatch, user, community])
+
   return (
     <main>
       <EditCommunityView community={community} />
