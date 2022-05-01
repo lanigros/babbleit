@@ -1,23 +1,26 @@
 import { useRouter } from 'next/router'
+import { stringify } from 'querystring'
 import { useState } from 'react'
 import { apiPostNewCommunityPost, apiUpdateCommunityPost } from '../../api'
 import { Input, TextArea } from '../../components'
 import CreatePostOrCommunityForm from '../../components/CreatePostOrCommunityForm'
 import { useForm } from '../../hooks/useForm'
-import { Id, Post, PostCreation } from '../../types'
+import { CommunityPost, Id, PostCreation } from '../../types'
 import { validateCommunityPost } from '../../validation/postValidation'
 
 type PostFormProps = {
-  currentPost?: Post
+  currentPost?: CommunityPost
 }
 
 export default function PostForm({ currentPost }: PostFormProps) {
   const router = useRouter()
   const communityId = router.query.slug
 
-  const [error, setError] = useState(false)
+  const [isError, setIsError] = useState(false)
 
-  const initialValues = currentPost || { title: '', content: '' }
+  const initialValues = currentPost
+    ? { title: currentPost.title, content: currentPost.content }
+    : { title: '', content: '' }
 
   const { values, errors, handleChange, handleSubmit } = useForm(
     initialValues,
@@ -26,23 +29,24 @@ export default function PostForm({ currentPost }: PostFormProps) {
   )
 
   async function submitHandler(post: PostCreation & Partial<Id>) {
-    error && setError(false)
+    isError && setIsError(false)
     async function postNewCommunity() {
       try {
-        const response = post.id
+        const response = currentPost?.id
           ? await apiUpdateCommunityPost({
-              data: { title: post.title, content: post.content },
-              slug: `/${communityId}/posts/${post.id}`
+              data: post,
+              slug: `/${communityId}/posts/${currentPost.id}`
             })
           : await apiPostNewCommunityPost({
               data: post,
               slug: `/${communityId}/posts`
             })
+
         if (response) {
           router.back()
         }
       } catch (e) {
-        setError(true)
+        setIsError(true)
       }
     }
     return postNewCommunity()
@@ -52,7 +56,7 @@ export default function PostForm({ currentPost }: PostFormProps) {
     <CreatePostOrCommunityForm
       handleSubmit={handleSubmit}
       type={'post'}
-      buttonText={'Create post'}
+      buttonText={currentPost ? 'Edit post' : 'Create post'}
     >
       <Input
         name='title'

@@ -35,12 +35,22 @@ export type UserResponse = {
 
 /** POSTS */
 
+export type PostCreation = {
+  title: string
+  content: string
+}
+
+export type Post = PostCreation & Id
+
 export type CommunityPost = {
   username: User['username']
   userId: User['id']
-  title: string
-  content: string
-} & Id
+} & Id &
+  PostCreation
+
+export type PostResponse = {
+  post: CommunityPost
+}
 
 /** COMMUNITY */
 
@@ -79,12 +89,3 @@ export type ServerSideProps = {
   community: DetailedCommunity
   communityAdminRole: CommunityAdminRole
 }
-
-/** COMMUNITYPOST (THREAD) */
-
-export type PostCreation = {
-  title: string
-  content: string
-}
-
-export type Post = PostCreation & Id
