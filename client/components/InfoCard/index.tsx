@@ -13,7 +13,8 @@ import {
   CardFooterContent,
   CardThumbnail,
   PlaceholderIcons,
-  MenuHolder
+  MenuHolder,
+  IconWrapper
 } from './InfoCard.styled'
 
 type CardProps = {
@@ -31,9 +32,12 @@ export default function InfoCard({
   showImage = false,
   allowDelete = false,
   allowEdit = false,
+  allowChangeBlocked = false,
+  isBlocked,
   onClick,
   onDelete,
-  onEdit
+  onEdit,
+  onChangeBlocked
 }: CardProps) {
   return (
     <CardContainer>
@@ -60,16 +64,22 @@ export default function InfoCard({
               allowDelete={allowDelete}
               onDelete={onDelete}
               onEdit={onEdit}
+              allowChangeBlocked={allowChangeBlocked}
+              onChangeBlocked={onChangeBlocked}
+              isBlocked={isBlocked}
             />
           </MenuHolder>
         )}
       </CardContent>
       {showFooter && (
         <CardFooter>
-          <CardFooterContent>
-            <PlaceholderIcons>&#128077;</PlaceholderIcons>
-            <PlaceholderIcons>&#128078;</PlaceholderIcons>
-            <PlaceholderIcons>&#11088;</PlaceholderIcons>
+          <CardFooterContent isBlocked={!!isBlocked}>
+            {isBlocked ? <h5>Blocked</h5> : null}
+            <IconWrapper>
+              <PlaceholderIcons>&#128077;</PlaceholderIcons>
+              <PlaceholderIcons>&#128078;</PlaceholderIcons>
+              <PlaceholderIcons>&#11088;</PlaceholderIcons>
+            </IconWrapper>
           </CardFooterContent>
         </CardFooter>
       )}

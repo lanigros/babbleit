@@ -5,9 +5,12 @@ import {
   boxShadows,
   fontWeights,
   fontSizes,
-  spacings,
-  sizes
+  spacings
 } from '../../global-styles/variables'
+
+type BlockedProps = {
+  isBlocked?: boolean
+}
 
 export const CardContainer = styled.div`
   max-width: 100%;
@@ -34,14 +37,20 @@ export const CardFooter = styled.div`
   width: 100%;
   height: 50px;
   background: ${colors.darkGray};
-  display: flex;
   align-self: end;
   border-radius: 0 0 ${borderRadiuses.small} ${borderRadiuses.small};
-  justify-content: flex-end;
   padding: ${spacings.extraSmall};
 `
 
-export const CardFooterContent = styled.div`
+export const CardFooterContent = styled.div<BlockedProps>`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: ${(props) => (props.isBlocked ? 'space-between' : 'end')};
+`
+
+export const IconWrapper = styled.div`
   height: 100%;
   display: flex;
   align-items: center;

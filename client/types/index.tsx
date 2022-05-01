@@ -8,6 +8,10 @@ export type ResponseMessage = {
 
 export type Id = { id: string }
 
+export type IsBlocked = {
+  isBlocked: 1 | 0
+}
+
 /** USER */
 
 export type UserLogin = {
@@ -23,11 +27,11 @@ export type UserSignup = {
 export type User = {
   email: string
   username: string
-  isBlocked: boolean
   createdAt: string
   updatedAt: string
   isAdmin: boolean
-} & Id
+} & Id &
+  IsBlocked
 
 export type UserResponse = {
   user?: User
@@ -46,7 +50,8 @@ export type CommunityPost = {
   username: User['username']
   userId: User['id']
 } & Id &
-  PostCreation
+  PostCreation &
+  IsBlocked
 
 export type PostResponse = {
   post: CommunityPost
@@ -67,10 +72,10 @@ export type CommunityRegistration = {
 export type Community = CommunityRegistration & Id
 
 export type DetailedCommunity = {
-  isBlocked: 1 | 0
   members: CommunityMember[]
   posts: CommunityPost[]
-} & Community
+} & Community &
+  IsBlocked
 
 export type CommunitiesResponse = {
   communities: Community[]

@@ -3,8 +3,16 @@ import { CommunityService } from '../service'
 import { Post, PostRegistration } from '../../types'
 import { NotFound, Unauthorized } from '../../errors'
 
-const getPosts = async (communityId: string) => {
-  const community = await CommunityService.findCommunityById(communityId)
+const getPosts = async (
+  communityId: string,
+  showBlockedCommunities = false,
+  showBlockedPosts = false
+) => {
+  const community = await CommunityService.findCommunityById(
+    communityId,
+    showBlockedCommunities,
+    showBlockedPosts
+  )
   return community.posts
 }
 
@@ -99,8 +107,10 @@ const deletePost = async (
   return result.acknowledged
 }
 
-const findPostById = async (postId: string) => {
-  const post = await PostModel.findOne({ _id: postId })
+const findPostById = async (postId: string, isAdmin?: boolean) => {
+  const post = await PostModel.findOne(
+    isAdmin ? { _id: postId } : { _id: postId, isBlocked: 0 }
+  )
 
   if (!post) {
     throw new NotFound('No such post')

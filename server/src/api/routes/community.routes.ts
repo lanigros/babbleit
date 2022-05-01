@@ -75,7 +75,7 @@ router
 
 router
   .route('/:id/posts')
-  .get(catchAsync(PostController.getPostsInCommunity))
+  .get(addCommunityAdminRole, catchAsync(PostController.getPostsInCommunity))
   .post(
     allowOnlyRegisteredUsers,
     addCommunityAdminRole,

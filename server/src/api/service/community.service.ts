@@ -76,7 +76,8 @@ async function getAllCommunities(
 
 async function findCommunityById(
   communityId: string,
-  showBlockedCommunities = false
+  showBlockedCommunities = false,
+  showBlockedPosts = false
 ): Promise<Community> {
   const result = await CommunityModel.aggregate<Community>([
     { $match: { _id: new Types.ObjectId(communityId) } },
@@ -88,13 +89,19 @@ async function findCommunityById(
         foreignField: 'communityId',
         pipeline: [
           {
+            $match: showBlockedPosts
+              ? { $or: [{ isBlocked: 0 }, { isBlocked: 1 }] }
+              : { isBlocked: 0 }
+          },
+          {
             $project: {
               _id: 0,
               title: 1,
               content: 1,
               username: 1,
               userId: { $toString: '$userId' },
-              id: { $toString: '$_id' }
+              id: { $toString: '$_id' },
+              isBlocked: 1
             }
           }
         ],

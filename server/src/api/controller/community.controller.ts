@@ -27,7 +27,8 @@ const getCommunities = async (req: Request, res: Response) => {
 const getCommunity = async (req: Request, res: Response) => {
   const community = await CommunityService.findCommunityById(
     req.params.id,
-    req.session.isAdmin
+    req.session.isAdmin,
+    req.session.isAdmin || !!req.communityAdminRole
   )
   res.json({ community, communityAdminRole: req.communityAdminRole || null })
 }
