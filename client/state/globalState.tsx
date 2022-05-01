@@ -26,6 +26,7 @@ type SetStateAction =
   | { type: 'updatePost'; payload: CommunityPost }
   | { type: 'setUsers'; payload: LimitedUserInfo[] }
   | { type: 'removeUser'; payload: Id }
+  | { type: 'updateUserInUsers'; payload: LimitedUserInfo }
 
 type GlobalContextType = {
   state: GlobalState
@@ -116,6 +117,17 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
       return {
         ...state,
         users
+      }
+
+    case 'updateUserInUsers':
+      const userIndexToUpdate = state.users.findIndex(
+        (user) => user.id === action.payload.id
+      )
+      const updateUsers = [...state.users]
+      updateUsers.splice(userIndexToUpdate, 1, action.payload)
+      return {
+        ...state,
+        users: updateUsers
       }
 
     default:

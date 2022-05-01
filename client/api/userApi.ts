@@ -1,4 +1,9 @@
-import { ResponseMessage, UserResponse, UsersResponse } from '../types'
+import {
+  IsBlocked,
+  ResponseMessage,
+  UserResponse,
+  UsersResponse
+} from '../types'
 import { createFetch, createServerSideFetch } from './createFetch'
 
 export const serverSideWhoAmI = createServerSideFetch<never, UserResponse>(
@@ -14,4 +19,9 @@ export const apiGetUsers = createServerSideFetch<never, UsersResponse>(
 export const apiDeleteAnAccount = createFetch<never, ResponseMessage>(
   'users',
   'DELETE'
+)
+
+export const apiChangeUserBlocked = createFetch<IsBlocked, ResponseMessage>(
+  'users',
+  'PUT'
 )
