@@ -93,6 +93,12 @@ router
     validateRequest('updatePost'),
     catchAsync(PostController.updatePost)
   )
+  .delete(
+    allowOnlyRegisteredUsers,
+    addCommunityAdminRole,
+    allowAllCommunityRoles,
+    catchAsync(PostController.deletePost)
+  )
 
 router
   .route('/:id/posts/:postId/blocked')
