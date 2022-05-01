@@ -49,6 +49,7 @@ router
 
 router
   .route('/:id/moderators')
+  .get(addCommunityAdminRole, catchAsync(communityController.getModerators))
   .post(
     addCommunityAdminRole,
     validateRequest('userId'),

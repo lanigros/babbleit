@@ -1,7 +1,12 @@
 import styled from 'styled-components'
-import { borderRadiuses, colors, spacings } from '../../global-styles/variables'
+import {
+  borderRadiuses,
+  colors,
+  fontSizes,
+  spacings
+} from '../../global-styles/variables'
 
-export const AddMemberWrapper = styled.div`
+export const CenteredModalWrapper = styled.div`
   max-height: 60vh;
   overflow-y: scroll;
   padding: ${spacings.medium};
@@ -19,5 +24,14 @@ export const AddMemberWrapper = styled.div`
 
   ::-webkit-scrollbar-thumb:hover {
     background: ${colors.paleBlue};
+  }
+`
+
+export const CloseButton = styled.button`
+  font-size: ${fontSizes.medium};
+  color: ${colors.white};
+
+  :hover {
+    color: ${colors.yellow};
   }
 `

@@ -1,6 +1,7 @@
 import { Document } from 'mongoose'
 
 import { Id, IsBlocked, MongoId, User, Post } from '.'
+import { AdminRoles } from './aggregate.types'
 
 export type CommunityBase = {
   title: string
@@ -53,3 +54,10 @@ export type CommunityMemberAggregate = {
   members: MemberResponse[]
 } & CommunityBase &
   Id
+
+export type ModeratorAggregate = {
+  userId: Id
+  username: User['username']
+  role: AdminRoles['moderator']
+  communityId: Id
+}
