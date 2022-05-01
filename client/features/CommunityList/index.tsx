@@ -6,6 +6,7 @@ import CommunityCard from '../CommunityCard'
 
 export default function CommunityList() {
   const { state } = useContext(GlobalContext)
+
   return (
     <CardList>
       <>

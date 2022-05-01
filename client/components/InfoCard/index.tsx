@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { MouseEvent } from 'react'
 
 import Thumbnail from '../../public/Thumbnail.jpg'
-import OptionMenu from '../OptionMenu'
+import OptionMenu, { EditProps } from '../OptionMenu'
 import {
   CardContainer,
   CardFooter,
@@ -13,7 +13,8 @@ import {
   CardFooterContent,
   CardThumbnail,
   PlaceholderIcons,
-  MenuHolder
+  MenuHolder,
+  IconWrapper
 } from './InfoCard.styled'
 
 type CardProps = {
@@ -21,12 +22,8 @@ type CardProps = {
   description: string
   showFooter?: boolean
   showImage?: boolean
-  allowDelete?: boolean
-  allowEdit?: boolean
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
-  onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
-  onEdit?: (e: MouseEvent<HTMLButtonElement>) => void
-}
+} & EditProps
 
 export default function InfoCard({
   title,
@@ -35,9 +32,12 @@ export default function InfoCard({
   showImage = false,
   allowDelete = false,
   allowEdit = false,
+  allowChangeBlocked = false,
+  isBlocked,
   onClick,
   onDelete,
-  onEdit
+  onEdit,
+  onChangeBlocked
 }: CardProps) {
   return (
     <CardContainer>
@@ -59,19 +59,30 @@ export default function InfoCard({
         </CardTextContainer>
         {((allowEdit && onEdit) || (allowDelete && onDelete)) && (
           <MenuHolder>
-            <OptionMenu onDelete={onDelete} onEdit={onEdit} />
+            <OptionMenu
+              allowEdit={allowEdit}
+              allowDelete={allowDelete}
+              onDelete={onDelete}
+              onEdit={onEdit}
+              allowChangeBlocked={allowChangeBlocked}
+              onChangeBlocked={onChangeBlocked}
+              isBlocked={isBlocked}
+            />
           </MenuHolder>
         )}
       </CardContent>
-      {showFooter && (
-        <CardFooter>
-          <CardFooterContent>
-            <PlaceholderIcons>&#128077;</PlaceholderIcons>
-            <PlaceholderIcons>&#128078;</PlaceholderIcons>
-            <PlaceholderIcons>&#11088;</PlaceholderIcons>
-          </CardFooterContent>
-        </CardFooter>
-      )}
+      <CardFooter>
+        <CardFooterContent isBlocked={!!isBlocked}>
+          {isBlocked ? <h5>Blocked</h5> : null}
+          {showFooter && (
+            <IconWrapper>
+              <PlaceholderIcons>&#128077;</PlaceholderIcons>
+              <PlaceholderIcons>&#128078;</PlaceholderIcons>
+              <PlaceholderIcons>&#11088;</PlaceholderIcons>
+            </IconWrapper>
+          )}
+        </CardFooterContent>
+      </CardFooter>
     </CardContainer>
   )
 }

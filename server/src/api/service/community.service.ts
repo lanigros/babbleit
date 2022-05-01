@@ -4,6 +4,7 @@ import { Unauthorized, NotFound } from '../../errors'
 import {
   Community,
   CommunityData,
+  CommunityMemberAggregate,
   CommunityRegistration,
   CommunitySelect,
   Role
@@ -23,7 +24,8 @@ async function saveNewCommunity(
 
   const community = new CommunityModel({
     title,
-    description
+    description,
+    creatorId: new Types.ObjectId(userId)
   })
 
   const savedCommunity = await community.save()
@@ -31,7 +33,8 @@ async function saveNewCommunity(
   const {
     _id,
     title: savedTitle,
-    description: savedDescription
+    description: savedDescription,
+    creatorId
   } = savedCommunity._doc
 
   const adminRole: Role = {
@@ -50,11 +53,12 @@ async function saveNewCommunity(
   return {
     id: _id.toString(),
     title: savedTitle,
-    description: savedDescription
+    description: savedDescription,
+    creatorId: creatorId.toString()
   }
 }
 
-async function getAllCommunities(
+async function getCommunities(
   showBlockedCommunities = false
 ): Promise<CommunityData[]> {
   const communities = await CommunityModel.find<CommunitySelect>(
@@ -69,15 +73,17 @@ async function getAllCommunities(
     return {
       id: community._id.toString(),
       title: community.title,
-      description: community.description
+      description: community.description,
+      isBlocked: community.isBlocked,
+      creatorId: community.creatorId.toString()
     }
   })
 }
 
-// TODO add posts to response
 async function findCommunityById(
   communityId: string,
-  showBlockedCommunities = false
+  showBlockedCommunities = false,
+  showBlockedPosts = false
 ): Promise<Community> {
   const result = await CommunityModel.aggregate<Community>([
     { $match: { _id: new Types.ObjectId(communityId) } },
@@ -89,12 +95,19 @@ async function findCommunityById(
         foreignField: 'communityId',
         pipeline: [
           {
+            $match: showBlockedPosts
+              ? { $or: [{ isBlocked: 0 }, { isBlocked: 1 }] }
+              : { isBlocked: 0 }
+          },
+          {
             $project: {
               _id: 0,
               title: 1,
               content: 1,
               username: 1,
-              id: { $toString: '$_id' }
+              userId: { $toString: '$userId' },
+              id: { $toString: '$_id' },
+              isBlocked: 1
             }
           }
         ],
@@ -108,6 +121,7 @@ async function findCommunityById(
         title: 1,
         description: 1,
         isBlocked: 1,
+        creatorId: { $toString: '$creatorId' },
         members: {
           $map: {
             input: '$members',
@@ -289,16 +303,51 @@ async function removeCommunityMember(communityId: string, userId: string) {
   return result.modifiedCount === 1
 }
 
+async function updateBlockedStatus(communityId: string, isBlocked: number) {
+  const result = await CommunityModel.updateOne(
+    { _id: communityId },
+    { isBlocked }
+  )
+
+  return result.acknowledged
+}
+
+async function findMembers(communityId: string) {
+  const memberAggregate =
+    await CommunityModel.aggregate<CommunityMemberAggregate>([
+      { $match: { _id: new Types.ObjectId(communityId) } },
+      { $limit: 1 },
+      {
+        $project: {
+          _id: 0,
+          members: {
+            $map: {
+              input: '$members',
+              in: {
+                id: { $toString: '$$this.userId' },
+                username: '$$this.username'
+              }
+            }
+          }
+        }
+      }
+    ])
+
+  return memberAggregate[0]?.members
+}
+
 const CommunityService = {
   saveNewCommunity,
-  getAllCommunities,
+  getCommunities,
   findCommunityById,
   addModerator,
   removeModerator,
   deleteCommunityById,
   deleteCommunitiesOwnedByUserId,
   addCommunityMember,
-  removeCommunityMember
+  removeCommunityMember,
+  updateBlockedStatus,
+  findMembers
 }
 
 export default CommunityService

@@ -7,12 +7,25 @@ import {
   OptionMenuWrapper
 } from './OptionMenu.styled'
 
-type OptionMenuProps = {
+export type EditProps = {
+  allowDelete?: boolean
+  allowEdit?: boolean
   onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
   onEdit?: (e: MouseEvent<HTMLButtonElement>) => void
+  isBlocked?: 1 | 0
+  onChangeBlocked?: (e: MouseEvent<HTMLButtonElement>) => void
+  allowChangeBlocked?: boolean
 }
 
-export default function OptionMenu({ onDelete, onEdit }: OptionMenuProps) {
+export default function OptionMenu({
+  onDelete,
+  onEdit,
+  allowDelete,
+  allowEdit,
+  allowChangeBlocked,
+  onChangeBlocked,
+  isBlocked
+}: EditProps) {
   const [isMenuActive, setIsMenuActive] = useState(false)
   return (
     <OptionMenuWrapper onPointerLeave={() => setIsMenuActive(false)}>
@@ -24,10 +37,15 @@ export default function OptionMenu({ onDelete, onEdit }: OptionMenuProps) {
       </OptionMenuM>
       {isMenuActive && (
         <MenuOptions>
-          {onEdit && <Option onClick={onEdit}>edit</Option>}
-          {onDelete && (
+          {onEdit && allowEdit && <Option onClick={onEdit}>edit</Option>}
+          {onDelete && allowDelete && (
             <Option onClick={onDelete} danger>
               delete
+            </Option>
+          )}
+          {allowChangeBlocked && onChangeBlocked && (
+            <Option onClick={onChangeBlocked}>
+              {isBlocked ? 'unblock' : 'block'}
             </Option>
           )}
         </MenuOptions>

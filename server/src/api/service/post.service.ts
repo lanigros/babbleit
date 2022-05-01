@@ -1,9 +1,18 @@
 import { PostModel, CommunityModel, UserModel } from '../model'
-import { UserService, CommunityService } from '../service'
-import { Post } from '../../types'
+import { CommunityService } from '../service'
+import { Post, PostRegistration } from '../../types'
+import { NotFound, Unauthorized } from '../../errors'
 
-const getPosts = async (communityId: string) => {
-  const community = await CommunityService.findCommunityById(communityId)
+const getPosts = async (
+  communityId: string,
+  showBlockedCommunities = false,
+  showBlockedPosts = false
+) => {
+  const community = await CommunityService.findCommunityById(
+    communityId,
+    showBlockedCommunities,
+    showBlockedPosts
+  )
   return community.posts
 }
 
@@ -51,8 +60,83 @@ const createPost = async (
   }
 }
 
+const updatePost = async (
+  postId: string,
+  userId: string,
+  update: PostRegistration
+) => {
+  const author = await PostModel.exists({
+    _id: postId,
+    userId
+  })
+
+  if (!author) {
+    throw new Unauthorized('You are not the owner of this post')
+  }
+
+  const result = await PostModel.updateOne({ _id: postId }, { ...update })
+  return result.acknowledged
+}
+
+const updateBlockedStatus = async (
+  _id: string,
+  isBlocked: number
+): Promise<boolean> => {
+  const result = await PostModel.updateOne({ _id }, { isBlocked })
+
+  return result.acknowledged
+}
+
+const deletePost = async (
+  postId: string,
+  userId: string,
+  hasAdminRole: boolean
+) => {
+  if (!hasAdminRole) {
+    const author = await PostModel.exists({
+      _id: postId,
+      userId
+    })
+
+    if (!author) {
+      throw new Unauthorized('You are not the owner of this post')
+    }
+  }
+
+  const result = await PostModel.deleteOne({ _id: postId })
+  return result.acknowledged
+}
+
+const findPostById = async (postId: string, isAdmin?: boolean) => {
+  const post = await PostModel.findOne(
+    isAdmin ? { _id: postId } : { _id: postId, isBlocked: 0 }
+  )
+
+  if (!post) {
+    throw new NotFound('No such post')
+  }
+
+  const { _id, userId, username, communityId, title, content, isBlocked } =
+    post._doc
+
+  return {
+    id: _id.toString(),
+    userId: userId.toString(),
+    username,
+    communityId: communityId.toString(),
+    title,
+    content,
+    isBlocked
+  }
+}
+
 const PostService = {
   getPosts,
-  createPost
+  createPost,
+  updatePost,
+  updateBlockedStatus,
+  deletePost,
+  findPostById
 }
+
 export default PostService

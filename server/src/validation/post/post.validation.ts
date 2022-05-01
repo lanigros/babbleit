@@ -4,14 +4,14 @@ import { BadRequest } from '../../errors'
 
 export const postSchema = {
   title: Joi.string()
-    .regex(/^[,. a-zA-Z0-9äöåÄÖÅ]+$/)
+    .regex(/^[,\. a-zA-Z0-9äöåÄÖÅ]+$/)
     .min(10)
     .max(40)
     .error(() => {
-      return new BadRequest('Invalid title')
+      return new BadRequest('Title must be 10 - 40 characters')
     }),
   content: Joi.string()
-    .regex(/^[,. a-zA-Z0-9äöåÄÖÅ@$!%*?\-_&]+$/)
+    .regex(/^[,\. a-zA-Z0-9äöåÄÖÅ@$!%*?\-_&]+$/)
     .min(10)
     .max(1000)
     .error(() => {

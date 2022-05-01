@@ -8,12 +8,21 @@ export type ResponseMessage = {
 
 export type Id = { id: string }
 
+export type IsBlocked = {
+  isBlocked: 1 | 0
+}
+
 /** USER */
 
 export type UserLogin = {
   email: string
   password: string
 }
+
+export type LimitedUserInfo = {
+  username: string
+} & Id &
+  Partial<IsBlocked>
 
 export type UserSignup = {
   username: string
@@ -22,28 +31,42 @@ export type UserSignup = {
 
 export type User = {
   email: string
-  username: string
-  isBlocked: boolean
   createdAt: string
   updatedAt: string
   isAdmin: boolean
-} & Id
+} & LimitedUserInfo
 
 export type UserResponse = {
   user?: User
 } & ErrorResponse
 
+export type UsersResponse = {
+  users: LimitedUserInfo[]
+} & ErrorResponse
+
 /** POSTS */
+
+export type PostCreation = {
+  title: string
+  content: string
+}
+
+export type Post = PostCreation & Id
 
 export type CommunityPost = {
   username: User['username']
-  title: string
-  content: string
-} & Id
+  userId: User['id']
+} & Id &
+  PostCreation &
+  IsBlocked
+
+export type PostResponse = {
+  post: CommunityPost
+}
 
 /** COMMUNITY */
 
-type CommunityMember = {
+export type CommunityMember = {
   username: User['username']
   userId: User['id']
 }
@@ -53,10 +76,16 @@ export type CommunityRegistration = {
   description: string
 }
 
-export type Community = CommunityRegistration & Id
+export type Community = { creatorId: Id['id'] } & CommunityRegistration &
+  Id &
+  IsBlocked
+
+export type MembersResponse = {
+  members: LimitedUserInfo[]
+  communityAdminRole: CommunityAdminRole
+} & ErrorResponse
 
 export type DetailedCommunity = {
-  isBlocked: 1 | 0
   members: CommunityMember[]
   posts: CommunityPost[]
 } & Community
@@ -78,12 +107,3 @@ export type ServerSideProps = {
   community: DetailedCommunity
   communityAdminRole: CommunityAdminRole
 }
-
-/** COMMUNITYPOST (THREAD) */
-
-export type PostCreation = {
-  title: string
-  content: string
-}
-
-export type Post = PostCreation & Id

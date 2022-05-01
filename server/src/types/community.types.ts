@@ -16,34 +16,34 @@ export type CommunityPost = {
   postId: Post['_id']
 }
 
+type CreatorId = {
+  creatorId: User['_id']
+}
+
 export type Community = {
   __v: number
   members: CommunityMember[]
   posts: CommunityPost[]
 } & CommunityRegistration &
   IsBlocked &
-  MongoId
+  MongoId &
+  CreatorId
 
 export type CommunityDocument = {
   _doc: Community
 } & Document
 
-export type CommunityData = Id & CommunityRegistration
+export type CommunityData = Id & CommunityRegistration & { creatorId: Id['id'] }
 
-export type CommunitySelect = MongoId & CommunityRegistration
-
-export type JoinedMember = {
-  userId: User['_id']
-  username: User['username']
-} & IsBlocked &
-  MongoId
+export type CommunitySelect = MongoId &
+  CommunityRegistration &
+  IsBlocked &
+  CreatorId
 
 export type MemberResponse = {
-  isBlocked: boolean
-} & Id &
-  Pick<User, 'username'>
+  id: Id['id']
+} & Pick<User, 'username'>
 
-export type CommunityAggregate = {
+export type CommunityMemberAggregate = {
   members: MemberResponse[]
-} & CommunityRegistration &
-  Id
+}

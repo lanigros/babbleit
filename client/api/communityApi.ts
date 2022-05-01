@@ -1,10 +1,11 @@
 import {
   CommunitiesResponse,
-  Community,
   CommunityRegistration,
   CommunityResponse,
+  IsBlocked,
   PostCreation,
-  ResponseMessage
+  ResponseMessage,
+  MembersResponse
 } from '../types'
 import { createFetch, createServerSideFetch } from './createFetch'
 
@@ -36,4 +37,24 @@ export const apiPostNewCommunity = createFetch<
 export const apiPostNewCommunityPost = createFetch<PostCreation, undefined>(
   `communities`,
   'POST'
+)
+
+export const apiJoinCommunity = createFetch<never, ResponseMessage>(
+  'communities',
+  'POST'
+)
+
+export const apiBlockCommunity = createFetch<IsBlocked, ResponseMessage>(
+  'communities',
+  'PUT'
+)
+
+export const apiGetMembers = createServerSideFetch<never, MembersResponse>(
+  'communities',
+  'GET'
+)
+
+export const apiRemoveMember = createFetch<{ userId: string }, ResponseMessage>(
+  'communities',
+  'DELETE'
 )

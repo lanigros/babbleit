@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import { NextFunction, Request, Response } from 'express'
 
-import { CommunityAdminModel, CommunityModel, UserModel } from '../api/model'
+import { CommunityAdminModel, CommunityModel } from '../api/model'
 import { Role } from '../types'
 import { Unauthorized } from '../errors'
 
@@ -49,15 +49,36 @@ export async function allowOnlyCommunityAdminsAndAdmins(
   next()
 }
 
-export async function allowOnlyCommunityMembers(
+export async function allowAllAdminRoles(
   req: Request,
   _: Response,
   next: NextFunction
 ) {
+  if (!(req.session.isAdmin || req.communityAdminRole)) {
+    next(
+      new Unauthorized(
+        'You must be an admin or moderator of the page or community to access this route'
+      )
+    )
+  }
+  next()
+}
+
+export async function allowAllCommunityRoles(
+  req: Request,
+  _: Response,
+  next: NextFunction
+) {
+  if (req.communityAdminRole || req.session.isAdmin) {
+    return next()
+  }
+
   const existingMember = await CommunityModel.exists({
+    _id: req.params.id,
     'members.userId': req.session.userId
   })
-  if (!existingMember) {
+
+  if (!existingMember && !req.communityAdminRole) {
     next(new Unauthorized('You must be a member to post in this community'))
   }
 

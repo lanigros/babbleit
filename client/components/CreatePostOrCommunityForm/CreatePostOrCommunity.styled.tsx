@@ -7,9 +7,7 @@ import {
   spacings,
   borderRadiuses,
   lineHeights
-} from '../../../global-styles/variables'
-
-export const Banner = styled.div``
+} from '../../global-styles/variables'
 
 export const BannerTitle = styled.div`
   font-size: ${fontSizes.extraLarge};

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { BadRequest, Unauthorized } from '../../errors'
+import { BadRequest, NotFound, Unauthorized } from '../../errors'
 import { createResponseMessage } from '../../utility'
 import { CommunityService } from '../service'
 
@@ -18,16 +18,15 @@ const createCommunity = async (req: Request, res: Response) => {
 }
 
 const getCommunities = async (req: Request, res: Response) => {
-  const communities = await CommunityService.getAllCommunities(
-    req.session.isAdmin
-  )
+  const communities = await CommunityService.getCommunities(req.session.isAdmin)
   res.json({ communities })
 }
 
 const getCommunity = async (req: Request, res: Response) => {
   const community = await CommunityService.findCommunityById(
     req.params.id,
-    req.session.isAdmin
+    req.session.isAdmin,
+    req.session.isAdmin || !!req.communityAdminRole
   )
   res.json({ community, communityAdminRole: req.communityAdminRole || null })
 }
@@ -112,7 +111,7 @@ const addCommunityMember = async (req: Request, res: Response) => {
 const removeCommunityMember = async (req: Request, res: Response) => {
   const isMembershipRemoved = await CommunityService.removeCommunityMember(
     req.params.id,
-    req.body.userId
+    req.params.userId
   )
 
   if (!isMembershipRemoved) {
@@ -139,6 +138,35 @@ const leaveCommunity = async (req: Request, res: Response) => {
   )
 }
 
+const updateBlockedStatus = async (req: Request, res: Response) => {
+  const { isBlocked } = req.body
+
+  const isUpdated = await CommunityService.updateBlockedStatus(
+    req.params.id,
+    isBlocked
+  )
+
+  if (!isUpdated) {
+    throw new Error('Update of blocked status was unsuccessful')
+  }
+
+  res.json(
+    createResponseMessage(
+      `Community successfully ${isBlocked ? 'blocked' : 'unblocked'}`
+    )
+  )
+}
+
+const getMembers = async (req: Request, res: Response) => {
+  const members = await CommunityService.findMembers(req.params.id)
+
+  if (!members) {
+    throw new NotFound('No members found')
+  }
+
+  res.json({ members, communityAdminRole: req.communityAdminRole })
+}
+
 const communityController = {
   createCommunity,
   getCommunities,
@@ -149,7 +177,9 @@ const communityController = {
   joinCommunity,
   addCommunityMember,
   leaveCommunity,
-  removeCommunityMember
+  removeCommunityMember,
+  updateBlockedStatus,
+  getMembers
 }
 
 export default communityController
