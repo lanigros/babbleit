@@ -1,6 +1,5 @@
 import {
   CommunitiesResponse,
-  Community,
   CommunityRegistration,
   CommunityResponse,
   PostCreation,

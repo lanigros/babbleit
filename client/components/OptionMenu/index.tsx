@@ -7,12 +7,19 @@ import {
   OptionMenuWrapper
 } from './OptionMenu.styled'
 
-type OptionMenuProps = {
+export type EditProps = {
+  allowDelete?: boolean
+  allowEdit?: boolean
   onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
   onEdit?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
-export default function OptionMenu({ onDelete, onEdit }: OptionMenuProps) {
+export default function OptionMenu({
+  onDelete,
+  onEdit,
+  allowDelete,
+  allowEdit
+}: EditProps) {
   const [isMenuActive, setIsMenuActive] = useState(false)
   return (
     <OptionMenuWrapper onPointerLeave={() => setIsMenuActive(false)}>
@@ -24,8 +31,8 @@ export default function OptionMenu({ onDelete, onEdit }: OptionMenuProps) {
       </OptionMenuM>
       {isMenuActive && (
         <MenuOptions>
-          {onEdit && <Option onClick={onEdit}>edit</Option>}
-          {onDelete && (
+          {onEdit && allowEdit && <Option onClick={onEdit}>edit</Option>}
+          {onDelete && allowDelete && (
             <Option onClick={onDelete} danger>
               delete
             </Option>

@@ -37,6 +37,7 @@ export type UserResponse = {
 
 export type CommunityPost = {
   username: User['username']
+  userId: User['id']
   title: string
   content: string
 } & Id

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { MouseEvent } from 'react'
 
 import Thumbnail from '../../public/Thumbnail.jpg'
-import OptionMenu from '../OptionMenu'
+import OptionMenu, { EditProps } from '../OptionMenu'
 import {
   CardContainer,
   CardFooter,
@@ -21,12 +21,8 @@ type CardProps = {
   description: string
   showFooter?: boolean
   showImage?: boolean
-  allowDelete?: boolean
-  allowEdit?: boolean
   onClick?: (e: MouseEvent<HTMLDivElement>) => void
-  onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
-  onEdit?: (e: MouseEvent<HTMLButtonElement>) => void
-}
+} & EditProps
 
 export default function InfoCard({
   title,
@@ -59,7 +55,12 @@ export default function InfoCard({
         </CardTextContainer>
         {((allowEdit && onEdit) || (allowDelete && onDelete)) && (
           <MenuHolder>
-            <OptionMenu onDelete={onDelete} onEdit={onEdit} />
+            <OptionMenu
+              allowEdit={allowEdit}
+              allowDelete={allowDelete}
+              onDelete={onDelete}
+              onEdit={onEdit}
+            />
           </MenuHolder>
         )}
       </CardContent>

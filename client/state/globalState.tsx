@@ -19,6 +19,7 @@ type SetStateAction =
   | { type: 'setCommunities'; payload: Community[] }
   | { type: 'setPosts'; payload: CommunityPost[] }
   | { type: 'removeCommunity'; payload: Id }
+  | { type: 'removePost'; payload: Id }
 
 type GlobalContextType = {
   state: GlobalState
@@ -43,11 +44,11 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
         communities: action.payload
       }
     case 'removeCommunity':
-      let indexToRemove = state.communities.findIndex(
+      const communityIndex = state.communities.findIndex(
         (community) => community.id === action.payload.id
       )
       const communities = [...state.communities]
-      communities.splice(indexToRemove, 1)
+      communities.splice(communityIndex, 1)
       return {
         ...state,
         communities
@@ -57,6 +58,17 @@ const GlobalReducer = (state: GlobalState, action: SetStateAction) => {
         ...state,
         posts: action.payload
       }
+    case 'removePost':
+      const postIndex = state.posts.findIndex(
+        (post) => post.id === action.payload.id
+      )
+      const posts = [...state.posts]
+      posts.splice(postIndex, 1)
+      return {
+        ...state,
+        posts
+      }
+
     default:
       return { ...state }
   }
