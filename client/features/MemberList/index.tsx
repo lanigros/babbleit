@@ -17,14 +17,14 @@ export default function MemberList({ communityAdminRole }: MemberListProps) {
   return (
     <CardList>
       {state.users?.length ? (
-        state.users.map((post) => {
+        state.users.map((user) => {
           async function removeMember() {
             try {
               const response = await apiRemoveMember({
-                slug: `${router.query.slug}/members/${post.id}`
+                slug: `${router.query.slug}/members/${user.id}`
               })
               if (response) {
-                dispatch({ type: 'removeUser', payload: { id: post.id } })
+                dispatch({ type: 'removeUser', payload: { id: user.id } })
               }
             } catch (e) {
               console.log('oopsie')
@@ -33,8 +33,8 @@ export default function MemberList({ communityAdminRole }: MemberListProps) {
 
           return (
             <UserCard
-              {...post}
-              key={post.id}
+              {...user}
+              key={user.id}
               disableBlocking={true}
               onDelete={removeMember}
               allowDelete={state.user.isAdmin || !!communityAdminRole}

@@ -11,10 +11,12 @@ export const serverSideWhoAmI = createServerSideFetch<never, UserResponse>(
   'GET'
 )
 
-export const apiGetUsers = createServerSideFetch<never, UsersResponse>(
-  'users',
-  'GET'
-)
+export const apiServerSideGetUsers = createServerSideFetch<
+  never,
+  UsersResponse
+>('users', 'GET')
+
+export const apiGetUsers = createFetch<never, UsersResponse>('users', 'GET')
 
 export const apiDeleteAnAccount = createFetch<never, ResponseMessage>(
   'users',

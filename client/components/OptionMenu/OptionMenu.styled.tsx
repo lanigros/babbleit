@@ -16,6 +16,7 @@ type DangerProps = {
 }
 
 export const OptionMenuWrapper = styled.div`
+  position: relative;
   padding: ${spacings.tiny};
 `
 
