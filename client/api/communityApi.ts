@@ -7,7 +7,8 @@ import {
   ResponseMessage,
   MembersResponse,
   UserId,
-  ModeratorsResponse
+  ModeratorsResponse,
+  Community
 } from '../types'
 import { createFetch, createServerSideFetch } from './createFetch'
 
@@ -24,6 +25,11 @@ export const apiRemoveCommunity = createFetch<never, ResponseMessage>(
 export const apiGetCommunity = createServerSideFetch<never, CommunityResponse>(
   'communities',
   'GET'
+)
+
+export const apiPutCommunity = createFetch<CommunityRegistration, Community>(
+  'communities',
+  'PUT'
 )
 
 export const apiPostNewCommunity = createFetch<

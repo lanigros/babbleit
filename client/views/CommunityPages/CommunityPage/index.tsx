@@ -65,6 +65,11 @@ export default function CommunityPage({
           {communityAdminRole && (
             <Button onClick={() => setShowAddMembers(true)}>Add member</Button>
           )}
+          {communityAdminRole === 'admin' && (
+            <Button onClick={() => router.push(`${router.query.slug}/edit`)}>
+              Edit info
+            </Button>
+          )}
         </MemberButtonsWrapper>
         {(communityAdminRole === 'admin' || state.user.isAdmin) && (
           <Button danger onClick={removeCommunity}>

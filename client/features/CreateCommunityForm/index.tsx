@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { apiPostNewCommunity } from '../../api'
+import { apiPostNewCommunity, apiPutCommunity } from '../../api'
 import CreatePostOrCommunityForm from '../../components/CreatePostOrCommunityForm'
 import Input from '../../components/Input'
 import TextArea from '../../components/TextArea'
@@ -8,15 +8,22 @@ import { useForm } from '../../hooks/useForm'
 import { CommunityRegistration } from '../../types'
 import { validateCommunity } from '../../validation/communityValidation'
 
-export default function CreateCommunityForm() {
+type CreateCommunityFormProps = {
+  communityToBeEdited?: CommunityRegistration
+}
+
+export default function CreateCommunityForm({
+  communityToBeEdited
+}: CreateCommunityFormProps) {
   const router = useRouter()
+  const communityId = router.query.slug // NEW
 
   const [isError, setIsError] = useState(false)
 
   const { values, errors, handleChange, handleSubmit } = useForm(
     {
-      title: '',
-      description: ''
+      title: communityToBeEdited ? communityToBeEdited.title : '',
+      description: communityToBeEdited ? communityToBeEdited.description : ''
     },
     submitHandler,
     validateCommunity
@@ -25,23 +32,43 @@ export default function CreateCommunityForm() {
   async function submitHandler(newCommunity: CommunityRegistration) {
     isError && setIsError(false)
 
-    async function postNewCommunity() {
-      try {
-        const response = await apiPostNewCommunity({
-          data: newCommunity
-        })
-        router.push(`communities/${response.community.id}`)
-      } catch (e) {
-        setIsError(true)
-      }
+    if (communityToBeEdited) {
+      return updateCommunity(newCommunity)
+    } else {
+      return createNewCommunity(newCommunity)
     }
-    return postNewCommunity()
+  }
+
+  async function createNewCommunity(newCommunity: CommunityRegistration) {
+    try {
+      const response = await apiPostNewCommunity({
+        data: newCommunity
+      })
+      router.push(`communities/${response.community.id}`)
+    } catch (e) {
+      setIsError(true)
+    }
+  }
+  async function updateCommunity(editedCommunity: CommunityRegistration) {
+    console.log('updating!')
+
+    try {
+      const response = await apiPutCommunity({
+        data: editedCommunity,
+        slug: `/${communityId}`
+      })
+      console.log(response)
+
+      //router.push(`communities/${response.id}`)
+    } catch (e) {
+      setIsError(true)
+    }
   }
 
   return (
     <CreatePostOrCommunityForm
       handleSubmit={handleSubmit}
-      buttonText={'Create community'}
+      buttonText={communityToBeEdited ? 'Update community' : 'Create community'}
       isError={isError}
       type={'community'}
     >
