@@ -152,7 +152,7 @@ const updateBlockedStatus = async (req: Request, res: Response) => {
 
   res.json(
     createResponseMessage(
-      `Post successfully ${isBlocked ? 'blocked' : 'unblocked'}`
+      `Community successfully ${isBlocked ? 'blocked' : 'unblocked'}`
     )
   )
 }
