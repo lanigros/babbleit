@@ -1,5 +1,5 @@
 import { MouseEvent, useContext } from 'react'
-import { apiChangeUserBlocked, apiDeleteAnAccount } from '../../api'
+import { apiChangeUserBlocked } from '../../api'
 import { InfoCard } from '../../components'
 import { GlobalContext } from '../../state/globalState'
 import { LimitedUserInfo } from '../../types'
@@ -9,7 +9,8 @@ type UserCardProps = {
   disableBlocking?: boolean
   onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
   allowDelete?: boolean
-  onAddMember?: (e: MouseEvent<HTMLButtonElement>) => void
+  onCustomButtonClick?: (e: MouseEvent<HTMLButtonElement>) => void
+  customButtonText?: string
 } & LimitedUserInfo
 
 export default function UserCard({
@@ -19,7 +20,8 @@ export default function UserCard({
   disableBlocking,
   onDelete,
   allowDelete = false,
-  onAddMember
+  onCustomButtonClick,
+  customButtonText
 }: UserCardProps) {
   const { state, dispatch } = useContext(GlobalContext)
 
@@ -51,8 +53,8 @@ export default function UserCard({
         isBlocked={isBlocked}
         allowChangeBlocked={disableBlocking ? false : state.user.isAdmin}
         onChangeBlocked={changeBlockedStatus}
-        onCustomButtonClick={onAddMember}
-        customButtonText={'Add member'}
+        onCustomButtonClick={onCustomButtonClick}
+        customButtonText={customButtonText}
       />
     </UserCardWrapper>
   )

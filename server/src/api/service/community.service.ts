@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-import { Unauthorized, NotFound } from '../../errors'
+import { Unauthorized, NotFound, BadRequest } from '../../errors'
 import {
   Community,
   CommunityData,
@@ -8,6 +8,7 @@ import {
   CommunityBase,
   CommunitySelect,
   EditBaseCommunity,
+  ModeratorAggregate,
   Role
 } from '../../types'
 import {
@@ -160,6 +161,12 @@ async function findCommunityById(
 }
 
 async function addModerator(communityId: string, userId: string) {
+  const userToBecomeModerator = await UserModel.findOne({ _id: userId })
+
+  if (!userToBecomeModerator) {
+    throw new BadRequest('No such user')
+  }
+
   const existingRole = await CommunityAdminModel.exists({
     userId: new Types.ObjectId(userId),
     'roles.communityId': new Types.ObjectId(communityId)
@@ -169,8 +176,26 @@ async function addModerator(communityId: string, userId: string) {
     return false
   }
 
+  const communityResult = await CommunityModel.updateOne(
+    { _id: communityId },
+    {
+      $pull: {
+        members: {
+          userId
+        }
+      }
+    }
+  )
+
+  if (!communityResult.acknowledged) {
+    throw new Error('Adding member was unsuccessful')
+  }
+
   const result = await CommunityAdminModel.updateOne(
-    { userId: new Types.ObjectId(userId) },
+    {
+      userId: new Types.ObjectId(userId),
+      username: userToBecomeModerator._doc.username
+    },
     {
       $push: {
         roles: {
@@ -194,7 +219,8 @@ async function removeModerator(communityId: string, userId: string) {
     {
       $pull: {
         roles: {
-          role: 'moderator'
+          role: 'moderator',
+          communityId: new Types.ObjectId(communityId)
         }
       }
     }
@@ -346,6 +372,31 @@ async function findMembers(communityId: string) {
   return memberAggregate[0]?.members
 }
 
+async function findModerators(communityId: string) {
+  return await CommunityAdminModel.aggregate<ModeratorAggregate>([
+    {
+      $match: { 'roles.communityId': new Types.ObjectId(communityId) }
+    },
+    {
+      $unwind: { path: '$roles' }
+    },
+    {
+      $project: {
+        _id: 0,
+        userId: { $toString: '$userId' },
+        username: 1,
+        role: '$roles.role',
+        communityId: { $toString: '$roles.communityId' }
+      }
+    },
+    {
+      $match: {
+        communityId
+      }
+    }
+  ])
+}
+
 const CommunityService = {
   saveNewCommunity,
   getCommunities,
@@ -358,7 +409,8 @@ const CommunityService = {
   removeCommunityMember,
   updateBlockedStatus,
   findMembers,
-  updateBaseCommunity
+  updateBaseCommunity,
+  findModerators
 }
 
 export default CommunityService

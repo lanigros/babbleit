@@ -104,6 +104,18 @@ export type CommunityResponse = {
   communityAdminRole: CommunityAdminRole
 }
 
+export type Moderator = {
+  userId: Id['id']
+  username: User['username']
+  role?: 'moderator'
+  communityId: Id['id']
+}
+
+export type ModeratorsResponse = {
+  moderators: Moderator[]
+  communityAdminRole: CommunityAdminRole
+}
+
 /** SERVER-SIDE PROPS */
 export type ServerSideProps = {
   user: User | null

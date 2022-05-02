@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
+
 import { apiRemoveCommunity } from '../../../api'
 import { MaxWidthContainer } from '../../../components'
 import Button from '../../../components/Button'
 import { AddMemberModal, PostList } from '../../../features'
+import ModeratorsModal from '../../../features/ModeratorsModal'
 import { GlobalContext } from '../../../state/globalState'
 import { CommunityAdminRole, DetailedCommunity } from '../../../types'
 import {
@@ -26,6 +28,7 @@ export default function CommunityPage({
   const { state } = useContext(GlobalContext)
 
   const [showAddMembers, setShowAddMembers] = useState(false)
+  const [showModerators, setShowModerators] = useState(false)
 
   function removeCommunity() {
     async function deleteCommunity() {
@@ -44,11 +47,18 @@ export default function CommunityPage({
         setShowModal={setShowAddMembers}
         community={community}
       />
+      <ModeratorsModal
+        showModal={showModerators}
+        setShowModal={setShowModerators}
+      />
       <Title>
         Community <span>{`'${community.title}'`}</span>
       </Title>
       <ButtonWrapper>
         <MemberButtonsWrapper>
+          <Button onClick={() => setShowModerators(true)}>
+            See moderators
+          </Button>
           <Button onClick={() => router.push(`${router.query.slug}/members`)}>
             See members
           </Button>

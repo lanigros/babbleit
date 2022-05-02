@@ -21,6 +21,10 @@ const communityAdminSchema = new Schema({
     ref: 'user',
     required: [true, 'User id must be provided']
   },
+  username: {
+    type: String,
+    required: [true, 'Username must be provided']
+  },
   roles: {
     type: [roleSchema]
   }

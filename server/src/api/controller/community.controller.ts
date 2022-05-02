@@ -183,7 +183,17 @@ const getMembers = async (req: Request, res: Response) => {
     throw new NotFound('No members found')
   }
 
-  res.json({ members, communityAdminRole: req.communityAdminRole })
+  res.json({ members, communityAdminRole: req.communityAdminRole || null })
+}
+
+const getModerators = async (req: Request, res: Response) => {
+  const moderators = await CommunityService.findModerators(req.params.id)
+
+  if (!moderators) {
+    throw new NotFound('No moderators found')
+  }
+
+  res.json({ moderators, communityAdminRole: req.communityAdminRole || null })
 }
 
 const communityController = {
@@ -199,7 +209,8 @@ const communityController = {
   removeCommunityMember,
   updateBlockedStatus,
   getMembers,
-  updateBaseCommunity
+  updateBaseCommunity,
+  getModerators
 }
 
 export default communityController

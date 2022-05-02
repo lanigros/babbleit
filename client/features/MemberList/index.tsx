@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-import { apiRemoveMember } from '../../api'
+import { apiAddModerator, apiRemoveMember } from '../../api'
 import { CardList } from '../../components'
 import { GlobalContext } from '../../state/globalState'
 import { CommunityAdminRole } from '../../types'
@@ -14,30 +14,48 @@ export default function MemberList({ communityAdminRole }: MemberListProps) {
   const router = useRouter()
   const { state, dispatch } = useContext(GlobalContext)
 
+  async function addModerator(userId: string) {
+    try {
+      const response = await apiAddModerator({
+        slug: `${router.query.slug}/moderators`,
+        data: { userId }
+      })
+      if (!response) {
+        return
+      }
+    } catch (e) {
+      console.log('oopsie')
+    }
+  }
+
+  async function removeMember(userId: string) {
+    try {
+      const response = await apiRemoveMember({
+        slug: `${router.query.slug}/members/${userId}`
+      })
+      if (response) {
+        dispatch({ type: 'removeUser', payload: { id: userId } })
+      }
+    } catch (e) {
+      console.log('oopsie')
+    }
+  }
+
   return (
     <CardList>
       {state.users?.length ? (
         state.users.map((user) => {
-          async function removeMember() {
-            try {
-              const response = await apiRemoveMember({
-                slug: `${router.query.slug}/members/${user.id}`
-              })
-              if (response) {
-                dispatch({ type: 'removeUser', payload: { id: user.id } })
-              }
-            } catch (e) {
-              console.log('oopsie')
-            }
-          }
-
           return (
             <UserCard
               {...user}
               key={user.id}
               disableBlocking={true}
-              onDelete={removeMember}
+              onDelete={() => removeMember(user.id)}
               allowDelete={state.user.isAdmin || !!communityAdminRole}
+              customButtonText={
+                communityAdminRole === 'admin' ? 'Make moderator' : undefined
+              }
+              onCustomButtonClick={() => addModerator(user.id)}
             />
           )
         })
