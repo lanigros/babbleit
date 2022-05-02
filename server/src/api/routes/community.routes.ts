@@ -32,6 +32,12 @@ router
     allowOnlyCommunityAdminsAndAdmins,
     catchAsync(CommunityController.deleteCommunity)
   )
+  .put(
+    validateRequest('communityUpdate'),
+    addCommunityAdminRole,
+    allowOnlyCommunityAdminsAndAdmins,
+    catchAsync(CommunityController.updateBaseCommunity)
+  )
 
 router
   .route('/:id/blocked')
