@@ -16,7 +16,7 @@ export default function CreateCommunityForm({
   communityToBeEdited
 }: CreateCommunityFormProps) {
   const router = useRouter()
-  const communityId = router.query.slug // NEW
+  const communityId = router.query.slug
 
   const [isError, setIsError] = useState(false)
 
@@ -50,14 +50,11 @@ export default function CreateCommunityForm({
     }
   }
   async function updateCommunity(editedCommunity: CommunityRegistration) {
-    console.log('updating!')
-
     try {
       const response = await apiPutCommunity({
         data: editedCommunity,
         slug: `/${communityId}`
       })
-      console.log(response)
 
       //router.push(`communities/${response.id}`)
     } catch (e) {

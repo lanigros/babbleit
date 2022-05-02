@@ -83,19 +83,15 @@ async function getCommunities(
 }
 
 async function updateBaseCommunity(community: EditBaseCommunity) {
-  try {
-    const result = await CommunityModel.updateOne(
-      { _id: community.id },
-      { title: community.title, description: community.description }
-    )
-    return result.acknowledged
-  } catch (error) {
-    return false
-  }
-  /*    .catch(() => {
-    throw new BadRequest('Community name already exists')
+  const result = await CommunityModel.updateOne(
+    { _id: community.id },
+    { title: community.title, description: community.description }
+  ).catch((error) => {
+    /* throw new BadRequest('Community name already exists') */
+    console.log(error)
   })
- */
+
+  return result
 }
 
 // TODO add posts to response

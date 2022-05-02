@@ -46,7 +46,7 @@ const updateBaseCommunity = async (req: Request, res: Response) => {
   console.log('CONTROLLER', result)
 
   if (!result) {
-    throw new Error('could not update')
+    throw new BadRequest('ÄT MITT BAJAS')
   }
 
   res.json(createResponseMessage('Succesfully updated'))
