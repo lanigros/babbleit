@@ -37,7 +37,9 @@ export default function InfoCard({
   onClick,
   onDelete,
   onEdit,
-  onChangeBlocked
+  onChangeBlocked,
+  customButtonText,
+  onCustomButtonClick
 }: CardProps) {
   return (
     <CardContainer>
@@ -57,7 +59,9 @@ export default function InfoCard({
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardTextContainer>
-        {((allowEdit && onEdit) || (allowDelete && onDelete)) && (
+        {((allowEdit && onEdit) ||
+          (allowDelete && onDelete) ||
+          (onCustomButtonClick && customButtonText)) && (
           <MenuHolder>
             <OptionMenu
               allowEdit={allowEdit}
@@ -67,6 +71,8 @@ export default function InfoCard({
               allowChangeBlocked={allowChangeBlocked}
               onChangeBlocked={onChangeBlocked}
               isBlocked={isBlocked}
+              customButtonText={customButtonText}
+              onCustomButtonClick={onCustomButtonClick}
             />
           </MenuHolder>
         )}

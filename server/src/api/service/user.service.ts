@@ -67,10 +67,9 @@ const deleteUserById = async (userId: string): Promise<string | null> => {
 const findUsers = async (
   showBlockedUsers = false
 ): Promise<PublicUserFields[]> => {
-  const users = await UserModel.find(showBlockedUsers ? {} : { isBlocked: 0 })
-    .select('_id isBlocked username')
-    .limit(10)
-    .skip(0)
+  const users = await UserModel.find(
+    showBlockedUsers ? {} : { isBlocked: 0 }
+  ).select('_id isBlocked username')
 
   return users.map((user) => {
     const { _id, username, isBlocked } = user._doc

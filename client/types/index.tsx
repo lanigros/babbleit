@@ -44,6 +44,10 @@ export type UsersResponse = {
   users: LimitedUserInfo[]
 } & ErrorResponse
 
+export type UserId = {
+  userId: User['id']
+}
+
 /** POSTS */
 
 export type PostCreation = {
@@ -55,10 +59,10 @@ export type Post = PostCreation & Id
 
 export type CommunityPost = {
   username: User['username']
-  userId: User['id']
 } & Id &
   PostCreation &
-  IsBlocked
+  IsBlocked &
+  UserId
 
 export type PostResponse = {
   post: CommunityPost
@@ -68,8 +72,7 @@ export type PostResponse = {
 
 export type CommunityMember = {
   username: User['username']
-  userId: User['id']
-}
+} & UserId
 
 export type CommunityRegistration = {
   title: string

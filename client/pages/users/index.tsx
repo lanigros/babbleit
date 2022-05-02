@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next'
 import { useContext, useEffect } from 'react'
-import { apiGetUsers, serverSideWhoAmI } from '../../api'
+import { apiServerSideGetUsers, serverSideWhoAmI } from '../../api'
 import { GlobalContext } from '../../state/globalState'
 import { LimitedUserInfo, ServerSideProps, User } from '../../types'
 import { UsersView } from '../../views'
@@ -15,7 +15,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   let user: ServerSideProps['user'] = null
 
   try {
-    const usersResponse = await apiGetUsers(ctx.req.cookies)
+    const usersResponse = await apiServerSideGetUsers(ctx.req.cookies)
     users = usersResponse.users
 
     const userResponse = await serverSideWhoAmI(ctx.req.cookies)

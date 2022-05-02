@@ -9,6 +9,7 @@ type UserCardProps = {
   disableBlocking?: boolean
   onDelete?: (e: MouseEvent<HTMLButtonElement>) => void
   allowDelete?: boolean
+  onAddMember?: (e: MouseEvent<HTMLButtonElement>) => void
 } & LimitedUserInfo
 
 export default function UserCard({
@@ -17,7 +18,8 @@ export default function UserCard({
   isBlocked,
   disableBlocking,
   onDelete,
-  allowDelete = false
+  allowDelete = false,
+  onAddMember
 }: UserCardProps) {
   const { state, dispatch } = useContext(GlobalContext)
 
@@ -49,6 +51,8 @@ export default function UserCard({
         isBlocked={isBlocked}
         allowChangeBlocked={disableBlocking ? false : state.user.isAdmin}
         onChangeBlocked={changeBlockedStatus}
+        onCustomButtonClick={onAddMember}
+        customButtonText={'Add member'}
       />
     </UserCardWrapper>
   )

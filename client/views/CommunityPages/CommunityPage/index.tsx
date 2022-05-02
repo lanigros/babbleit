@@ -1,12 +1,16 @@
 import { useRouter } from 'next/router'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { apiRemoveCommunity } from '../../../api'
 import { MaxWidthContainer } from '../../../components'
 import Button from '../../../components/Button'
-import { PostList } from '../../../features'
+import { AddMemberModal, PostList } from '../../../features'
 import { GlobalContext } from '../../../state/globalState'
 import { CommunityAdminRole, DetailedCommunity } from '../../../types'
-import { ButtonWrapper, Title } from './CommunitiesPage.styled'
+import {
+  ButtonWrapper,
+  MemberButtonsWrapper,
+  Title
+} from './CommunitiesPage.styled'
 
 type CommunityProps = {
   communityAdminRole: CommunityAdminRole
@@ -18,7 +22,11 @@ export default function CommunityPage({
   communityAdminRole
 }: CommunityProps) {
   const router = useRouter()
+
   const { state } = useContext(GlobalContext)
+
+  const [showAddMembers, setShowAddMembers] = useState(false)
+
   function removeCommunity() {
     async function deleteCommunity() {
       await apiRemoveCommunity({
@@ -31,13 +39,23 @@ export default function CommunityPage({
 
   return (
     <MaxWidthContainer>
+      <AddMemberModal
+        showModal={showAddMembers}
+        setShowModal={setShowAddMembers}
+        community={community}
+      />
       <Title>
         Community <span>{`'${community.title}'`}</span>
       </Title>
       <ButtonWrapper>
-        <Button onClick={() => router.push(`${router.query.slug}/members`)}>
-          See members
-        </Button>
+        <MemberButtonsWrapper>
+          <Button onClick={() => router.push(`${router.query.slug}/members`)}>
+            See members
+          </Button>
+          {communityAdminRole && (
+            <Button onClick={() => setShowAddMembers(true)}>Add member</Button>
+          )}
+        </MemberButtonsWrapper>
         {(communityAdminRole === 'admin' || state.user.isAdmin) && (
           <Button danger onClick={removeCommunity}>
             Delete community

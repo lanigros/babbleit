@@ -15,6 +15,8 @@ export type EditProps = {
   isBlocked?: 1 | 0
   onChangeBlocked?: (e: MouseEvent<HTMLButtonElement>) => void
   allowChangeBlocked?: boolean
+  customButtonText?: string
+  onCustomButtonClick?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 export default function OptionMenu({
@@ -24,7 +26,9 @@ export default function OptionMenu({
   allowEdit,
   allowChangeBlocked,
   onChangeBlocked,
-  isBlocked
+  isBlocked,
+  customButtonText,
+  onCustomButtonClick
 }: EditProps) {
   const [isMenuActive, setIsMenuActive] = useState(false)
   return (
@@ -37,6 +41,9 @@ export default function OptionMenu({
       </OptionMenuM>
       {isMenuActive && (
         <MenuOptions>
+          {customButtonText && onCustomButtonClick && (
+            <Option onClick={onCustomButtonClick}>{customButtonText}</Option>
+          )}
           {onEdit && allowEdit && <Option onClick={onEdit}>edit</Option>}
           {onDelete && allowDelete && (
             <Option onClick={onDelete} danger>
