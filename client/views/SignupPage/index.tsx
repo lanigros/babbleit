@@ -1,5 +1,5 @@
 import { MaxWidthContainer } from '../../components'
-import { Signup } from '../../features'
+import { SignupOrUpdate as Signup } from '../../features'
 import {
   Container,
   BackgroundContainer,

@@ -4,22 +4,34 @@ import { useForm } from '../../hooks/useForm'
 import { validateSignup } from '../../validation/userValidation'
 import { useContext, useState } from 'react'
 import { GlobalContext } from '../../state/globalState'
-import { UserSignup } from '../../types'
-import { apiSignup } from '../../api/authApi'
+import { User, UserSignup } from '../../types'
 import { useRouter } from 'next/router'
+import { apiUpdateProfile, apiSignup } from '../../api'
 
-export default function Signup() {
+type SignupOrUpdateProps = {
+  currentUser?: Partial<User>
+  onSubmit?: () => void
+}
+
+export default function SignupOrUpdateProfile({
+  currentUser,
+  onSubmit
+}: SignupOrUpdateProps) {
   const router = useRouter()
   const { dispatch } = useContext(GlobalContext)
 
   const [error, setError] = useState<string>('')
 
-  function submitHandler({ repeatPassword, ...signupValues }: UserSignup) {
+  function submitHandler({ repeatPassword, ...userValues }: UserSignup) {
     async function postLogin() {
       try {
-        const response = await apiSignup({ data: signupValues })
+        const response = currentUser
+          ? await apiUpdateProfile({ data: userValues })
+          : await apiSignup({ data: userValues })
+
+        onSubmit && onSubmit()
         response.user && dispatch({ type: 'user', payload: response.user })
-        router.push('/profile')
+        router.asPath !== '/profile' && router.push('/profile')
       } catch (e) {
         if (e instanceof Error && e.message.length > 0) {
           setError(e.message)
@@ -33,8 +45,8 @@ export default function Signup() {
 
   const { values, errors, handleChange, handleSubmit } = useForm(
     {
-      email: '',
-      username: '',
+      email: currentUser?.email || '',
+      username: currentUser?.username || '',
       password: '',
       repeatPassword: ''
     },
@@ -44,11 +56,11 @@ export default function Signup() {
 
   return (
     <SignupForm
-      title={'Sign up'}
+      title={currentUser ? 'Update profile' : 'Sign up'}
       buttonText={`Let's go!`}
       onSubmit={handleSubmit}
       isSubmitDisabled={Object.keys(errors).length !== 0}
-      linkText={'Or login here'}
+      linkText={currentUser ? undefined : 'Or login here'}
       linkUrl={'/'}
       isSuccessful={error.length === 0}
       errorMessage={error}

@@ -15,7 +15,7 @@ type LoginComponentProps = {
   children: JSX.Element[]
   isSubmitDisabled: boolean
   linkUrl: string
-  linkText: string
+  linkText?: string
   errorMessage: string
   isSuccessful: boolean
   onSubmit: (e: MouseEvent<HTMLButtonElement>) => void
@@ -40,9 +40,11 @@ export default function LoginForm({
       <Button onClick={onSubmit} disabled={isSubmitDisabled}>
         {buttonText}
       </Button>
-      <LinkWrapper>
-        <Link href={linkUrl}>{linkText}</Link>
-      </LinkWrapper>
+      {linkText && (
+        <LinkWrapper>
+          <Link href={linkUrl}>{linkText}</Link>
+        </LinkWrapper>
+      )}
     </LoginWrapper>
   )
 }

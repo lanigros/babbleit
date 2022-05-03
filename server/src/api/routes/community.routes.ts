@@ -68,7 +68,7 @@ router
   .get(addCommunityAdminRole, catchAsync(CommunityController.getMembers))
   .post(
     addCommunityAdminRole,
-    allowOnlyCommunityAdminsAndAdmins,
+    allowAllAdminRoles,
     validateRequest('userId'),
     catchAsync(CommunityController.addCommunityMember)
   )

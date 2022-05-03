@@ -58,7 +58,7 @@ const findUserById = async (
 const updateFields = async (
   _id: string,
   fieldsToUpdate: UpdateableUserFields
-): Promise<boolean> => {
+): Promise<UserData> => {
   const { password } = fieldsToUpdate
   let update = { ...fieldsToUpdate }
 
@@ -75,7 +75,13 @@ const updateFields = async (
     throw new Error('Something went wrong')
   }
 
-  return true
+  const { _id: id, email, username } = user._doc
+
+  const admin = await AdminModel.exists({
+    userId: _id
+  })
+
+  return { id: id.toString(), email, username, isAdmin: !!admin }
 }
 
 const deleteUserById = async (userId: string): Promise<string | null> => {
