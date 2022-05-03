@@ -23,6 +23,11 @@ export const apiDeleteAnAccount = createFetch<never, ResponseMessage>(
   'DELETE'
 )
 
+export const apiDeleteMyAccount = createFetch<never, ResponseMessage>(
+  'users/me',
+  'DELETE'
+)
+
 export const apiChangeUserBlocked = createFetch<IsBlocked, ResponseMessage>(
   'users',
   'PUT'
