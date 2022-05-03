@@ -3,14 +3,18 @@ import { Types } from 'mongoose'
 import { NotFound } from '../../errors'
 import {
   CommunityPost,
-  Post,
   PublicUserFields,
   UpdateableUserFields,
-  UserData,
   UserResponse
 } from '../../types'
 import { hashPassword } from '../../utility'
-import { AdminModel, PostModel, UserModel } from '../model'
+import {
+  AdminModel,
+  CommunityAdminModel,
+  CommunityModel,
+  PostModel,
+  UserModel
+} from '../model'
 import AdminService from './admin.service'
 import CommunityService from './community.service'
 
@@ -67,9 +71,28 @@ const updateFields = async (
     update = { ...fieldsToUpdate, password: hashedPassword }
   }
 
-  const user = await UserModel.findOneAndUpdate({ _id, isBlocked: 0 }, update, {
-    new: true
-  })
+  const user = await UserModel.findOneAndUpdate({ _id, isBlocked: 0 }, update)
+
+  const oldUsername = user?._doc.username
+  const newUsername = update.username
+
+  if (newUsername && newUsername !== oldUsername) {
+    await CommunityAdminModel.updateOne(
+      { username: oldUsername },
+      { username: newUsername }
+    )
+    await PostModel.updateMany(
+      { username: oldUsername },
+      { username: newUsername }
+    )
+    await CommunityModel.updateMany(
+      { 'members.username': oldUsername },
+      {
+        $set: { 'members.$[i].username': newUsername }
+      },
+      { arrayFilters: [{ 'i.username': oldUsername }] }
+    )
+  }
 
   if (!user) {
     throw new Error('Something went wrong')

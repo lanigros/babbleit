@@ -11,12 +11,7 @@ import {
   ModeratorAggregate,
   Role
 } from '../../types'
-import {
-  CommunityAdminModel,
-  CommunityModel,
-  UserCommunityModel,
-  UserModel
-} from '../model'
+import { CommunityAdminModel, CommunityModel, UserModel } from '../model'
 
 async function saveNewCommunity(
   newCommunity: CommunityBase,
@@ -229,17 +224,6 @@ async function removeModerator(communityId: string, userId: string) {
 }
 
 async function deleteCommunityById(id: string) {
-  const userCommunityResult = await UserCommunityModel.updateMany(
-    {},
-    {
-      $pull: {
-        communities: {
-          communityId: new Types.ObjectId(id)
-        }
-      }
-    }
-  )
-
   const communityResult = await CommunityModel.deleteOne({
     _id: new Types.ObjectId(id)
   })
@@ -257,7 +241,6 @@ async function deleteCommunityById(id: string) {
 
   return {
     isCommunityDeleted: communityResult.acknowledged,
-    isUserCommunityDeleted: userCommunityResult.acknowledged,
     isCommunityAdminDeleted: communityAdminResult.acknowledged
   }
 }
