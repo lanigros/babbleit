@@ -1,9 +1,10 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useContext } from 'react'
+
 import { GlobalContext } from '../../state/globalState'
 import logo from '../../public/logo.svg'
 import Image from 'next/image'
-
 import {
   HeaderBody,
   ProfileWrapper,
@@ -13,18 +14,17 @@ import {
 } from './Header.styled'
 import Button from '../../components/Button'
 import { apiLogout } from '../../api'
-import Router from 'next/router'
 
 export default function Header() {
   const { state, dispatch } = useContext(GlobalContext)
   const { user } = state
-  const router = Router
+  const router = useRouter()
 
   async function logoutHandler() {
     try {
       await apiLogout()
       dispatch({ type: 'user', payload: {} })
-      router.push('/')
+      if (router.route.includes('profile')) router.push('/')
     } catch (error) {
       console.log('Opsie')
     }
