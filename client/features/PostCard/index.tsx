@@ -7,7 +7,7 @@ import { CommunityPost } from '../../types'
 import { PostCardWrapper } from './PostCard.styled'
 
 type PostCardProps = {
-  hasAdminPrivileges: boolean
+  hasAdminPrivileges?: boolean
 } & CommunityPost
 
 export default function PostCard({

@@ -4,7 +4,7 @@ import { GlobalContext } from '../../state/globalState'
 import PostCard from '../PostCard'
 
 type PostListProps = {
-  isCommunityAdmin: boolean
+  isCommunityAdmin?: boolean
 }
 
 export default function PostList({ isCommunityAdmin }: PostListProps) {

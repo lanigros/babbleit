@@ -11,21 +11,24 @@ const getWhoAmI = async (req: Request, res: Response) => {
     return
   }
 
-  const foundUser = await UserService.findUserById(req.session.userId)
-  const { isBlocked, ...user } = foundUser
+  const foundUser = await UserService.findUserById(
+    req.session.userId,
+    req.query.withPosts as string
+  )
 
-  if (isBlocked) {
+  const { user, posts } = foundUser
+
+  if (user.isBlocked) {
     throw new Unauthorized('User has been blocked by an admin')
   }
 
-  res.json({ user })
+  res.json(posts ? { user, posts } : { user })
 }
 
 const updateFields = async (req: Request, res: Response) => {
   if (!req.session.userId) {
     throw new Error('Something went wrong')
   }
-
   await UserService.updateFields(req.session.userId, req.body)
   res.json(
     createResponseMessage(

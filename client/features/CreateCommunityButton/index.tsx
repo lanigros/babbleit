@@ -1,7 +1,7 @@
 import { Button } from './createCommunityButton.styled'
 import Link from 'next/link'
 
-export default function ExploreButton() {
+export default function CreateCommunityButton() {
   return (
     <Link href={'/create-community'}>
       <Button>

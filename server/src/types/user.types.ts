@@ -1,4 +1,5 @@
 import { MongoId, IsBlocked, Id } from '.'
+import { CommunityPost } from './post.types'
 
 export type UserLogin = {
   email: string
@@ -26,10 +27,12 @@ export type UserData = {
   email: User['email']
   username: User['username']
   isAdmin: boolean
-} & Id
+} & Id &
+  Partial<IsBlocked>
 
 export type UserResponse = {
   user: UserData
+  posts?: CommunityPost[]
 }
 
 export type UpdateableUserFields = {
