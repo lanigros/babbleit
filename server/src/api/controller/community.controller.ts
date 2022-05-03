@@ -44,7 +44,7 @@ const updateBaseCommunity = async (req: Request, res: Response) => {
   })
 
   if (!result) {
-    throw new BadRequest('Something went wrong')
+    throw new BadRequest('Update failed')
   }
 
   res.json(createResponseMessage('Succesfully updated'))
