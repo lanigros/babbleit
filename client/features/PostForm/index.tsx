@@ -16,7 +16,7 @@ export default function PostForm({ currentPost }: PostFormProps) {
   const router = useRouter()
   const communityId = router.query.slug
 
-  const [isError, setIsError] = useState(false)
+  const [error, setError] = useState<string | undefined>()
 
   const initialValues = currentPost
     ? { title: currentPost.title, content: currentPost.content }
@@ -29,7 +29,7 @@ export default function PostForm({ currentPost }: PostFormProps) {
   )
 
   async function submitHandler(post: PostCreation & Partial<Id>) {
-    isError && setIsError(false)
+    error && setError(undefined)
     async function postNewCommunity() {
       try {
         const response = currentPost?.id
@@ -46,7 +46,9 @@ export default function PostForm({ currentPost }: PostFormProps) {
           router.back()
         }
       } catch (e) {
-        setIsError(true)
+        if (e instanceof Error) {
+          setError(e.message)
+        }
       }
     }
     return postNewCommunity()
@@ -57,6 +59,7 @@ export default function PostForm({ currentPost }: PostFormProps) {
       handleSubmit={handleSubmit}
       type={'post'}
       buttonText={currentPost ? 'Edit post' : 'Create post'}
+      error={error}
     >
       <Input
         name='title'

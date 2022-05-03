@@ -18,7 +18,7 @@ export default function CreateCommunityForm({
   const router = useRouter()
   const communityId = router.query.slug
 
-  const [isError, setIsError] = useState(false)
+  const [error, setError] = useState<string | undefined>()
 
   const { values, errors, handleChange, handleSubmit } = useForm(
     {
@@ -30,7 +30,7 @@ export default function CreateCommunityForm({
   )
 
   async function submitHandler(newCommunity: CommunityRegistration) {
-    isError && setIsError(false)
+    error && setError(undefined)
 
     if (communityToBeEdited) {
       return updateCommunity(newCommunity)
@@ -46,7 +46,9 @@ export default function CreateCommunityForm({
       })
       router.push(`communities/${response.community.id}`)
     } catch (e) {
-      setIsError(true)
+      if (e instanceof Error) {
+        setError(e.message)
+      }
     }
   }
   async function updateCommunity(editedCommunity: CommunityRegistration) {
@@ -58,7 +60,9 @@ export default function CreateCommunityForm({
 
       //router.push(`communities/${response.id}`)
     } catch (e) {
-      setIsError(true)
+      if (e instanceof Error) {
+        setError(e.message)
+      }
     }
   }
 
@@ -66,7 +70,7 @@ export default function CreateCommunityForm({
     <CreatePostOrCommunityForm
       handleSubmit={handleSubmit}
       buttonText={communityToBeEdited ? 'Update community' : 'Create community'}
-      isError={isError}
+      error={error}
       type={'community'}
     >
       <Input
