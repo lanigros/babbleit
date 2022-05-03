@@ -17,7 +17,7 @@ type GlobalState = {
 }
 
 type SetStateAction =
-  | { type: 'user'; payload: User }
+  | { type: 'user'; payload: Partial<User> }
   | { type: 'setCommunities'; payload: Community[] }
   | { type: 'removeCommunity'; payload: Id }
   | { type: 'updateCommunity'; payload: Community }

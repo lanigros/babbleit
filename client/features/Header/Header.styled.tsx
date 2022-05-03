@@ -50,3 +50,7 @@ export const InitialLetter = styled.h4`
 export const NotLoggedInTxt = styled.p`
   color: ${colors.white};
 `
+export const ItemsToRightWrapper = styled.div`
+  display: flex;
+  gap: ${spacings.large};
+`
