@@ -11,11 +11,11 @@
     "skipLibCheck": true,
     "moduleResolution": "Node",
     "types": [
-      "node"
+      "node", "jest"
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "src/**/*.js"
   ],
   "exclude": [
     "node_modules",
