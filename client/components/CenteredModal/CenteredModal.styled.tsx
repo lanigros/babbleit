@@ -8,7 +8,7 @@ import {
 
 export const CenteredModalWrapper = styled.div`
   max-height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: ${spacings.medium};
   background: ${colors.transparentBlack};
   border-radius: ${borderRadiuses.small};

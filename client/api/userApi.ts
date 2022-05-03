@@ -2,6 +2,7 @@ import {
   IsBlocked,
   ResponseMessage,
   UserResponse,
+  UserSignup,
   UsersResponse
 } from '../types'
 import { createFetch, createServerSideFetch } from './createFetch'
@@ -10,6 +11,11 @@ export const serverSideWhoAmI = createServerSideFetch<never, UserResponse>(
   'users/me',
   'GET'
 )
+
+export const apiUpdateProfile = createFetch<
+  Omit<UserSignup, 'repeatPassword'>,
+  UserResponse
+>('users/me', 'PUT')
 
 export const apiServerSideGetUsers = createServerSideFetch<
   never,
