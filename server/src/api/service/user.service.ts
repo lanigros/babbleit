@@ -5,6 +5,7 @@ import {
   CommunityPost,
   PublicUserFields,
   UpdateableUserFields,
+  UserData,
   UserResponse
 } from '../../types'
 import { hashPassword } from '../../utility'
