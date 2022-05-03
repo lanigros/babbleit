@@ -56,6 +56,9 @@ export default function CommunityPage({
       </Title>
       <ButtonWrapper>
         <MemberButtonsWrapper>
+          <Button onClick={() => router.push(`${router.query.slug}/new-post`)}>
+            Add new post
+          </Button>
           <Button onClick={() => setShowModerators(true)}>
             See moderators
           </Button>
