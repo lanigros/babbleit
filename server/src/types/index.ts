@@ -4,7 +4,6 @@ export * from './communityAdmin.types'
 export * from './user.types'
 export * from './post.types'
 export * from './aggregate.types'
-export * from './userCommunity.types'
 
 export type StatusError = {
   status?: number
