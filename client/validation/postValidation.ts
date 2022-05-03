@@ -1,14 +1,14 @@
 import { PostCreation } from '../types'
 
 export function validatePostTitle({ title }: Pick<PostCreation, 'title'>) {
-  const titleRegex = /^([,\. a-zA-Z0-9äöåÄÖÅ@$!%*?\-_&]+){10,40}$/
+  const titleRegex = /^([,\. a-zA-Z0-9äöåÄÖÅ@$!%*?\-_&]){10,40}$/
   return titleRegex.test(title)
 }
 
 export function validatePostContent({
   content
 }: Pick<PostCreation, 'content'>) {
-  const titleRegex = /^([,\. a-zA-Z0-9äöåÄÖÅ@$!%*?\-_&]+){10,1000}$/
+  const titleRegex = /^([,\. a-zA-Z0-9äöåÄÖÅ@$!%*?\-_&]){10,1000}$/
   return titleRegex.test(content)
 }
 
