@@ -8,10 +8,8 @@ type CommunityProps = {
 
 export default function EditCommunity({ community }: CommunityProps) {
   return (
-    <>
-      <MaxWidthContainer>
-        <CreateCommunityForm communityToBeEdited={community} />
-      </MaxWidthContainer>
-    </>
+    <MaxWidthContainer>
+      <CreateCommunityForm communityToBeEdited={community} />
+    </MaxWidthContainer>
   )
 }

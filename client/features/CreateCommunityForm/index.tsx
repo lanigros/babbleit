@@ -33,9 +33,9 @@ export default function CreateCommunityForm({
     error && setError(undefined)
 
     if (communityToBeEdited) {
-      return updateCommunity(newCommunity)
+      await updateCommunity(newCommunity)
     } else {
-      return createNewCommunity(newCommunity)
+      await createNewCommunity(newCommunity)
     }
   }
 
@@ -57,8 +57,7 @@ export default function CreateCommunityForm({
         data: editedCommunity,
         slug: `/${communityId}`
       })
-
-      //router.push(`communities/${response.id}`)
+      response.message && router.back()
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message)
