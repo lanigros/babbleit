@@ -29,7 +29,6 @@ export default function ModeratorsModal({
       })
       setModerators(moderatorsResponse.moderators)
       setCommunityAdminRole(moderatorsResponse.communityAdminRole)
-      console.log('moderatorsResponse', moderatorsResponse)
     }
     fetchModerators()
   }, [router.query.slug])
