@@ -4,7 +4,8 @@ import {
   catchAsync,
   validateRequest,
   allowOnlyRegisteredUsers,
-  allowOnlyAdmin
+  allowOnlyAdmin,
+  validateParamsId
 } from '../../middleware'
 import { UserController } from '../controller'
 
@@ -27,6 +28,7 @@ router
 
 router
   .route('/:userId')
+  .all(validateParamsId)
   .put(
     allowOnlyAdmin,
     validateRequest('updateBlocked'),
