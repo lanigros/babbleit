@@ -9,7 +9,8 @@ import {
   allowOnlyCommunityAdminsAndAdmins,
   allowAllCommunityRoles,
   allowAllAdminRoles,
-  allowOnlyAdmin
+  allowOnlyAdmin,
+  validateParamsId
 } from '../../middleware'
 import communityController from '../controller/community.controller'
 
@@ -26,6 +27,7 @@ router
 
 router
   .route('/:id')
+  .all(validateParamsId)
   .get(addCommunityAdminRole, catchAsync(CommunityController.getCommunity))
   .delete(
     addCommunityAdminRole,
@@ -41,6 +43,7 @@ router
 
 router
   .route('/:id/blocked')
+  .all(validateParamsId)
   .put(
     allowOnlyAdmin,
     validateRequest('updateBlocked'),
@@ -49,6 +52,7 @@ router
 
 router
   .route('/:id/moderators')
+  .all(validateParamsId)
   .get(addCommunityAdminRole, catchAsync(communityController.getModerators))
   .post(
     addCommunityAdminRole,
@@ -58,6 +62,7 @@ router
 
 router
   .route('/:id/moderators/:userId')
+  .all(validateParamsId)
   .delete(
     addCommunityAdminRole,
     catchAsync(communityController.deleteModerator)
@@ -65,6 +70,7 @@ router
 
 router
   .route('/:id/members')
+  .all(validateParamsId)
   .get(addCommunityAdminRole, catchAsync(CommunityController.getMembers))
   .post(
     addCommunityAdminRole,
@@ -75,6 +81,7 @@ router
 
 router
   .route('/:id/members/:userId')
+  .all(validateParamsId)
   .delete(
     addCommunityAdminRole,
     allowOnlyCommunityAdminsAndAdmins,
@@ -83,10 +90,12 @@ router
 
 router
   .route('/:id/join')
+  .all(validateParamsId)
   .post(allowOnlyRegisteredUsers, catchAsync(CommunityController.joinCommunity))
 
 router
   .route('/:id/leave')
+  .all(validateParamsId)
   .delete(
     allowOnlyRegisteredUsers,
     catchAsync(CommunityController.leaveCommunity)
@@ -94,6 +103,7 @@ router
 
 router
   .route('/:id/posts')
+  .all(validateParamsId)
   .get(addCommunityAdminRole, catchAsync(PostController.getPostsInCommunity))
   .post(
     allowOnlyRegisteredUsers,
@@ -105,6 +115,7 @@ router
 
 router
   .route('/:id/posts/:postId')
+  .all(validateParamsId)
   .get(allowOnlyRegisteredUsers, catchAsync(PostController.getPost))
   .put(
     allowOnlyRegisteredUsers,
@@ -122,6 +133,7 @@ router
 
 router
   .route('/:id/posts/:postId/blocked')
+  .all(validateParamsId)
   .put(
     allowOnlyRegisteredUsers,
     addCommunityAdminRole,
